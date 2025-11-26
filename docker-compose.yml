@@ -1,0 +1,53 @@
+version: "3.7"
+
+services:
+  webserver:
+    image: nginx:latest
+    container_name: dream_webserver
+    ports:
+      - 8082:80
+    volumes:
+      - .:/var/www/html
+      - ./webserver/default.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - php-fpm
+  php-fpm:
+    build: ./webserver
+    volumes:
+      - .:/var/www/html
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  ratchat:
+    build: ./Ratchat
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 8000:8000
+  swagger:
+    image: swaggerapi/swagger-ui:latest
+    container_name: swagger_ui
+    ports:
+      - 8099:8080
+    volumes:
+      - ./swagger:/usr/share/nginx/html/swagger
+    environment:
+      SWAGGER_JSON: /usr/share/nginx/html/swagger/swagger.json
+  # php-app:
+  #   build: .
+  #   devices:
+  #     - "/dev/ttyUSB0:/dev/ttyUSB0"  # 掛載 USB 設備
+  #   volumes:
+  #     - .:/app
+  #   ports:
+  #     - "8080:81"
+  #   environment:
+  #     - COMPOSER_ALLOW_SUPERUSER=1
+  #   restart: always
+  # dream:
+  #   build: .
+  #   container_name: dream_python
+  #   volumes:
+  #     - ./:/app
+  #   ports:
+  #     - 8090:8090
+  #     - 8099:8090

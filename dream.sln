@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "dream", "dream.phpproj", "{DA441162-F87D-4BAB-A5B2-F3F41478DD9E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA441162-F87D-4BAB-A5B2-F3F41478DD9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA441162-F87D-4BAB-A5B2-F3F41478DD9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA441162-F87D-4BAB-A5B2-F3F41478DD9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA441162-F87D-4BAB-A5B2-F3F41478DD9E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {396A5DF5-3521-49D5-A1CE-9720987088C6}
+	EndGlobalSection
+EndGlobal

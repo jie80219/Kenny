@@ -1,0 +1,18 @@
+<Project Sdk="Devsense.Php.Sdk">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>da441162-f87d-4bab-a5b2-f3f41478dd9e</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EnvName>IISExpress</EnvName>
+    <RootNamespace>dream</RootNamespace>
+    <WebRoot>public</WebRoot>
+    <RuntimeVersion>7.4</RuntimeVersion>
+    <SaveServerSettingsInUserFile>false</SaveServerSettingsInUserFile>
+    <PHPDevHostName>localhost</PHPDevHostName>
+    <PHPDevAutoPort>true</PHPDevAutoPort>
+    <PHPDevRouting />
+    <IISProjectUrl>http://localhost/</IISProjectUrl>
+    <IISExpressSslEnabled>false</IISExpressSslEnabled>
+    <PHPDevPort>80</PHPDevPort>
+  </PropertyGroup>
+</Project>
