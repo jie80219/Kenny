@@ -1,0 +1,232 @@
+<?php include(__DIR__.'/../basic/header.html'); ?>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <div class="row row-cols-1 row-cols-md-3">
+        <div class="col-lg-12 mb-4">
+            <div class="card">
+                <h5 class="card-header text-primary">當前時間</h5>
+                <div class="card-body row row-cols-1 row-cols-md-3">
+                    <div class="col-lg-12 mb-4 row row-cols-1 row-cols-md-3">
+                        <div class="form-group form-inline">
+                            <label>選擇日期:</label>
+                            <input id="date" type="date" class="mx-2 form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-12 mb-4">
+                        <form oninput="formattedDate.value=formatSecond(time.value)">
+                            <div class="form-group">
+                                <input type="range" class="form-control-range" id="time" name="points" value="0" min="0"
+                                    max="86400">
+                                <output style="font-size: 18px;">當前時間:</output>
+                                <output name="formattedDate" for="time" style="font-size: 18px;"></output>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 mb-4">
+            <div class="card my-3">
+                <h5 class="card-header">金屬中心詳細資訊</h5>
+                <div class="card-body my-3 row row-cols-1 row-cols-md-3">
+                    <div class="table-responsive col-lg-12 mb-4" style="max-height: 500px;">
+                        <table id="EDMTable" class="table table-bordered" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>時間</th>
+                                    <th>ASF</th>
+                                    <th>ADCPD</th>
+                                    <th>ADE</th>
+                                    <th>AIDT</th>
+                                    <th>APDC</th>
+                                    <th>AGV</th>
+                                    <th>OCR</th>
+                                </tr>
+                            </thead>
+                            <tbody id="EDMInfo">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 mb-4">
+            <div class="card my-3">
+                <h5 class="card-header">圖表</h5>
+                <div class="card-body">
+                    <div class="col-lg-12 mb-4 text-center">
+                        <canvas id="EDMChart" style="max-height: 600px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php include(__DIR__.'/../basic/footer.html'); ?>
+
+</body>
+<script>
+    var EDMInfo = $(`#EDMInfo`).remove()
+    var EDMX_Values = [];
+    var ASF_Values = [];
+    var ADCPD_Values = [];
+    var ADE_Values = [];
+    var AIDT_Values = [];
+    var AGV_Values = [];
+    var OCR_Values = [];
+
+    $(function () {
+
+        var date = new Date();
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+
+        if (month < 10) month = "0" + month;
+        if (day < 10) day = "0" + day;
+
+        var today = year + "-" + month + "-" + day;
+        $("#date").attr("value", today);
+
+        h = date.getHours();
+        m = date.getMinutes();
+        s = date.getSeconds();
+        sec = h * 3600 + m * 60 + s
+
+        $("#time").attr("value", sec);
+        formattedDate = formatSecond(sec)
+        $("[name='formattedDate']").text(formattedDate);
+
+        getEDMInfo(formattedDate);
+
+    })
+
+
+    function getEDMInfo(formattedDate) {
+
+        EDMX_Values = [];
+        ASF_Values = [];
+        ADCPD_Values = [];
+        ADE_Values = [];
+        AIDT_Values = [];
+        APDC_Values = [];
+        AGV_Values = [];
+        OCR_Values = [];
+
+        $.ajax({
+            url: `/Discharge/EDM/record`,
+            dataType: 'json',
+            method: 'GET',
+            data: {
+                time: formattedDate
+            },
+            success: function (response) {
+
+                tbody = $(EDMInfo).clone()
+                $.each(response['data'], function (key, value) {
+
+                    var tr = "<tr>"
+                    if (value['row_number'] == 1) {
+                        tr = `<tr class="p-3 mb-2 bg-danger text-white">`
+                    }
+                    tbody.append(`${tr}<td>${value['TimeTag']}</td>
+                                        <td>${value['ASF']}</td>
+                                        <td>${value['ADCPD']}</td>
+                                        <td>${value['ADE']}</td>
+                                        <td>${value['AIDT']}</td>
+                                        <td>${value['APDC']}</td>
+                                        <td>${value['AGV']}</td>
+                                        <td>${value['OCR']}</td>        
+                                    </tr>`)
+                    EDMX_Values.push(value['TimeTag'])
+                    ASF_Values.push(parseFloat(value['ASF']))
+                    ADCPD_Values.push(parseFloat(value['ADCPD']))
+                    ADE_Values.push(parseFloat(value['ADE']))
+                    AIDT_Values.push(parseFloat(value['AIDT']))
+                    APDC_Values.push(parseFloat(value['APDC']))
+                    AGV_Values.push(parseFloat(value['AGV']))
+                    OCR_Values.push(parseFloat(value['OCR']))
+                });
+                $("#EDMTable").append(tbody)
+
+                new Chart("EDMChart", {
+                    type: "line",
+                    data: {
+                        labels: EDMX_Values,
+                        datasets: [{
+                            label: 'ASF',
+                            data: ASF_Values,
+                            borderColor: "red",
+                            fill: false
+                        }, {
+                            label: 'ADCPD',
+                            data: ADCPD_Values,
+                            borderColor: "green",
+                            fill: false
+                        }, {
+                            label: 'ADE',
+                            data: ADE_Values,
+                            borderColor: "blue",
+                            fill: false
+                        }, {
+                            label: 'AIDT',
+                            data: AIDT_Values,
+                            borderColor: "yellow",
+                            fill: false
+                        }, {
+                            label: 'APDC',
+                            data: APDC_Values,
+                            borderColor: "orange",
+                            fill: false
+                        }, {
+                            label: 'AGV',
+                            data: AGV_Values,
+                            borderColor: "#B5A4ED",
+                            fill: false
+                        }, {
+                            label: 'OCR',
+                            data: OCR_Values,
+                            borderColor: "#75856F",
+                            fill: false
+                        }]
+                    }
+                });
+            }
+        });
+    }
+
+
+    function formatSecond(secs) {
+        var hr = Math.floor(secs / 3600);
+        var min = Math.floor((secs - (hr * 3600)) / 60);
+        var sec = parseInt(secs - (hr * 3600) - (min * 60));
+
+        var currentDatetime = $("#date").val() + " " + hr + ':' + min + ':' + sec;
+        var dateTime = new Date(currentDatetime);
+
+        month = `${(dateTime.getMonth() + 1)}`.padStart(2, "0")
+        date = `${dateTime.getDate()}`.padStart(2, "0")
+        hr = `${dateTime.getHours()}`.padStart(2, "0")
+        min = `${dateTime.getMinutes()}`.padStart(2, "0")
+        sec = `${dateTime.getSeconds()}`.padStart(2, "0")
+
+        formattedDate = dateTime.getFullYear() + "-" + month + "-" + date + " " + hr + ':' + min + ':' + sec;
+
+        return formattedDate;
+    }
+
+    $(document).on('mouseup', '#time', function () {
+
+        formattedDate = $("[name='formattedDate']").val()
+        $(`#EDMInfo`).remove()
+
+        getEDMInfo(formattedDate);
+    })
+
+</script>
+
+</html>

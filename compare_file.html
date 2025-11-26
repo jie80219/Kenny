@@ -1,0 +1,467 @@
+<?php include(__DIR__ . '/basic/header.html'); ?>
+<div class="row">
+  <!-- search -->
+  <div class="col-12">
+    <div class="card shadow mb-4">
+      <div class="card-body d-flex overflow-auto">
+        <div class="flex-nowrap d-flex justify-content-center" id="list-tab">
+          <ul class="list-group list-group-horizontal w-100">
+            <li class="list-group-item flex-fill w-100">上傳圖檔</li>
+            <li class="list-group-item flex-fill w-100">查詢歷史訂單</li>
+            <li class="list-group-item flex-fill w-100">全圖比對</li>
+            <li class="list-group-item flex-fill w-100">零件分類</li>
+            <li class="list-group-item flex-fill w-100">零件比對</li>
+            <li class="list-group-item flex-fill w-100">刻度圈選</li>
+            <li class="list-group-item flex-fill w-100">刻度修改</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <!-- search -->
+  <div class="col-12">
+    <div class="card shadow mb-4">
+      <div class="card-header">
+        報價單摘要
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-borderless">
+            <thead>
+              <tr>
+                <th>客戶圖縮圖</th>
+                <th>訂單資訊</th>
+                <th>註記</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td width=10%>
+                  <img class="img-thumbnail" id="imgThumbnail">
+                </td>
+                <td>
+                  <p>客戶圖號：<span id="spanFileId">1</span></p>
+                  <p>開單時間：<span id="spanUploadTime">2021/05/27</span></p>
+                </td>
+                <td id="tdComment">尚未有任何註記</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row row-cols-1">
+  <div class="col">
+    <div class="card shadow mb-4 h-100">
+      <div class="card-header">全圖比對</div>
+      <div class="card-body">
+        <ul>
+          <li>選擇要呈現的廠內圖數量</li>
+          <li>可設定要呈現出的數量</li>
+        </ul>
+        <div class="form-group row">
+          <div class="col-sm-auto form-group row">
+            <label class="col-form-label col-auto">相似度門檻：</label>
+            <div class="col-auto">
+              <select class="form-control" id="selectThreshold">
+                <option value="40">40%</option>
+                <option value="50">50%</option>
+                <option value="60">60%</option>
+                <option value="70">70%</option>
+                <option value="80">80%</option>
+                <option value="90">90%</option>
+                <option value="100">100%</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-auto form-group row">
+            <label class="col-form-label col-auto">參考數量：</label>
+            <div class="col-auto">
+              <select class="form-control" id="selectAmount">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+            <label class="col-form-label col-auto">張</label>
+          </div>
+        </div>
+        <div class="accordion" id="accordionFilter">
+          <div class="card">
+            <div class="card-header" id="accordionHeadingFilter">
+              <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                  篩選設定
+                </button>
+              </h2>
+            </div>
+            <div id="collapseFilter" class="collapse" aria-labelledby="accordionHeadingFilter" data-parent="#accordionFilter">
+              <div class="card-body">
+                <div class="form-group row">
+                  <div class="form-group row col-auto">
+                    <label class="col-form-label col-sm-auto">年份：</label>
+                    <div class="col-sm form-check form-inline">
+                      <input type="checkbox" class="form-check-input">
+                      <label class="form-check-label">2022</label>
+                    </div>
+                    <div class="col-sm form-check form-inline">
+                      <input type="checkbox" class="form-check-input">
+                      <label class="form-check-label">2021</label>
+                    </div>
+                  </div>
+                  <div class="form-group row col-auto">
+                    <label class="col-form-label col-sm-auto">材質：</label>
+                    <div class="col-sm-auto form-check form-inline">
+                      <input type="checkbox" class="form-check-input">
+                      <label class="form-check-label">鋼鐵</label>
+                    </div>
+                    <div class="col-sm-auto form-check form-inline">
+                      <input type="checkbox" class="form-check-input">
+                      <label class="form-check-label">鎢鋼</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul>
+          <li>註記的部分會在研發階段時，看到所留下的註記</li>
+          <li>按下一步後可送至研發</li>
+        </ul>
+        <div class="table-responsive">
+          <table class="table table-borderless" width=100%>
+            <thead>
+              <tr>
+                <th>客戶原圖</th>
+                <th>廠內圖</th>
+                <th>訂單資訊</th>
+                <th width=30%>註記</th>
+                <th>相似度</th>
+                <th>勾選</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="divImage">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<?php include(__DIR__ . '/basic/footer.html'); ?>
+
+<script>
+
+  var setting = {
+    "lengthChange": true,
+    "destroy": true,
+    "info": true,
+    "searching": false,
+    "order": [],
+    "language": {
+      "processing": "處理中...",
+      "loadingRecords": "載入中...",
+      "lengthMenu": "顯示 _MENU_ 項結果",
+      "zeroRecords": "沒有符合的結果",
+      "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+      "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+      "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+      "infoPostFix": "",
+      "search": "搜尋:",
+      "paginate": {
+        "first": "第一頁",
+        "previous": "上一頁",
+        "next": "下一頁",
+        "last": "最後一頁"
+      },
+      "aria": {
+        "sortAscending": ": 升冪排列",
+        "sortDescending": ": 降冪排列"
+      }
+    }
+  }
+
+
+
+
+
+let process = null;
+var url = new URL(window.location.href);
+var id = url.searchParams.get("id");
+var file_id_dest = url.searchParams.get("file_id_dest");
+$(function(){
+  getListState(id);
+  getFileInformation(id);
+})
+
+function getListState(file_id) {
+  $.ajax({
+    url: `/file/state/${file_id}`,
+    type: 'get',
+    dataType: 'json',
+    success: function(response) {
+      $(response.file_information).each(function() {
+        $('#spanUploadTime').text(this.upload_time)
+        $('#spanFileId').text(this.order_name)
+        $('#imgThumbnail').attr('src',`/file/${this.id}`)
+      })
+
+      $('#list-tab').html(``);
+      let list_tab = $(`<ul class="list-group list-group-horizontal w-100"></ul>`);
+      let list_color = null;
+      $(response.state).each(function(index) {
+        if(index==0 || list_color != this.module_color){
+          list_color = this.module_color;
+          if(index!=0)
+            $('#list-tab').append($(list_tab)[0].outerHTML);
+          list_tab = $(`
+            <div class="alert alert${this.module_color} form-group" role="alert">
+              <p class="alert-heading text-center">${this.module_name}</p>
+              <div class="list-group list-group-horizontal" role="tablist">
+                <ul class="list-group list-group-horizontal">
+                </ul>
+              </div>
+            </div>
+          `);
+        }
+        $(list_tab).find('ul').append(`
+          <li class="list-group-item list-group-item${this['update_time']!=null?this.module_color:''} flex-fill text-nowrap ${location.href.indexOf(this.url+'?')!=-1?'active':''}"  ${this.redirect?``:`onclick="javascript:location.href='${this['url']}?id=${file_id}&file_id_dest=${file_id_dest}'"`}>${this['progress']}</li>
+        `);
+        if(index==response.state.length-1){
+          $('#list-tab').append($(list_tab)[0].outerHTML);
+        }
+      })
+    }
+  })
+}
+$(document).on('change','#selectAmount,#selectThreshold',function(){
+  getFileInformation(id)
+});
+function getFileInformation(file_id){
+  $.ajax({
+    url:`/file/information/${file_id}`,
+    type:'get',
+    dataType:'json',
+    success:function(response){
+      $(response).each(function(){
+        let process_id = this.process_id
+        process = setTimeout(process_resultMatch(process_id), 2000)
+        function process_resultMatch(process_id){
+          $.ajax({
+            url: `/resultMatch/${process_id}`,
+            data:{
+              threshold:$('#selectThreshold').val(),
+              amount:$('#selectAmount').val(),
+              module_name:'研發'
+            },
+            type: 'get',
+            success: function (response) {
+              let selector_not = ``;
+              $(response.result).each(function () {
+                selector_not += `:not(#divImageResultMatch_${this.id})`;
+              });
+              
+              $(`[id*=divImageResultMatch_]${selector_not}`).each(function(){
+                $(this).remove();
+              })
+              $(response.result).each(function (index) {
+                let match = this;
+                let comment = null;
+                let comment_other = '';
+                if(isJson(this.comment)){
+                  $(JSON.parse(this.comment)).each(function(){
+                    if(this.module_name=='研發'){
+                      comment = this.comment
+                    }else if(this.module_name!=null&& this.comment!=null){
+                      comment_other +=`<p>${this.module_name}：${this.comment}</p>`;
+                    }
+                  })
+                }
+                
+                if($(`#divImageResultMatch_${this.id}`).length==0){
+                  $('#divImage').append(`
+                    <tr id="divImageResultMatch_${this.id}">
+                      <td width=20%>
+                        <img src="/file/${file_id}" class="figure-img img-fluid img-thumbnail rounded" alt="..." />
+                      </td>
+                      <td width=20%>
+                        <img src="/file/${this.id}" class="figure-img img-fluid img-thumbnail rounded" alt="..." />
+                      </td>
+                      <td >
+                        <div  name="tdDetail">
+                          <p class="text-nowrap">查無製程</p>
+                        </div>
+                        <p>
+                          <a class="btn btn-light" name="collapseBtn" style="display:none;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 100%;min-width: 1px;" data-toggle="collapse" href="#multiCollapseExample${this.id}" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">查看更多資訊</a>
+                        </p>
+                        <div class="col">
+                          <div class="collapse multi-collapse" id="multiCollapseExample${this.id}">
+                            <div class="" name="collapseDetail"  >
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>${comment_other}<input type="text" value="${comment!=null?comment:''}" class="form-control" name="inputComment" data-file_id="${file_id}" data-file_id_dest="${this.id}" data-confidence="${Number.parseFloat(this.confidence).toFixed(2)}"/></td>
+                      <td>相似度：${Number.parseFloat(this.confidence).toFixed(2)}%</td>
+                      <td><input type="checkbox" class="form-control" ${comment!=null?'checked':''} name="inputCheck" data-file_id="${file_id}" data-file_id_dest="${this.id}" data-confidence="${Number.parseFloat(this.confidence).toFixed(2)}"/></td>
+                      <td><button type="button" class="btn btn-primary" onclick="buttonPass(this)" data-file_id="${file_id}" data-file_id_dest="${this.id}" data-confidence="${Number.parseFloat(this.confidence).toFixed(2)}">下一步</button></td>
+                    </tr>
+                  `);
+                  if(match.order_name!=null || index==0){
+                    $.ajax({
+                      url:`/business/detail`,
+                      type:'get',
+                      data:{
+                        id:index==0?'211-961205001':match.order_name
+                      },
+                      success:function(response){
+                        $(response).each(function(){
+                          $(`#divImageResultMatch_${match.id} [name="tdDetail"]`).html(``);
+                          $(`#divImageResultMatch_${match.id} [name="collapseBtn"]`).show();
+                          let row = this;
+                          let tmpIndex = 0;
+                          // $(`#divImageResultMatch_${match.id} [name="collapseBtn"]`).html(`查看更多資訊`)
+                          $.each(row,function(key,value){
+                            if(tmpIndex > 2){
+                               $(`#divImageResultMatch_${match.id} [name="collapseDetail"]`).append(`
+                                <p class="text-nowrap">${key}：${value}</p>
+                              `);
+                            }else{
+                              $(`#divImageResultMatch_${match.id} [name="tdDetail"]`).append(`
+                                <p class="text-nowrap">${key}：${value}</p>
+                              `);
+                            }
+                            tmpIndex++;
+                           
+                          })
+                          
+                          return false;
+                        })
+                      }
+                    })
+                  }
+                }
+                      // <button type="button" class="btn btn-link" onclick="getDetail(${index==0?'\'211-961205001\'':this.order_name},${this.id})">訂單明細</button>
+                $('#divImage').append($(`#divImageResultMatch_${this.id}`));
+              })
+              $(response.status).each(function(){
+                if(this.status == "stop"){
+                  clearTimeout(process);
+                }else{
+                  process = setTimeout(function(){process_resultMatch(process_id)}, 2000)
+                }
+              })
+            }
+          })
+        }
+      })
+    }
+  })
+}
+
+  $(document).on('change','[name=inputCheck]',function(){
+    let element = this;
+    if($(this).prop('checked')){
+      $.ajax({
+        url:`/file/comment`,
+        type:'post',
+        data:{
+          file_id: $(element).attr('data-file_id'),
+          file_id_dest: $(element).attr('data-file_id_dest'),
+          confidence:$(element).attr('data-confidence'),
+          comment:$(element).closest('tr').find('[name=inputComment]').val(),
+          module_name:'研發'
+        },
+      })
+    }else{
+      $.ajax({
+        url:`/file/comment`,
+        type:'delete',
+        data:{
+          file_id: $(this).attr('data-file_id'),
+          file_id_dest: $(this).attr('data-file_id_dest'),
+          module_name:'研發'
+        },
+      })
+    }
+  })
+  $(document).on('input','[name=inputComment]',function(){
+    let element = this;
+    if($(element).closest('tr').find('[name=inputCheck]').prop('checked')){
+      $.ajax({
+        url:`/file/comment`,
+        type:'post',
+        data:{
+          file_id: $(element).attr('data-file_id'),
+          file_id_dest: $(element).attr('data-file_id_dest'),
+          confidence:$(element).attr('data-confidence'),
+          comment:$(element).closest('tr').find('[name=inputComment]').val(),
+          module_name:'研發'
+        },
+      })
+    }
+  })
+  
+  
+  function buttonPass(element) {
+    $('#basicModal').find('.modal-header').text(``);
+    $('#basicModal').find('.modal-body').text(`請稍等...`);
+    $('#basicModal').find('.modal-footer').text(``);
+    $('#basicModal').modal('show');
+    file_id = $(element).attr('data-file_id')
+    file_id_dest = $(element).attr('data-file_id_dest')
+    $.ajax({
+      url:`/file/comment`,
+      type:'patch',
+      data:{
+        url:window.location.href,
+        id:id,
+        file_id: $(element).attr('data-file_id'),
+        file_id_dest: $(element).attr('data-file_id_dest'),
+      },
+      dataType:'json',
+      success:function(response){
+        $(response).each(function(){
+          window.location.href = `${this.url}?id=${file_id}&file_id_dest=${file_id_dest}`
+        })
+      }
+    })
+  }
+  $(document).on('click', '#buttonFinish', function() {
+    let element = this;
+    $('#basicModal').find('.modal-header').text(``);
+    $('#basicModal').find('.modal-body').text(`請稍等...`);
+    $('#basicModal').find('.modal-footer').text(``);
+    $('#basicModal').modal('show');
+    $.ajax({
+      url:'/file/progress/finish',
+      type:'post',
+      data:{
+        id:id
+      },
+      dataType:'json',
+      success:function(response){
+        $(response).each(function(){
+          window.location.href = `${this.url}?id=${id}`
+        })
+      }
+    })
+  });
+
+function inspin(){
+    $('#exampleModal .modal-title').html('讀取中')
+    $('#exampleModal .modal-footer').html('')
+    $('#exampleModal .modal-body').html(`<div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>`);
+    $('#exampleModal').modal('show');
+  }
+</script>

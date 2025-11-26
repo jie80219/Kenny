@@ -1,0 +1,335 @@
+<?php include(__DIR__.'/../basic/header.html'); ?>
+<link type="text/css" rel="stylesheet" href="https://bobkovalex.github.io/Basic-Canvas-Paint/resources/css/bcPaint.css">
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <div name="uploadStageUpload" class="row row-cols-1 row-cols-md-3">
+        <div class="col-lg-12 mb-4 row justify-content-end">
+            <button type="button" class="btn btn-info mx-2"><a class="text-white" href="/3DConvert/factoryImgSearch">廠內圖查詢</a></button>
+            <button type="button" class="btn btn-info mx-2"><a class="text-white" href="/3DConvert">廠內圖轉檔</a></button>
+            <button type="button" class="btn btn-info mx-2"><a class="text-white" href="/3DConvert/imageUpload">階段圖上傳</a></button>
+        </div>
+        <div class="col-lg-12 mb-4">
+            <div class="card">
+                <h5 class="card-header text-primary">製令單查詢</h5>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group form-inline">
+                            <label>選擇日期:</label>
+                            <input id="dateStart" type="date" class="mx-2 form-control">
+                            <label>-</label>
+                            <input id="dateEnd" type="date" class="mx-2 form-control">
+                            <label>客戶代號:</label>
+                            <input id="customerCode" type="" class="mx-2 form-control">
+                            <button type="button" class="btn btn-info mx-2">查詢</button>
+                        </div>
+                    </div>
+                    <div class="row  table-responsive">
+                        <table class="table table-bordered text-center" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>製令單號</th>
+                                    <th>客戶代號</th>
+                                    <th>客戶名稱</th>
+                                    <th>交期</th>
+                                    <th>廠內圖</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>製令單1</td>
+                                    <td>XXXXXXX</td>
+                                    <td>XXX</td>
+                                    <td>3週</td>
+                                    <td><button id="showInfo" type="button" class="btn btn-warning mx-2">查看</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>製令單2</td>
+                                    <td>XXXXXXX</td>
+                                    <td>XXX</td>
+                                    <td>3週</td>
+                                    <td><button id="upload" type="button" class="btn btn-primary mx-2">上傳</button></td>
+                                </tr>
+                                <tr>
+                                    <td>製令單3</td>
+                                    <td>XXXXXXX</td>
+                                    <td>XXX</td>
+                                    <td>3週</td>
+                                    <td><button id="upload" type="button" class="btn btn-primary mx-2">上傳</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div name="uploadFactoryImage" class="col-lg-4 mb-4">
+            <div class="card border-primary mb-3">
+                <h5 class="card-header text-white text-center bg-primary border-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                        class="bi bi-upload" viewBox="0 0 16 16">
+                        <path
+                            d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z">
+                        </path>
+                        <path
+                            d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z">
+                        </path>
+                    </svg>
+                    上傳廠內圖
+                </h5>
+                <div class="card-body dropzone overflow-auto h-100" action="/file?mode=textrecog" id="uploadDropzone"
+                    method='post'>
+                </div>
+            </div>
+        </div>
+        <div name="image" class="col-lg-8 mb-4">
+            <div class="card border-primary mb-3">
+                <h5 class="card-header text-white text-center bg-primary border-primary">
+                    廠內圖
+                </h5>
+                <div class="card-body">
+                </div>
+            </div>
+        </div>
+        <div name="processInfo" class="col-lg-12 mb-4">
+            <div class="card border-primary mb-3">
+                <h5 class="card-header text-white text-center bg-primary border-primary">
+                    製程資訊
+                </h5>
+                <div class="card-body row row-cols-1 row-cols-md-3">
+                    <div class="col-lg-3 mb-3 ">
+                        <div class="card border-info shadow-lg">
+                            <h5 class="card-header text-white text-center bg-info">207-車床長度</h5>
+                            <div class="card-body">
+                                <form class="">
+                                    <div class="form-group">
+                                        <label for="mark">註記</label>
+                                        <textarea class="form-control" id="mark" rows="2"></textarea>
+                                    </div>
+                                    <div class="form-group custom-file">
+                                        <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+                                        <label class="custom-file-label" for="validatedCustomFile">2D圖上傳</label>
+
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+                                        <label class="custom-file-label" for="validatedCustomFile">3D圖上傳</label>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="showImage" class="card-footer text-center bg-warning text-dark" type="button">
+                                點擊放大查看階段圖
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 mb-3">
+                        <div class="card border-info shadow-lg">
+                            <h5 class="card-header text-white text-center bg-info">312-CNC外徑</h5>
+                            <div class="card-body">
+                                <form class="">
+                                    <div class="form-group">
+                                        <label for="mark">註記</label>
+                                        <textarea class="form-control" id="mark" rows="2"></textarea>
+                                    </div>
+                                    <div class="form-group custom-file">
+                                        <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+                                        <label class="custom-file-label" for="validatedCustomFile">2D圖上傳</label>
+
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+                                        <label class="custom-file-label" for="validatedCustomFile">3D圖上傳</label>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="showImage" class="card-footer text-center bg-warning text-dark" type="button">
+                                點擊放大查看階段圖
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 mb-3">
+                        <div class="card border-info shadow-lg">
+                            <h5 class="card-header text-white text-center bg-info">402-熱前粗銑</h5>
+                            <div class="card-body">
+                                <form class="">
+                                    <div class="form-group">
+                                        <label for="mark">註記</label>
+                                        <textarea class="form-control" id="mark" rows="2"></textarea>
+                                    </div>
+                                    <div class="form-group custom-file">
+                                        <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+                                        <label class="custom-file-label" for="validatedCustomFile">2D圖上傳</label>
+
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+                                        <label class="custom-file-label" for="validatedCustomFile">3D圖上傳</label>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="showImage" class="card-footer text-center bg-warning text-dark" type="button">
+                                點擊放大查看階段圖
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 mb-3">
+                        <div class="card border-info shadow-lg">
+                            <h5 class="card-header text-white text-center bg-info">501-熱前粗研磨</h5>
+                            <div class="card-body">
+                                <form class="">
+                                    <div class="form-group">
+                                        <label for="mark">註記</label>
+                                        <textarea class="form-control" id="mark" rows="2"></textarea>
+                                    </div>
+                                    <div class="form-group custom-file">
+                                        <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+                                        <label class="custom-file-label" for="validatedCustomFile">2D圖上傳</label>
+
+                                    </div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="validatedCustomFile" required>
+                                        <label class="custom-file-label" for="validatedCustomFile">3D圖上傳</label>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="showImage" class="card-footer text-center bg-warning text-dark" type="button">
+                                點擊放大查看階段圖
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="2D" name="2D" class="col-lg-6 mb-4">
+            <div class="card">
+                <h5 class="card-header text-primary">CNC車床</h5>
+                <div class="card-body">
+                    <div class="col-lg-12 mb-4 row row-cols-2">
+                        <img src="/3DModel/2D.png" class="img-fluid img-thumbnail rounded float-left" alt="...">
+                        <img src="/3DModel/2D.png" class="img-fluid img-thumbnail rounded float-left" alt="...">
+                    </div>
+                    <div class="col-lg-12 mb-4 row justify-content-end">
+                        <!-- <button type="button" class="btn btn-info mx-2" data-toggle="modal" data-type="machine_faulty"
+                            data-target="#machine_faulty_Modal">
+                            編輯</button> -->
+                            <button type="button" class="btn btn-info mx-2" id="editIMG">
+                            編輯</button>
+                    </div>
+                    <div class="col-lg-12 mb-4">
+                        <div id="bcPaint"></div>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="3D" name="3D" class="col-lg-6 mb-4">
+            <div class="card">
+                <h5 class="card-header text-primary">3D視圖</h5>
+                <div class="card-body">
+                    <div class="" style="height: 400px;">
+                        <div class="online_3d_viewer h-100" model="/3DModel/test0824.STL">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="modal fade" id="machine_faulty_Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">圖片編輯</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card shadow mb-2">
+                    <div class="card-header">圖片標記</div>
+                    <div class="card-body">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">儲存</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<?php include(__DIR__.'/../basic/footer.html'); ?>
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="/o3dv/three.min-129.js"></script>
+<script type="text/javascript" src="/o3dv/o3dv.min-0.7.21.js"></script>
+<script type="text/javascript" src="https://bobkovalex.github.io/Basic-Canvas-Paint/resources/js/bcPaint.js"></script>
+<script>
+
+
+    $(function () {
+        //     uploadImageTemplate = $("[name='uploadFactoryImage']").remove();
+        //     imageTemplate = $("[name='image']").remove();
+        //     processInfoTemplate = $("[name='processInfo']").remove();
+        //     file2D = $("[name='2D']").remove();
+        //     file3D = $("[name='3D']").remove();
+        viewer();
+    });
+    $(document).on('click', '#editIMG', function (e) {
+        $('#bcPaint').bcPaint();
+    
+    });
+
+    $(document).on('click', '#showInfo', function (e) {
+
+        $("[name='uploadFactoryImage']").remove();
+        $("[name='image']").remove();
+        $("[name='processInfo']").remove();
+        $("[name='2D']").remove();
+        $("[name='3D']").remove();
+
+        $("[name='uploadStageUpload']").append(uploadImageTemplate);
+        $("[name='uploadStageUpload']").append(imageTemplate);
+        $("[name='uploadStageUpload']").append(processInfoTemplate);
+    });
+
+    $(document).on('click', '#upload', function (e) {
+
+        $("[name='uploadFactoryImage']").remove();
+        $("[name='image']").remove();
+        $("[name='processInfo']").remove();
+        $("[name='2D']").remove();
+        $("[name='3D']").remove();
+
+        $("[name='uploadStageUpload']").append(uploadImageTemplate);
+        $("[name='uploadStageUpload']").append(imageTemplate);
+        $("[name='uploadStageUpload']").append(processInfoTemplate);
+    });
+
+    $(document).on('click', '#showImage', function (e) {
+
+        $("[name='2D']").remove();
+        $("[name='3D']").remove();
+
+        $("[name='uploadStageUpload']").append(file2D);
+        $("[name='uploadStageUpload']").append(file3D);
+        viewer();
+    });
+</script>
+<script type='text/javascript'>
+    function viewer() {
+        OV.Init3DViewerElement($('.online_3d_viewer')[0], OV.ParameterConverter.StringToModelUrls('/3DModel/test0824.STL'));
+    }
+
+</script>
+
+</html>

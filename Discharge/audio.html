@@ -1,0 +1,100 @@
+<?php include(__DIR__.'/../basic/header.html'); ?>
+
+<style type="text/css">
+</style>
+<div class="row">
+	<div class="col-10 form-inline">
+		<div data-property-id="uDateTimeRange" data-rendertype="DateTimeRange"></div>
+	</div>
+	<div class="col-2">
+        <div id="uLoad" data-rendertype="Button" data-property-type="search" data-property-onclick="search();"></div>
+	</div>
+	<div class="col-10">
+		<div id="divWaveSurfer" height="64"></div>
+	</div>
+	<div class="col-2 align-self-center">
+        <div data-property-id="uPlay" data-rendertype="Button" data-property-icon="far fa-play-circle" data-property-text="Play" data-property-onclick="play(cPlayAudio);"></div>
+	</div>
+</div>
+<div id="uAudioList" class="row">
+
+</div>
+<?php include(__DIR__.'/../basic/footer.html'); ?>
+</body>
+<link href="/css/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+<script src="/js/json.js"></script>
+<script src="/js/string.js"></script>
+<script src="/js/dateTime.js"></script>
+<script src="/js/jquery-ui-timepicker-addon.js"></script>
+<script src="/js/renderControls.js"></script>
+<script src="https://unpkg.com/wavesurfer.js/dist/wavesurfer.js"></script>
+<script>
+	var cPlayAudio = "/resource/Inside Castle.mp3";
+	var jDateTimeRange_Start_Date, jDateTimeRange_Start_Time;
+	var wavesurfer;
+	$(function () {
+		renderControl(renderControlCallBack);
+	});
+	function renderControlCallBack() {
+		jDateTimeRange_Start_Date = $("#uDateTimeRange_Start_Date");
+		jDateTimeRange_Start_Time = $("#uDateTimeRange_Start_Time");
+		jDateTimeRange_End_Date = $("#uDateTimeRange_End_Date");
+		jDateTimeRange_End_Time = $("#uDateTimeRange_End_Time");
+		jDateTimeRange_Start_Date.val("2021-12-15");
+		jDateTimeRange_Start_Time.val("21:50");
+		jDateTimeRange_End_Date.val("2021-12-15");
+		jDateTimeRange_End_Time.val("22:00");
+		
+		wavesurfer = WaveSurfer.create({
+			container: "#divWaveSurfer",
+			waveColor: "#337ab7",
+			progressColor: "#23527c"
+		});
+		wavesurfer.activeUrl = cPlayAudio;
+		wavesurfer.load(wavesurfer.activeUrl);
+
+		wavesurfer.paused = true;
+		wavesurfer.on('play', function () {
+			this.paused = false; $("#uPlay").html("<i class=\"far fa-pause-circle\"></i><span class=\"ml-2\">Pause</span>");
+		});
+
+		wavesurfer.on('pause', function () {
+			this.paused = true; $("#uPlay").html("<i class=\"far fa-play-circle\"></i><span class=\"ml-2\">Play</span>");
+		});
+
+		wavesurfer.on('finish', function () {
+			this.paused = true; $("#uPlay").html("<i class=\"far fa-play-circle\"></i><span class=\"ml-2\">Play</span>");
+			this.wavesurfer.seekTo(0);
+		});
+	}
+	function play(cUrl) {
+		if (!wavesurfer) { return; }
+		cPlayAudio = cUrl;
+		if (wavesurfer.activeUrl === cPlayAudio) {
+			wavesurfer.playPause();
+			return;
+		};
+		wavesurfer.once('ready', function () {
+			wavesurfer.play();
+		});
+		wavesurfer.activeUrl = cPlayAudio
+		wavesurfer.load(cUrl);
+	}
+	function search() {
+		let cStart = jDateTimeRange_Start_Date.val() + " " + jDateTimeRange_Start_Time.val();
+		let cEnd = jDateTimeRange_End_Date.val() + " " + jDateTimeRange_End_Time.val();
+        json("get", "/Discharge/audio/dataLoad", { dTime_Start: cStart, dTime_End: cEnd }, function (aData) {
+            if (aData.length == 0) { return; }
+			let jAudioList = $("#uAudioList");
+			$.each(aData, function (key, value) {
+                let div = `
+                    <div onclick="play('${value.cAudioData}');" class="col-12" style="cursor:pointer">
+                        ${value.dStart} ~ ${value.dEnd}
+                    </div>`;
+                jAudioList.append(div);
+            });
+        });
+	}
+</script>
+
+</html>

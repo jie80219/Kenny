@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>TEST</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons">
+    <link rel="stylesheet" href="/vendor/chatBot/liveChat.css">
+    <link rel="stylesheet" href="/vendor/chatBot/chatBot.css">
+    <link rel="stylesheet" href="/vendor/rfid/rfid_index.css">
+    <link rel="stylesheet" href="/vendor/index/index.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="/vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="/js/sb-admin-2.min.js"></script>
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-sidebar/3.3.1/sticky-sidebar.min.js"></script>
+
+    <script src="/js/json.js"></script>
+    <script src="/js/string.js"></script>
+    <script src="/js/renderControls.js"></script>
+    <script src="/js/jquery.signalR-2.4.2.min.js"></script>
+
+    <script>
+        $(function () {
+            //let oData = {
+            //    cSaveType: "new", cBillNumber: "20221108001", dBillDate: "2022-11-08", iKind: "1",
+            //    cExplain: "這是備註BBB",
+            //    iBillNumber: 20221108001
+            //};
+            //voucherMainDataSave(oData);
+
+            //let oData = {
+            //    cSaveType: "edit", iBillNumber: 20221006001, iRecordNumber: 1,
+            //    cWayID: "C",
+            //    cSubjectID: "8188", fTotal: 5500.0, fExrate: 1.0, cCurrencyID: "NTD",
+            //    cExplain: "這是備註BBB5",
+
+            //};
+            //voucherDetailDataSave(oData);
+
+            //let oData = { cQueryType: "billDate", dStart: "2022-9-28", dEnd: "2022-10-28", cur_page: 1, size: 20 }
+            //let oData = { cQueryType: "billNumber", cKeyword: "2022", cur_page: 1, size: 20 }
+            //voucherMainDataLoad(oData);
+            //voucherDetailDataLoad(oData);
+
+            //let oData = { cQueryType: "uid", cKeyword: "99", cur_page: 1, size: 20 }
+            //userRelationshipDataLoad(oData);
+            //let oData = {
+            //    cSaveType: "new", iUserID: 139, cRelationship: "isMemberOf", iUserID_Relation2: 141
+            //    ,iRelationshipIndex: 1
+            //};
+            //userRelationshipDataSave(oData);
+
+            //let oData = { cQueryType: "id", cKeyword: "8", cur_page: 1, size: 20 }
+            //?cQueryType=name&cKeyword=資產
+            //groupDataLoad(oData);
+            //kindDataLoad(oData);
+            //subjectDataLoad(oData);
+
+            //let oData = {
+            //    cSaveType: "delete", cLv0_ID: "A", cLv0_Name: "測試新增 Lv0", cLv0_Name_English: "test new lv0",
+            //    cMemo: "這是備註 lv0",
+            //    cLv0_ID_New: "A"
+            //};
+            //groupDataSave(oData);
+
+            /*
+            let oData = {
+                cSaveType: "edit", cLv1_ID: "83", cLv1_Name: "測試新增 Lv1x", cLv1_Name_English: "test new lv1x",
+                cMemo: "這是備註 lv1x",
+                cLv1_ID_New: "84"
+            };
+            kindDataSave(oData);
+            */
+            /*
+			let oData = {
+				cSaveType: "new", cLv2_ID: "8188", cLv2_Name: "測試新增x", cLv2_Name_English: "test newx",
+				iAttribute: 3, bSumMode: false, cCurrencyID: "NTD", cMemo: "這是備註x"
+				//cLv2_ID_New
+			};
+			subjectDataSave(oData);
+            */
+            //let oData = { cTableName: "Attribute" }
+            //typeDataLoad(oData);
+
+		    //renderControl(renderControlCallBack);
+	    });
+        function renderControlCallBack() {
+        }
+        function groupDataLoad(oData) {
+            // oRow = { iOrder, bIsMatch, cLv0_ID, cLv0_Name, cLv0_Name_English, cMemo }
+            json("get", "/Accounting/group/dataLoad", oData, function (aData) {
+                let iRows = aData.iRows; let aRows = aData.aRows;
+                alert("iRows:" + iRows);
+                let jList = $("#uList");
+                for (iIndex in aRows) {
+                    let oRow = aRows[iIndex];
+                    let iOrder = oRow.iOrder;
+                    let bIsMatch = oRow.bIsMatch;
+                    let cLv0_ID = oRow.cLv0_ID; let cLv0_Name = oRow.cLv0_Name; let cLv0_Name_English = oRow.cLv0_Name_English;
+                    let cLine = "" + iOrder + ". " + cLv0_ID + ": " + cLv0_Name + "==" + bIsMatch;
+                    $("<li class='text-dark'></li>").text(cLine).appendTo(jList);
+			    }
+		    });
+
+		}
+		function groupDataSave(oData) {
+			json("post", "/Accounting/group/dataSave", oData, function (aData) {
+				alert("Save OK.");
+			});
+		}
+
+        function kindDataLoad(oData) {
+            // oRow = { iOrder, bIsMatch, cLv0_ID, cLv0_Name, cLv1_ID, cLv1_Name, cLv0_Name_English, cMemo }
+            json("get", "/Accounting/kind/dataLoad", oData, function (aData) {
+                let iRows = aData.iRows; let aRows = aData.aRows;
+                alert("iRows:" + iRows);
+                let jList = $("#uList");
+                for (iIndex in aRows) {
+                    let oRow = aRows[iIndex];
+                    let iOrder = oRow.iOrder;
+                    let bIsMatch = oRow.bIsMatch;
+                    let cLv1_ID = oRow.cLv1_ID; let cLv1_Name = oRow.cLv1_Name; let cLv1_Name_English = oRow.cLv1_Name_English;
+                    let cLine = "" + iOrder + ". " + cLv1_ID + ": " + cLv1_Name + "==" + bIsMatch;
+                    $("<li class='text-dark'></li>").text(cLine).appendTo(jList);
+			    }
+		    });
+        }
+		function kindDataSave(oData) {
+			json("post", "/Accounting/kind/dataSave", oData, function (aData) {
+				alert("Save OK.");
+			});
+		}
+
+        function subjectDataLoad(oData) {
+            /*
+                oRow = {
+                    iOrder,
+                    bIsMatch,
+                    cLv0_ID, cLv0_Name,
+                    cLv1_ID, cLv1_Name,
+                    cLv2_ID, cLv2_Name, cLv2_Name_English,
+                    cBelongSubject_ID, cBelongSubject_Name,
+                    iAttribute, iKind, bSumMode,
+                    cCurrencyID, cCurrencyName,
+                    cMemo
+                }
+            */
+            json("get", "/Accounting/subject/dataLoad", oData, function (aData) {
+                let iRows = aData.iRows; let aRows = aData.aRows;
+                alert("iRows:" + iRows + " " + JSON.stringify(aRows));
+                let jList = $("#uList");
+                for (iIndex in aRows) {
+                    let oRow = aRows[iIndex];
+                    let iOrder = oRow.iOrder;
+                    let bIsMatch = oRow.bIsMatch;
+                    let cLv0_ID = oRow.cLv0_ID; let cLv0_Name = oRow.cLv0_Name;
+                    let cLv1_ID = oRow.cLv1_ID; let cLv1_Name = oRow.cLv1_Name;
+                    let cLv2_ID = oRow.cLv2_ID; let cLv2_Name = oRow.cLv2_Name; let cLv2_Name_English = oRow.cLv2_Name_English;
+                    let cBelongSubject_ID = oRow.cBelongSubject_ID; let cBelongSubject_Name = oRow.cBelongSubject_Name;
+                    let cLine = "" + iOrder + ". " + cLv2_ID + ": " + cLv2_Name + " **** " + cBelongSubject_ID + ": " + cBelongSubject_Name + "==" + bIsMatch;
+                    $("<li class='text-dark'></li>").text(cLine).appendTo(jList);
+			    }
+		    });
+        }
+        function subjectDataSave(oData) {
+            json("post", "/Accounting/subject/dataSave", oData, function (aData) {
+                alert("Save OK.");
+		    });
+        }
+
+
+        function voucherMainDataLoad(oData) {
+            // oRow = { iOrder, bIsMatch, cLv0_ID, cLv0_Name, cLv0_Name_English, cMemo }
+            json("get", "/Accounting/voucher/main/dataLoad", oData, function (aData) {
+                let iRows = aData.iRows; let aRows = aData.aRows;
+                alert("iRows:" + iRows);
+                let jList = $("#uList");
+                for (iIndex in aRows) {
+                    let oRow = aRows[iIndex];
+                    let iOrder = oRow.iOrder;
+                    let iBillNumber = oRow.iBillNumber;
+                    let iKind_ID = oRow.iKind_ID; let cKind_Name = oRow.cKind_Name;
+                    let cLine = "" + iOrder + ". [" + iBillNumber+ "] " + iKind_ID + ": " + cKind_Name;
+                    $("<li class='text-dark'></li>").text(cLine).appendTo(jList);
+			    }
+		    });
+
+		}
+        function voucherMainDataSave(oData) {
+            json("post", "/Accounting/voucher/main/dataSave", oData, function (aData) {
+                alert("Save OK.");
+		    });
+        }
+        function voucherDetailDataLoad(oData) {
+            // oRow = { iOrder, bIsMatch, cLv0_ID, cLv0_Name, cLv0_Name_English, cMemo }
+            json("get", "/Accounting/voucher/detail/dataLoad", oData, function (aData) {
+                let iRows = aData.iRows; let aRows = aData.aRows;
+                alert("iRows:" + iRows + " " + JSON.stringify(aRows));
+                let jList = $("#uList");
+                for (iIndex in aRows) {
+                    let oRow = aRows[iIndex];
+                    let iOrder = oRow.iOrder;
+                    let iBillNumber = oRow.iBillNumber;
+                    let iKind_ID = oRow.iKind_ID; let cKind_Name = oRow.cKind_Name;
+                    let cLine = "" + iOrder + ". [" + iBillNumber+ "] " + iKind_ID + ": " + cKind_Name;
+                    $("<li class='text-dark'></li>").text(cLine).appendTo(jList);
+			    }
+		    });
+
+		}
+        function voucherDetailDataSave(oData) {
+            json("post", "/Accounting/voucher/detail/dataSave", oData, function (aData) {
+                alert("Save OK.");
+		    });
+        }
+
+        function userRelationshipDataLoad(oData) {
+            json("get", "/system/user/relationship/dataLoad", oData, function (aData) {
+                let iRows = aData.iRows; let aRows = aData.aRows;
+                alert("iRows:" + iRows);
+                let jList = $("#uList");
+                for (iIndex in aRows) {
+                    let oRow = aRows[iIndex];
+                    let iOrder = oRow.iOrder;
+                    let iUserID = oRow.iUserID; let cAccount = oRow.cAccount; let cName = oRow.cName;
+                    let cRelationship = oRow.cRelationship;
+                    let iUserID_Relation2 = oRow.iUserID_Relation2; let cAccount_Relation2 = oRow.cAccount_Relation2; let cName_Relation2 = oRow.cName_Relation2;
+                    let cLine = "" + iOrder + ". " + cAccount + ": " + cName + " ==" + cRelationship + "== " + cAccount_Relation2 + ": " + cName_Relation2;
+                    $("<li class='text-dark'></li>").text(cLine).appendTo(jList);
+			    }
+		    });
+
+		}
+		function userRelationshipDataSave(oData) {
+			json("post", "/system/user/relationship/dataSave", oData, function (aRows) {
+				alert(aData);
+			});
+		}
+
+        function typeDataLoad(oData) {
+            // oRow = { iID / cID, cName, iOrder }
+            json("get", "/Accounting/type/dataLoad", oData, function (aRows) {
+                let jList = $("#uList");
+                for (iIndex in aRows) {
+                    let oRow = aRows[iIndex];
+                    let cID = oRow.iID; if (cID === undefined) { cID = oRow.cID; }
+                    let cName = oRow.cName;
+                    let iOrder = oRow.iOrder;
+                    let cLine = "" + iOrder + ". " + cID + ": " + cName;
+                    $("<li class='text-dark'></li>").text(cLine).appendTo(jList);
+			    }
+		    });
+
+		}
+    </script>
+</head>
+
+<body id="page-top" class="sidebar-toggled">
+    <form>
+        <ul id="uList"></ul>
+    </form>
+</body>
+
+</html>

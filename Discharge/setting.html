@@ -1,0 +1,503 @@
+<?php include(__DIR__.'/../basic/header.html'); ?>
+<style type="text/css">
+</style>
+<div class="text-right">
+	<div id="uSave" data-rendertype="Button" data-property-type="save" data-property-onclick="save();"></div>
+</div>
+<!-- RFID READER -->
+<div class="card">
+	<div class="card-header">
+		<h3>RFID</h3>
+	</div>
+	<div class="card-body">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Reader</th>
+					<th>IP</th>
+					<th>Port</th>
+				</tr>
+			</thead>
+			<tbody id="tbody_RfidReaderContainer">
+			</tbody>
+		</table>
+	</div>
+</div>
+<!-- Z -->
+<div class="card">
+	<div class="card-header">
+		<h3>Z Value</h3>
+	</div>
+	<div class="card-body">
+		<table class="table">
+			<tbody>
+				<tr>
+					<th class="table-secondary">IP</th>
+					<td><div data-rendertype="Textbox" data-property-id="uZ_Camera_IP" /></td>
+					<th class="table-secondary">Port</th>
+					<td><div data-rendertype="Textbox" data-property-id="uZ_Camera_Port" /></td>
+				</tr>
+				<tr>
+					<th class="table-secondary">Account</th>
+					<td><div data-rendertype="Textbox" data-property-id="uZ_Camera_Account" /></td>
+					<th class="table-secondary">Password</th>
+					<td><div data-rendertype="Textbox" data-property-id="uZ_Camera_Password" /></td>
+				</tr>
+				<tr><th colspan="4" class="table-primary">AnalysisArea Z</th></tr>
+				<tr>
+					<td colspan="4">
+						<table class="table">
+							<tbody>
+								<tr>
+									<th class="table-info">LeftTop-X</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Z_LeftTop_X" /></td>
+									<th class="table-info">LeftTop-Y</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Z_LeftTop_Y" /></td>
+								</tr>
+								<tr>
+									<th class="table-info">RightTop-X</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Z_RightTop_X" /></td>
+									<th class="table-info">RightTop-Y</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Z_RightTop_Y" /></td>
+								</tr>
+								<tr>
+									<th class="table-info">LeftBottom-X</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Z_LeftBottom_X" /></td>
+									<th class="table-info">LeftBottom-Y</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Z_LeftBottom_Y" /></td>
+								</tr>
+								<tr>
+									<th class="table-info">RightBottom-X</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Z_RightBottom_X" /></td>
+									<th class="table-info">RightBottom-Y</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Z_RightBottom_Y" /></td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<tr><th colspan="4" class="table-primary">AnalysisArea Disconnect</th></tr>
+				<tr>
+					<td colspan="4">
+						<table class="table">
+							<tbody>
+								<tr>
+									<th class="table-info">LeftTop-X</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Disconnect_LeftTop_X" /></td>
+									<th class="table-info">LeftTop-Y</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Disconnect_LeftTop_Y" /></td>
+								</tr>
+								<tr>
+									<th class="table-info">RightTop-X</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Disconnect_RightTop_X" /></td>
+									<th class="table-info">RightTop-Y</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Disconnect_RightTop_Y" /></td>
+								</tr>
+								<tr>
+									<th class="table-info">LeftBottom-X</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Disconnect_LeftBottom_X" /></td>
+									<th class="table-info">LeftBottom-Y</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Disconnect_LeftBottom_Y" /></td>
+								</tr>
+								<tr>
+									<th class="table-info">RightBottom-X</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Disconnect_RightBottom_X" /></td>
+									<th class="table-info">RightBottom-Y</th>
+									<td><div data-rendertype="Textbox" data-property-id="uZ_AnalysisArea_Disconnect_RightBottom_Y" /></td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<th class="table-secondary">SmoothMedian</th>
+					<td><div data-rendertype="Textbox" data-property-id="uZ_SmoothMedian" /></td>
+					<th class="table-secondary">BrightLowValue</th>
+					<td><div data-rendertype="Textbox" data-property-id="uZ_BrightLowValue" /></td>
+				</tr>
+				<tr>
+					<th class="table-secondary">DilateIterations</th>
+					<td><div data-rendertype="Textbox" data-property-id="uZ_DilateIterations" /></td>
+					<th></th>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<!-- Discharge -->
+<div class="card">
+	<div class="card-header">
+		<h3>Discharge Value</h3>
+	</div>
+	<div class="card-body">
+		<table class="table">
+			<tbody>
+				<tr>
+					<th class="table-secondary">IP</th>
+					<td><div data-rendertype="Textbox" data-property-id="uDischarge_Camera_IP" /></td>
+					<th class="table-secondary">Port</th>
+					<td><div data-rendertype="Textbox" data-property-id="uDischarge_Camera_Port" /></td>
+				</tr>
+				<tr>
+					<th class="table-secondary">Account</th>
+					<td><div data-rendertype="Textbox" data-property-id="uDischarge_Camera_Account" /></td>
+					<th class="table-secondary">Password</th>
+					<td><div data-rendertype="Textbox" data-property-id="uDischarge_Camera_Password" /></td>
+				</tr>
+				<tr><th colspan="4" class="table-primary">AnalysisArea</th></tr>
+				<tr>
+					<td colspan="4">
+						<table class="table">
+							<tbody>
+								<tr>
+									<th class="table-info">Left</th>
+									<td><div data-rendertype="Textbox" data-property-id="uDischarge_AnalysisArea_Left" /></td>
+									<th class="table-info">Top</th>
+									<td><div data-rendertype="Textbox" data-property-id="uDischarge_AnalysisArea_Top" /></td>
+								</tr>
+								<tr>
+									<th class="table-info">Width</th>
+									<td><div data-rendertype="Textbox" data-property-id="uDischarge_AnalysisArea_Width" /></td>
+									<th class="table-info">Height</th>
+									<td><div data-rendertype="Textbox" data-property-id="uDischarge_AnalysisArea_Height" /></td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<th class="table-secondary">GaussianArea</th>
+					<td><div data-rendertype="Textbox" data-property-id="uDischarge_GaussianArea" /></td>
+					<th class="table-secondary">BrightLowValue</th>
+					<td><div data-rendertype="Textbox" data-property-id="uDischarge_BrightLowValue" /></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<!-- LabelPrinter -->
+<div class="card">
+	<div class="card-header">
+		<h3>Label Printer</h3>
+	</div>
+	<div id="cardbody_LabelPrinterContainer" class="card-body">
+	</div>
+</div>
+<div class="card">
+	<div class="card-header">
+		<h3>Vibration Modbus</h3>
+	</div>
+	<div class="card-body">
+		<table class="table">
+			<tbody>
+				<tr>
+					<th class="table-secondary">ComPort</th>
+					<td>
+						<div data-rendertype="DropDownList" data-property-id="uVibration_Comport" data-property-items="[{}]" />
+					</td>
+					<th class="table-secondary">Port</th>
+					<td>
+						<div data-rendertype="DropDownList" data-property-id="uVibration_DeviceID" data-property-items="[{}]" />
+					</td>
+					<th class="table-secondary">Address</th>
+					<td><div data-rendertype="Textbox" data-property-id="uVibration_Address" /></td>
+					<th class="table-secondary">Data Length</th>
+					<td>
+						<div data-rendertype="DropDownList" data-property-id="uVibration_Length" data-property-items="[{}]" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="card">
+	<div class="card-header">
+		<h3>App Listener</h3>
+	</div>
+	<div class="card-body">
+		<table class="table">
+			<tbody>
+				<tr>
+					<th class="table-secondary">IP</th>
+					<td><div data-rendertype="Textbox" data-property-id="uIIS_IP" /></td>
+					<th class="table-secondary">Port</th>
+					<td><div data-rendertype="Textbox" data-property-id="uIIS_Port" /></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="card">
+	<div class="card-header">
+		<h3>IIS Server (SQL)</h3>
+	</div>
+	<div class="card-body">
+		<table class="table">
+			<tbody>
+				<tr>
+					<th class="table-secondary">IP</th>
+					<td><div data-rendertype="Textbox" data-property-id="uWeb_IP" /></td>
+					<th class="table-secondary">Port</th>
+					<td><label id="uWeb_Port" class="form-control">80</label></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="card">
+	<div class="card-header">
+		<h3>Storage Path</h3>
+	</div>
+	<div class="card-body">
+		<table class="table">
+			<tbody>
+				<tr>
+					<th class="table-secondary">IP</th>
+					<td><div data-rendertype="Textbox" data-property-id="uStoragePath" /></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<?php include(__DIR__.'/../basic/footer.html'); ?>
+</body>
+<script src="/js/json.js"></script>
+<script src="/js/string.js"></script>
+<script src="/js/renderControls.js"></script>
+<script>
+	var oSetting; var aRfidReader;
+	$(function () {
+		json("get", "/RFID/setting/dataLoad", {}, function (aRfidReader) {
+			json("post", "/RFID/setting/dataSave", aRfidReader, function (oCallBack) {
+				if (oCallBack.length == 0) { return; }
+				alert("Setting OK!");
+			});
+		});
+		//$.when(
+		//	json("get", "/Discharge/setting/dataLoad", { }),
+		//	json("get", "/RFID/setting/dataLoad", { })
+		//).done(function (oDataDischarge, oDataRfid) {
+		//	oSetting = oDataDischarge[0].status === "success" && oDataDischarge[1] === "success" ? oDataDischarge[0].data : [];
+		//	aRfidReader = oDataRfid[0].status === "success" && oDataRfid[1] === "success" ? oDataRfid[0].data : [];
+			
+		//	let tr; let td;
+
+		//	let jLabelPrinterContainer = $("#cardbody_LabelPrinterContainer");
+		//	let aLabelPrinter = oSetting.aLabelPrinter;
+		//	for (cPrinterName in aLabelPrinter) {
+		//		let table = $("<table class=\"table\"></table>").appendTo(jLabelPrinterContainer);
+		//		let thead = $("<thead></thead>").appendTo(table);
+		//		tr = $("<tr></tr>").appendTo(thead);
+		//		td = $("<th colspan=\"6\"><h4>" + cPrinterName + "</h4></th>").appendTo(tr);
+		//		let tbody = $("<tbody></tbody>").appendTo(table);
+		//		tr = $("<tr></tr>").appendTo(tbody);
+		//		td = $("<th class=\"table-secondary\">IP</th>").appendTo(tr);
+		//		td = $("<td><div data-rendertype=\"Textbox\" data-property-id=\"uLabel" + cPrinterName + "_IP\" /></td>").appendTo(tr);
+		//		td = $("<th class=\"table-secondary\">Port</th>").appendTo(tr);
+		//		td = $("<td><div data-rendertype=\"Textbox\" data-property-id=\"uLabel" + cPrinterName + "_Port\" /></td>").appendTo(tr);
+		//		td = $("<th class=\"table-secondary\">ResponseDelay</th>").appendTo(tr);
+		//		td = $("<td><div data-rendertype=\"Textbox\" data-property-id=\"uLabel" + cPrinterName + "_ResponseDelay\" /></td>").appendTo(tr);
+		//		tr = $("<tr></tr>").appendTo(tbody);
+		//		td = $("<th class=\"table-secondary\">PrinterCommand</th>").appendTo(tr);
+		//		td = $("<td colspan=\"5\"><div data-rendertype=\"TextArea\" data-property-id=\"uLabel" + cPrinterName + "_PrinterCommand\" data-property-rows=\"10\" /></td>").appendTo(tr);
+		//	}
+
+		//	let jRfidReaderContainer = $("#tbody_RfidReaderContainer");
+		//	for (cReaderName in aRfidReader) {
+		//		tr = $("<tr></tr>").appendTo(jRfidReaderContainer);
+		//		td = $("<td><label id=\"uRfid" + cReaderName + "_ReaderName\"></label></td>").appendTo(tr);
+		//		td = $("<td><div data-rendertype=\"Textbox\" data-property-id=\"uRfid" + cReaderName + "_IP\" /></td>").appendTo(tr);
+		//		td = $("<td><div data-rendertype=\"Textbox\" data-property-id=\"uRfid" + cReaderName + "_Port\" /></td>").appendTo(tr);
+		//	}
+
+		//	renderControl(renderControlCallBack);
+		//}).fail(function(jqXHR){ alert(jqXHR.status); });;
+		/*
+		let oData = [{ fValue: 10.0, bDisconnect: false, dTime: "2022-3-6 14:50" },{ fValue: 20.0, bDisconnect: false, dTime: "2022-3-6 14:55" }];
+		json("post", "/Discharge/Z/dataSave", oData, function (aData) {
+			alert("OK");
+		});
+		*/
+	});
+	function renderControlCallBack() {
+		jVibration_Comport = $("#uVibration_Comport");
+		for (i = 1; i < 10; i++) { jVibration_Comport.append($("<option></option>").val("COM" + i).text("COM" + i)); }
+		jVibration_DeviceID = $("#uVibration_DeviceID");
+		for (i = 1; i < 5; i++) { jVibration_DeviceID.append($("<option></option>").val(i).text(i)); }
+		jVibration_Length = $("#uVibration_Length");
+		for (i = 1; i < 5; i++) { jVibration_Length.append($("<option></option>").val(i).text(i)); }
+
+		if (oSetting.length == 0) { return; }
+		let pLeftTop; let pRightTop; let pLeftBottom; let pRightBottom;
+		let oArea;
+
+		for (cReaderName in aRfidReader) {
+			let oReader = aRfidReader[cReaderName];
+			$("#uRfid" + cReaderName + "_ReaderName").text(cReaderName);
+			$("#uRfid" + cReaderName + "_IP").val(oReader.cIP);
+			$("#uRfid" + cReaderName + "_Port").val(oReader.iPort);
+		}
+
+		let oZ = oSetting.oZ;
+		$("#uZ_Camera_IP").val(oZ.cIP); $("#uZ_Camera_Port").val(oZ.iPort);
+		$("#uZ_Camera_Account").val(oZ.cAccount); $("#uZ_Camera_Password").val(oZ.cPassword);
+		pLeftTop = pointDecode(oZ.oAnalysisArea_Z.pLeftTop);
+		$("#uZ_AnalysisArea_Z_LeftTop_X").val(pLeftTop.X);
+		$("#uZ_AnalysisArea_Z_LeftTop_Y").val(pLeftTop.Y);
+		pRightTop = pointDecode(oZ.oAnalysisArea_Z.pRightTop);
+		$("#uZ_AnalysisArea_Z_RightTop_X").val(pRightTop.X);
+		$("#uZ_AnalysisArea_Z_RightTop_Y").val(pRightTop.Y);
+		pLeftBottom = pointDecode(oZ.oAnalysisArea_Z.pLeftBottom);
+		$("#uZ_AnalysisArea_Z_LeftBottom_X").val(pLeftBottom.X);
+		$("#uZ_AnalysisArea_Z_LeftBottom_Y").val(pLeftBottom.Y);
+		pRightBottom = pointDecode(oZ.oAnalysisArea_Z.pRightBottom);
+		$("#uZ_AnalysisArea_Z_RightBottom_X").val(pRightBottom.X);
+		$("#uZ_AnalysisArea_Z_RightBottom_Y").val(pRightBottom.Y);
+		pLeftTop = pointDecode(oZ.oAnalysisArea_Disconnect.pLeftTop);
+		$("#uZ_AnalysisArea_Disconnect_LeftTop_X").val(pLeftTop.X);
+		$("#uZ_AnalysisArea_Disconnect_LeftTop_Y").val(pLeftTop.Y);
+		pRightTop = pointDecode(oZ.oAnalysisArea_Disconnect.pRightTop);
+		$("#uZ_AnalysisArea_Disconnect_RightTop_X").val(pRightTop.X);
+		$("#uZ_AnalysisArea_Disconnect_RightTop_Y").val(pRightTop.Y);
+		pLeftBottom = pointDecode(oZ.oAnalysisArea_Disconnect.pLeftBottom);
+		$("#uZ_AnalysisArea_Disconnect_LeftBottom_X").val(pLeftBottom.X);
+		$("#uZ_AnalysisArea_Disconnect_LeftBottom_Y").val(pLeftBottom.Y);
+		pRightBottom = pointDecode(oZ.oAnalysisArea_Disconnect.pRightBottom);
+		$("#uZ_AnalysisArea_Disconnect_RightBottom_X").val(pRightBottom.X);
+		$("#uZ_AnalysisArea_Disconnect_RightBottom_Y").val(pRightBottom.Y);
+		$("#uZ_SmoothMedian").val(oZ.iSmoothMedian);
+		$("#uZ_BrightLowValue").val(oZ.iBrightLowValue);
+		$("#uZ_DilateIterations").val(oZ.iDilateIterations);
+
+		let oDischarge = oSetting.oDischarge;
+		$("#uDischarge_Camera_IP").val(oDischarge.cIP); $("#uDischarge_Camera_Port").val(oDischarge.iPort);
+		$("#uDischarge_Camera_Account").val(oDischarge.cAccount); $("#uDischarge_Camera_Password").val(oDischarge.cPassword);
+		oArea = rectangleDecode(oDischarge.oAnalysisArea);
+		$("#uDischarge_AnalysisArea_Left").val(oArea.Left); $("#uDischarge_AnalysisArea_Top").val(oArea.Top);
+		$("#uDischarge_AnalysisArea_Width").val(oArea.Width); $("#uDischarge_AnalysisArea_Height").val(oArea.Height);
+		$("#uDischarge_GaussianArea").val(oDischarge.iGaussianArea); $("#uDischarge_BrightLowValue").val(oDischarge.iBrightLowValue);
+
+		let aLabelPrinter = oSetting.aLabelPrinter;
+		for (cPrinterName in aLabelPrinter) {
+			let oLabelPrinter = aLabelPrinter[cPrinterName];
+			$("#uLabel" + cPrinterName + "_IP").val(oLabelPrinter.cIP);
+			$("#uLabel" + cPrinterName + "_Port").val(oLabelPrinter.iPort);
+			$("#uLabel" + cPrinterName + "_ResponseDelay").val(oLabelPrinter.iResponseDelay);
+			$("#uLabel" + cPrinterName + "_PrinterCommand").val(oLabelPrinter.cPrinterCommand);
+		}
+
+		let oVibration = oSetting.oVibration;
+		jVibration_Comport.val(oVibration.oComPort.cComPort);
+		jVibration_DeviceID.val(oVibration.iDeviceID);
+		$("#uVibration_Address").val(oVibration.iAddress);
+		jVibration_Length.val(oVibration.iLength);
+
+		let oIIS = oSetting.oIIS;
+		$("#uIIS_IP").val(oIIS.cIP);
+		$("#uIIS_Port").val(oIIS.iPort);
+
+		let oWeb = oSetting.oWeb;
+		$("#uWeb_IP").val(oWeb.cIP);
+
+		$("#uStoragePath").val(oSetting.cStoragePath);
+	}
+	function save() {
+		json("get", "/Discharge/setting/dataLoad", {}, function (oSetting) {
+			if (oSetting.length == 0) { return; }
+
+			let oZ = oSetting.oZ;
+			oZ.cIP = $("#uZ_Camera_IP").val(); oZ.iPort = parseInt($("#uZ_Camera_Port").val());
+			oZ.cAccount = $("#uZ_Camera_Account").val(); oZ.cPassword = $("#uZ_Camera_Password").val();
+
+			let oAnalysisArea_Z = oZ.oAnalysisArea_Z;
+			oAnalysisArea_Z.pLeftTop = pointEncode($("#uZ_AnalysisArea_Z_LeftTop_X").val(), $("#uZ_AnalysisArea_Z_LeftTop_Y").val());
+			oAnalysisArea_Z.pRightTop = pointEncode($("#uZ_AnalysisArea_Z_RightTop_X").val(), $("#uZ_AnalysisArea_Z_RightTop_Y").val());
+			oAnalysisArea_Z.pLeftBottom = pointEncode($("#uZ_AnalysisArea_Z_LeftBottom_X").val(), $("#uZ_AnalysisArea_Z_LeftBottom_Y").val());
+			oAnalysisArea_Z.pRightBottom = pointEncode($("#uZ_AnalysisArea_Z_RightBottom_X").val(), $("#uZ_AnalysisArea_Z_RightBottom_Y").val());
+
+			let oAnalysisArea_Disconnect = oZ.oAnalysisArea_Disconnect;
+			oAnalysisArea_Disconnect.pLeftTop = pointEncode($("#uZ_AnalysisArea_Disconnect_LeftTop_X").val(), $("#uZ_AnalysisArea_Disconnect_LeftTop_Y").val());
+			oAnalysisArea_Disconnect.pRightTop = pointEncode($("#uZ_AnalysisArea_Disconnect_RightTop_X").val(), $("#uZ_AnalysisArea_Disconnect_RightTop_Y").val());
+			oAnalysisArea_Disconnect.pLeftBottom = pointEncode($("#uZ_AnalysisArea_Disconnect_LeftBottom_X").val(), $("#uZ_AnalysisArea_Disconnect_LeftBottom_Y").val());
+			oAnalysisArea_Disconnect.pRightBottom = pointEncode($("#uZ_AnalysisArea_Disconnect_RightBottom_X").val(), $("#uZ_AnalysisArea_Disconnect_RightBottom_Y").val());
+
+			oZ.iSmoothMedian = parseInt($("#uZ_SmoothMedian").val());
+			oZ.iBrightLowValue = parseInt($("#uZ_BrightLowValue").val());
+			oZ.iDilateIterations = parseInt($("#uZ_DilateIterations").val());
+
+			let oDischarge = oSetting.oDischarge;
+			oDischarge.cIP = $("#uDischarge_Camera_IP").val(); oDischarge.iPort = parseInt($("#uDischarge_Camera_Port").val());
+			oDischarge.cAccount = $("#uDischarge_Camera_Account").val(); oDischarge.cPassword = $("#uDischarge_Camera_Password").val();
+			oDischarge.oAnalysisArea = rectangleEncode(
+				$("#uDischarge_AnalysisArea_Left").val(), $("#uDischarge_AnalysisArea_Top").val(),
+				$("#uDischarge_AnalysisArea_Width").val(), $("#uDischarge_AnalysisArea_Height").val()
+			);
+			oDischarge.iGaussianArea = parseInt($("#uDischarge_GaussianArea").val());
+			oDischarge.iBrightLowValue = parseInt($("#uDischarge_BrightLowValue").val());
+
+			oSetting.aLabelPrinter.Printer1.cIP = $("#uLabelPrinter1_IP").val();
+			oSetting.aLabelPrinter.Printer1.iPort = parseInt($("#uLabelPrinter1_Port").val());
+			oSetting.aLabelPrinter.Printer1.cPrinterCommand = $("#uLabelPrinter1_PrinterCommand").val();
+			oSetting.aLabelPrinter.Printer1.iResponseDelay = parseInt($("#uLabelPrinter1_ResponseDelay").val());
+			oSetting.aLabelPrinter.Printer2.cIP = $("#uLabelPrinter1_IP").val();
+			oSetting.aLabelPrinter.Printer2.iPort = parseInt($("#uLabelPrinter1_Port").val());
+			oSetting.aLabelPrinter.Printer2.cPrinterCommand = $("#uLabelPrinter2_PrinterCommand").val();
+			oSetting.aLabelPrinter.Printer2.iResponseDelay = parseInt($("#uLabelPrinter2_ResponseDelay").val());
+			oSetting.aLabelPrinter.Printer3.cIP = $("#uLabelPrinter3_IP").val();
+			oSetting.aLabelPrinter.Printer3.iPort = parseInt($("#uLabelPrinter3_Port").val());
+			oSetting.aLabelPrinter.Printer3.cPrinterCommand = $("#uLabelPrinter3_PrinterCommand").val();
+			oSetting.aLabelPrinter.Printer3.iResponseDelay = parseInt($("#uLabelPrinter3_ResponseDelay").val());
+
+			let oVibration = oSetting.oVibration;
+			oVibration.oComPort.cComPort = $("#uVibration_Comport").val();
+			oVibration.iDeviceID = parseInt($("#uVibration_DeviceID").val());
+			oVibration.iAddress = parseInt($("#uVibration_Address").val());
+			oVibration.iLength = parseInt($("#uVibration_Length").val());
+
+			let oIIS = oSetting.oIIS;
+			oIIS.cIP = $("#uIIS_IP").val();
+			oIIS.iPort = parseInt($("#uIIS_Port").val());
+
+			let oWeb = oSetting.oWeb;
+			oWeb.cIP = $("#uWeb_IP").val();
+
+			oSetting.cStoragePath = $("#uStoragePath").val();
+
+			json("post", "/Discharge/setting/dataSave", oSetting, function (oCallBack) {
+				if (oCallBack.length == 0) { return; }
+				alert("Setting OK!");
+			});
+		});
+		json("get", "/Rfid/setting/dataLoad", {}, function (oSetting) {
+			if (aRfidReader.length == 0) { return; }
+
+			for (cReaderName in aRfidReader) {
+				let oReader = aRfidReader[cReaderName];
+				oReader.cIP = $("#uRfid" + cReaderName + "_IP").val();
+				oReader.iPort = parseInt($("#uRfid" + cReaderName + "_Port").val());
+			}
+
+			json("post", "/RFID/setting/dataSave", aRfidReader, function (oCallBack) {
+				if (oCallBack.length == 0) { return; }
+				alert("Rfid Reader OK!");
+			});
+		});
+	}
+	function pointDecode(cPoint) {
+		let aData = cPoint.split(",").map(item => item.trim());
+		return { X: aData[0], Y: aData[1] };
+	}
+	function pointEncode(cX, cY) {
+		return cX + ", " + cY;
+	}
+	function rectangleDecode(cRectangle) {
+		let aData = cRectangle.split(",").map(item => item.trim());
+		return { Left: aData[0], Top: aData[1], Width: aData[2], Height: aData[3] };
+	}
+	function rectangleEncode(cLeft, cTop, cWidth, cHeight) {
+		return cLeft + ", " + cTop + ", " + cWidth + ", " + cHeight;
+	}
+</script>
+
+</html>

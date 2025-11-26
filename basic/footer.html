@@ -1,0 +1,532 @@
+</div>
+<!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+<!-- Footer -->
+<footer class="sticky-footer " style="background-color: #efefef">
+    <div class="my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Your Website 2022</span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top" style="z-index:9999;">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">確定要登出嗎?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">如果你確定要離開系統，請按下下方登出鈕</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
+                <a class="btn btn-primary" href="/login">登出</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="basicModal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+<button hidden data-target="#imgModal" data-toggle="modal" id="buttonImg"></button>
+<!-- Modal -->
+<div class="modal fade" id="imgModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="body" style="z-index:9999;position: relative;">
+<!-- 新增.hint包裝，當觸發事件，用hint_child包裝兩個btn(show、none方便) -->
+    <div class="hint">
+        <div id="chat-circle-quesion" class="btn btn-raised">
+            <i class="fas fa-solid fa-question"></i>
+        </div>
+        <div class="hint_child d-none">
+            <div id="chat-circle-debug" class="btn btn-raised" data-toggle="modal" data-target="#ModalDebug">
+                <i class="fas fa-bug"></i>
+            </div>
+            <div id="chat-circle" class="btn btn-raised">
+                <div id="chat-overlay"></div>
+                <i class="far fa-comments"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-box">
+        <div class="chat-box-header">
+            liveChat
+            <span class="chat-box-toggle"><i class="material-icons">close</i></span>
+        </div>
+        <div class="chat-box-body">
+            <div class="chat-logs">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card" style="height:65vh">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h4>議題列表</h4>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="btn-group float-right">
+                                            <button class="btn btn-secondary fa fa-folder" type="button"
+                                                data-toggle="modal" data-target="#basicModal"
+                                                data-type="addClass"></button>
+                                            <button class="btn btn-secondary " type="button" data-toggle="modal"
+                                                data-target="#basicModal" data-type="create">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-search"
+                                                aria-hidden="true"></i></span>
+                                    </div>
+                                    <input type="text" id="searchChatroomInput" class="form-control">
+                                </div>
+                            </div>
+                            <div class="card-body overflow-auto" name="inbox_chat">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="card" style="height:65vh">
+                            <div class="card-header">
+                                <nav class="navbar navbar-expand navbar-light bg-light d-flex justify-content-between">
+                                    <a class="navbar-brand" name="navbarChatroomTitle"></a>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-light dropdown-toggle text-dark bg-light"
+                                            data-toggle="dropdown" data-display="static" aria-haspopup="true"
+                                            aria-expanded="false" id="tool_dropdown" style="display:none;">
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <button class="dropdown-item" type="button-light" data-toggle="modal"
+                                                data-target="#basicModal" data-type="member">成員列表</button>
+                                            <div class="dropdown-divider"></div>
+                                            <button class="dropdown-item" type="button" data-toggle="modal"
+                                                data-target="#basicModal" data-type="insertClass">加入議題類別</button>
+                                            <div class="dropdown-divider"></div>
+                                            <button class="dropdown-item" type="button" data-toggle="modal"
+                                                data-target="#basicModal" data-type="delete">離開議題</button>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                            <div class="card-body overflow-auto msg_history">
+                                <div class="h-100 d-flex flex-column">
+                                    <div class="card flex-grow-1 mb-3">
+                                        <div class="card-body" name="chatBox">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="align-bottom">
+                                    <div class="dropup" id="dropupTag">
+                                        <div class="dropdown-menu show" aria-labelledby="dropdownMenuButton"
+                                            id="tagPeople">
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <a class="scroll-to-down rounded">
+                                            <i class="fas fa-angle-down"></i>
+                                        </a>
+                                        <div class="w-100">
+                                            <textarea class="form-control" style="word-wrap:break-word;width:100%;"
+                                                placeholder="請在此輸入訊息，ENTER可以換行&#13;&#10;SHIFT+ENTER送出訊息"
+                                                id="textinput"></textarea>
+                                        </div>
+                                        <input style="display:none;" type="file" name="inputFile">
+                                        <div class="btn-group dropup">
+                                            <div class="flex-shrink-1  align-self-center ml-1">
+                                                <button type="button" class="btn btn-secondary btn-block far fa-smile "
+                                                    aria-haspopup="true" aria-expanded="false" id="btnEmoji">
+                                                </button>
+                                            </div>
+                                            <div class="dropdown-menu overflow-auto" aria-labelledby="dropdownMenuEmoji"
+                                                id="dropdownMenuEmoji" style="display:none;height:25vh">
+                                                <div class="btn-group" role="group" aria-label="Basic example">
+                                                    <button type="button" name="emojiPic"
+                                                        class="btn badge badge-light ml-1-">&#128512;</button>
+                                                    <button type="button" name="emojiPic"
+                                                        class="btn badge badge-light ml-1-">&#128513;</button>
+                                                    <button type="button" name="emojiPic"
+                                                        class="btn badge badge-light ml-1-">&#128514;</button>
+                                                </div>
+                                                <a class="dropdown-item" href="#">Action</a>
+                                                <a class="dropdown-item" href="#">Another action</a>
+                                                <a class="dropdown-item" href="#">Something else here</a>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="flex-shrink-1  align-self-center ml-1">
+                                            <button class="btn btn-secondary btn-block far fa-paper-plane msg_send_btn"
+                                                name="ButtonMsgSend" type="button"></button>
+                                        </div>
+                                        <div class="flex-shrink-1  align-self-center ml-1">
+                                            <button class="btn btn-secondary " type="button"
+                                                onclick="uploadFile(this)">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalDebug" tabindex="-1" role="dialog" aria-labelledby="ModalDebugLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalDebugLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<!-- Bootstrap core JavaScript-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="/vendor/chart.js/Chart.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/js/sb-admin-2.min.js"></script>
+<script src="/js/jquery.dataTables.min.js"></script>
+<script src="/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-sidebar/3.3.1/sticky-sidebar.min.js"></script>
+<script src="/vendor/chatBot/chatBot.js"></script>
+<script src="/vendor/chatBot/liveChat.js"></script>
+
+</body>
+
+</html>
+<script type="text/javascript">
+    var timer;
+    function isJson(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+    $(document).on('click', '#content img', function () {
+        if ($(this).closest("#root").length == 1) {
+            return;
+        }
+        $('#buttonImg').click();
+        let element = this;
+        let src = $(this).attr('src');
+        $('#imgModal').find('.modal-header').text('檢視縮圖');
+        if ($(this).data('type') == 'two') {
+            $('#imgModal').find('.modal-body').html(`<div class="row overflow-auto">
+                <div class="col-6">
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">旋轉</span>
+                        <button type="button" id="" onclick="rotatepic('rotatepic1',-90)" class="btn btn-secondary">-90°</button>
+                        <button type="button" id=""  onclick="rotatepic('rotatepic1',-10)" class="btn btn-secondary">-10°</button>
+                    </div>
+                    <input type="number" class="form-control" id="rotatepic1" value="0" data-type="rotatepic1" name="inputrotate">
+                    <div class="input-group-append">
+                        <button type="button" id=""  onclick="rotatepic('rotatepic1',10)" class="btn btn-secondary">+10°</button>
+                        <button type="button" id=""  onclick="rotatepic('rotatepic1',90)" class="btn btn-secondary">+90°</button>
+                    </div>
+                    </div>
+                    <figcaption class="figure-caption ">報價原圖</figcaption>
+                    <img src="/file/${$(this).data('img2')}" class="img-fluid" data-type="rotatepic1">
+                </div>
+                <div class="col-6">
+                    <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="">旋轉</span>
+                        <button type="button" id="" onclick="rotatepic('rotatepic2',-90)" class="btn btn-secondary">-90°</button>
+                        <button type="button" id=""  onclick="rotatepic('rotatepic2',-10)" class="btn btn-secondary">-10°</button>
+                    </div>
+                    <input type="number" class="form-control" id="rotatepic2" value="0" data-type="rotatepic2" name="inputrotate">
+                    <div class="input-group-append">
+                        <button type="button" id=""  onclick="rotatepic('rotatepic2',10)" class="btn btn-secondary">+10°</button>
+                        <button type="button" id=""  onclick="rotatepic('rotatepic2',90)" class="btn btn-secondary">+90°</button>
+                    </div>
+                    </div>
+                    <figcaption class="figure-caption">客戶原圖</figcaption>
+                    <img src="${src}" class="img-fluid" data-type="rotatepic2">
+                </div>
+                
+            </div>`);
+        } else {
+            $('#imgModal').find('.modal-body').html(`
+                <img src="${src}" class="img-fluid"></img>
+            `);
+        }
+
+        $('#imgModal').find('.modal-footer').html(`
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">關閉</button>
+        `);
+    })
+    function rotatepic(tmpimg,tmpint) {
+        let element;
+        if(tmpimg == "rotatepic1"){
+            element = $('#rotatepic1')
+        }else{
+            element = $('#rotatepic2')
+        }
+        let rotate = parseInt($(element).val());
+        rotate += tmpint;
+        // if(rotate<0){
+        //   rotate+=360;
+        // }
+        rotate %= 360;
+        $(element).val(rotate)
+        $(element).change()
+    }
+    jQuery.fn.rotate = function(degrees) {
+      $(this).css({
+        'transform': 'rotate(' + degrees + 'deg)'
+      });
+    };
+    $(document).on('change', '[name="inputrotate"]', function() {
+        
+        let degrees = parseInt($(this).val());
+        $(`img[data-type=${$(this).data('type')}]`).css({
+            'transform': 'rotate(' + degrees + 'deg)',
+            '-ms-transform': 'rotate(' + degrees + 'deg)',
+            '-moz-transform': 'rotate(' +  + 'deg)',
+            '-webkit-transform': 'rotate(' + degrees + 'deg)',
+            '-o-transform': 'rotate(' + degrees + 'deg)'
+        }); 
+    
+    });
+    getUserInformation();
+    function getUserInformation() {
+        $.ajax({
+            url: `/system/user`,
+            type: 'get',
+            success: function (response) {
+                $.each(response, function () {
+                    $('#userDropdown span').text(this.name)
+                })
+            }
+        })
+    }
+    //0401 懸浮顯現，2秒後將隱藏
+    $(".hint").hover(function () {
+        $(".hint_child").removeClass("d-none");
+        $("#chat-circle-quesion").addClass("d-none");
+    }, function () {
+        window.clearTimeout(timer);
+        timer = window.setTimeout(function () {
+            $("#chat-circle-quesion").removeClass("d-none");
+            $(".hint_child").addClass("d-none");
+        }, 2000);
+    });
+    function bgChange(bg) {
+
+        $(bg).attr("style", "background-color: #6378e5; color: #ffffff");
+    }
+    function bgRecover(bg) {
+
+        $(bg).attr("style", "");
+    }
+    function btnBgChange(bg) {
+
+        $(bg).attr("style", "background-color: #6378e5; color: #ffffff");
+        // $(bg).attr("class", "btn dropdown-toggle text-white")
+    }
+    function btnBgRecover(bg) {
+
+        $(bg).attr("style", "");
+    }
+    //智慧感測
+    $.ajax({
+        url: `/Environment/Quality`,
+        dataType: 'json',
+        method: 'GET',
+        success: function (response) {
+            $('#temperatureHead').text(`${response[0]['temperature']}°C`);
+            $('#humidityHead').text(`${response[0]['humidity']}%`);
+            $('#PM1Head').text(`${response[0]['PM1.0']}μg/m3`);
+            $('#PM25Head').text(`${response[0]['PM2.5']}μg/m3`);
+            $('#PM10Head').text(`${response[0]['PM10']}μg/m3`);
+
+            //溫度
+            if (response[0]['temperature'] >= 38 || response[0]['temperature'] <= 5) {
+                $('#temperatureHead').attr('style', 'color: #ff0000')
+            }
+            else if (response[0]['temperature'] == 37 || (response[0]['temperature'] >= 6 && response[0]['temperature'] <= 9)) {
+                $('#temperatureHead').attr('style', 'color: #ff7300')
+            }
+            else if (response[0]['temperature'] == 36 || response[0]['temperature'] == 10) {
+                $('#temperatureHead').attr('style', 'color: #DDAA00')
+            }
+            else {
+                $('#temperatureHead').attr('style', 'color: #009c00')
+            }
+            //PM2.5
+            if (response[0]['PM2.5'] >= 0 && response[0]['PM2.5'] <= 15) {
+                $('#PM25Head').attr('style', 'color: #009c00')
+            }
+            else if (response[0]['PM2.5'] >= 16 && response[0]['PM2.5'] <= 35) {
+                $('#PM25Head').attr('style', 'color: #DDAA00')
+            }
+            else if (response[0]['PM2.5'] >= 36 && response[0]['PM2.5'] <= 54) {
+                $('#PM25Head').attr('style', 'color: #ff7300')
+            }
+            else {
+                $('#PM25Head').attr('style', 'color: #ff0000')
+            }
+            //PM10
+            if (response[0]['PM10'] >= 0 && response[0]['PM10'] <= 50) {
+                $('#PM10Head').attr('style', 'color: #009c00')
+            }
+            else if (response[0]['PM10'] >= 51 && response[0]['PM10'] <= 100) {
+                $('#PM10Head').attr('style', 'color: #DDAA00')
+            }
+            else if (response[0]['PM10'] >= 101 && response[0]['PM10'] <= 254) {
+                $('#PM10Head').attr('style', 'color: #ff7300')
+            }
+            else {
+                $('#PM10Head').attr('style', 'color: #ff0000')
+            }
+        }
+    });
+    $.ajax({
+        url: `/permissions`,
+        type: 'get',
+        data: {},
+        success: function (response) {
+            $(response).each(function () {
+                let item = $(`
+                <li class="nav-item">
+                </li>
+                `);
+                $(this).each((key, permission_group) => {
+                    if (permission_group.permission_group_id !== null) {
+                        let item_child = $(`<div></div>`);
+                        $(permission_group.permissions).each((permissions_key, permission) => {
+                            $(item_child).append(`
+                                <a class="collapse-item h6" href="${permission.permission_url}">${permission.permission_name}</a>
+                            `);
+                        })
+                        $(item).append(`
+                            <a class="nav-link collapsed h5 text-center" onmouseover="btnBgChange(this)" onmouseout="btnBgRecover(this)" href="#" data-toggle="collapse" data-target="#collapseNavSidebarPermission_${permission_group.permissions_index}"
+                                aria-expanded="true" aria-controls="collapseNavSidebarPermission_${permission_group.permissions_index}" id="accordionNavSidebarPermission_${permission_group.permissions_index}">
+                                ${permission_group.permission_group_name}
+                            </a>
+                            <div id="collapseNavSidebarPermission_${permission_group.permissions_index}" class="collapse" aria-labelledby="headingQuotation" data-parent="#accordionSidebar">
+                                <div class="bg-white py-2 collapse-inner rounded">
+                                    ${$(item_child).html()}
+                                </div>
+                            </div>
+                        `);
+                    } else {
+                        let item_child = $(`<div></div>`);
+                        $(permission_group.permissions).each((permissions_key, permission) => {
+                            $(item).append(`
+                                <a class="nav-link collapsed h5 text-center" onmouseover="bgChange(this)" onmouseout="bgRecover(this)" class="nav-link text-dark" href="${permission.permission_url}">${permission.permission_name}</a>
+                            `);
+                        })
+                    }
+                })
+                $('#divNavSidebarPermission').append(item);
+            });
+        }
+    });
+</script>

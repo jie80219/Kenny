@@ -1,0 +1,745 @@
+<?php include(__DIR__.'/../basic/header.html'); ?>
+<script src="/dropzone/dist/dropzone.js"></script>
+<link rel="stylesheet" href="/dropzone/dist/dropzone.css">
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<style>
+    /* The heart of the matter */
+
+    .horizontal-scrollable>.row {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .horizontal-scrollable>.row>.col-xs-4 {
+        display: inline-block;
+        float: none;
+    }
+
+    /* Decorations */
+
+    .col-xs-4 {
+        color: white;
+        font-size: 24px;
+        padding-bottom: 20px;
+        padding-top: 18px;
+    }
+
+    .col-xs-4:nth-child(2n+1) {
+        background: green;
+    }
+
+    .col-xs-4:nth-child(2n+2) {
+        background: black;
+    }
+</style>
+
+<!-- Page Heading -->
+<h3 class="h3 mb-4 text-gray-800">電子文件簽核</h3>
+<div class="row">
+    <div class="offset-lg-1 col-lg-10 offset-lg-1">
+        <div class="card">
+            <div class="card-body">
+                <form id="infoform">
+                    <div class="form-group row">
+                        <label class="col-form-label col-md-auto">名稱：
+                        </label>
+                        <div class="col-md">
+                            <input type="text" class="form-control" name="inputQuestion" data-type="title"
+                                id="inputName" placeholder="ex.123" required value="i">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-form-label col-md-auto">受文者：
+                        </label>
+                        <div class="col-md">
+                            <input type="text" class="form-control text-truncate" name="inputQuestion"
+                                data-type="receiver" id="inputReciver" placeholder="ex.123" required disabled>
+                            <div id="validationServer05Feedback" class="invalid-feedback">
+                                <!-- Please provide a valid zip. -->
+                                請選擇受文者
+                            </div>
+                        </div>
+                        <label class="col-form-label col-md-auto">發文者：
+                        </label>
+                        <div class="col-md">
+                            <input type="text" class="form-control" name="inputQuestion" data-type="user_id"
+                                id="inputPoster" placeholder="ex.123" required disabled>
+                        </div>
+
+                    </div>
+                    <div class="col-form-label col-md-auto">
+                        <p>
+                            <button class="btn btn-primary btn-lg btn-block" type="button" data-toggle="collapse"
+                                data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"
+                                id="receiverEdit">
+                                受文者編輯
+                            </button>
+                        </p>
+
+                    </div>
+                    <div class="collapse" id="collapseExample">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                    aria-controls="home" aria-selected="true">審核名單</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                                    aria-controls="profile" aria-selected="false">審核流程</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <div class="card mb-4">
+                                    <div class="card-body">
+                                        <div class="row rows-col-1 rows-col-lg-2">
+                                            <div class="col">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="chkList">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>全選</th>
+                                                                <th>姓名</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="chkedList">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>姓名</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <div class="container horizontal-scrollable mt-3 mb-3">
+                                    <div class="row flex-row flex-nowrap" cellspacing="0" width="100%"
+                                        id="sortableReceiver">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <input type="date" class="form-control" name="inputQuestion"
+                                            data-type="publish_date" required value="2022-01-02" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select id="inputState" class="form-control" name="inputQuestion"
+                                        data-type="urgent_type_id" required>
+                                        <option selected>普通件</option>
+                                        <option>速件</option>
+                                        <option>急件</option>
+                                        <option>特急件</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                    </div>
+                    <br />
+                    <div class="form-group row">
+                        <div class="container">
+                            <button type="button" class="btn btn-lg btn-secondary" disabled>龍畿企業人字第xxxxxxxx號</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-lg btn-secondary" style="display: none;"
+                        id="submitinfo"></button>
+                </form>
+                <form action="/file?mode=textrecog" class="dropzone h-100" id="uploadDropzone" method='post'
+                    style="min-width:200px"></form>
+
+                <hr />
+                <h4>內文</h3>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="card-header">工具列</div>
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <span>描述</span>
+                                        <button class="btn btn-primary mil-toolbar" data-type="paragraph">＋</button>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span>回覆</span>
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#basicModal"
+                                            data-type="text">＋</button>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span>回饋</span>
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#basicModal"
+                                            data-type="textarea">＋</button>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span>單選</span>
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#basicModal"
+                                            data-type="radio">＋</button>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span>多選</span>
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#basicModal"
+                                            data-type="checkbox">＋</button>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span>檔案</span>
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#basicModal"
+                                            data-type="filecomponent">＋</button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <div class="card shadow">
+                                <div class="card-header">
+                                    編輯區
+                                </div>
+                                <div class="card-body">
+                                    <ul class="mil-editor droptrue list-unstyled" style="min-height: 100px;">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+                    <div class="col-12 form-group row">
+                        <div class="col-auto">
+                            <button class="col-auto btn btn-primary" id="save">存擋</button>
+                        </div>
+                        <div class="col-auto">
+                            <button class="col-auto btn btn-secondary" id="preview">預覽</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php include(__DIR__.'/../basic/footer.html'); ?>
+<link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css"
+    rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script type="text/javascript"
+    src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+<script>
+
+    function getuser_id() {
+        $.ajax({
+            url: '/system/user',
+            type: 'get',
+            dataType: 'json',
+            data: {
+            },
+            success: function (response) {
+                $(response).each(function () {
+                    $('[name="inputQuestion"][data-type="user_id"]').val(this.name)
+                })
+            }
+        });
+    }
+
+    var setting = {
+        "lengthChange": true,
+        "destroy": true,
+        "info": true,
+        "searching": false,
+        "order": [],
+        "language": {
+            "processing": "處理中...",
+            "loadingRecords": "載入中...",
+            "lengthMenu": "顯示 _MENU_ 項結果",
+            "zeroRecords": "沒有符合的結果",
+            "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+            "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+            "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+            "infoPostFix": "",
+            "search": "搜尋:",
+            "paginate": {
+                "first": "第一頁",
+                "previous": "上一頁",
+                "next": "下一頁",
+                "last": "最後一頁"
+            },
+            "aria": {
+                "sortAscending": ": 升冪排列",
+                "sortDescending": ": 降冪排列"
+            }
+        }
+    }
+
+    Dropzone.options.uploadDropzone = {
+        dictDefaultMessage: '拖曳客戶圖至此 或 點此選擇檔案',
+        addRemoveLinks: true,
+        maxFiles: 1,
+        acceptedFiles: '.pdf,.jpg',
+        timeout: 300000,
+        /*milliseconds*/
+        init: function () {
+            this.on("success", function (file, response) {
+                _via_canvas_regions = [];
+                resetTable();
+                ingetCrop(id);
+                inspin();
+                getPicture(id)
+                matchCustomer(id)
+            }),
+                this.on("removedfile", function (file) {
+                    $.ajax({
+                        url: '/file',
+                        type: 'delete',
+                        dataType: 'json',
+                        data: {
+                            id: id
+                        },
+                        success: function (response) { }
+                    })
+                });
+        },
+        success: function (file, response) {
+
+        }
+    };
+
+
+    $(document).on('submit', '#infoform', function (e) {
+        e.preventDefault(e);
+        let tmpArr = {}
+        $('[name="inputQuestion"]').each(function () {
+            tmpArr[$(this).data('type')] = $(this).val()
+        })
+        let receiverArr = {}
+        $("#sortableReceiver ul.droptrue").each(function (index, value) {
+            // receiverArr[]
+            $(this).find("li").each(function () {
+                receiverArr[$(this).data('id')] = index + 1;
+            });
+        });
+        let contentArr = [];
+        $('[name="inputnode"]').each(function () {
+            let tmpObj = {}
+            if($(this).data('type') == 'filecomponent'){
+                tmpObj['type'] = 'file'
+            }else{
+                tmpObj['type'] = $(this).data('type')
+
+            }
+            if ($(this).data('type') != 'paragraph') {
+                tmpObj['title'] = $(this).find('label').html()
+            }
+            let idArr = [];
+            if ($(this).data('type') == 'radio' || $(this).data('type') == 'checkbox') {
+                $(this).find('[data-uid]').each(function () {
+                    idArr.push($(this).val())
+                })
+                tmpObj['content_option'] = idArr;
+            }
+
+
+            contentArr.push(tmpObj)
+
+        });
+        console.log(contentArr)
+
+
+        // return false
+
+        receiverArr['nknu'] = 1;
+        receiverArr['nknu2'] = 1;
+        receiverArr['nknu3'] = 2;
+
+        tmpArr['receiverArr'] = receiverArr;
+        if (tmpArr["receiver"] != '') {
+            $('[name="inputQuestion"][data-type="receiver"]').attr('class', "form-control text-truncate")
+            $.ajax({
+                url: '/eSign/question',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    info: tmpArr,
+                    content: contentArr
+                },
+                success: function (response) {
+
+                }
+            });
+        } else {
+
+            $('[name="inputQuestion"][data-type="receiver"]').attr('class', "form-control text-truncate is-invalid")
+            $('html,body').animate({
+                scrollTop: $('[name="inputQuestion"][data-type="receiver"]').offset().top
+            }, 'slow');
+            return;
+
+        }
+
+    });
+
+    $(document).on('click', '#save', function (e) {
+        $('#submitinfo').click();
+    });
+    function getUID() {
+        return 'xxxxxxxx-xxxx-xxxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
+            function (c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+    }
+    $('.summernote').summernote();
+
+    $(document).on('click', '#preview', function () {
+        let content = $(`<div></div>`);
+        $('.mil-editor').find('[data-input]').each(function () {
+            if ($(this).attr('data-input') == "paragraph") {
+                $(content).append($(this).find('.summernote').summernote('code'));
+            } else {
+                $(content).append($(this)[0].outerHTML);
+            }
+        });
+        $('#basicModal').find('.modal-header').html(`預覽`)
+        $('#basicModal').find('.modal-body').html($(content).html())
+        $('#basicModal').modal('show');
+    });
+
+    $(document).on('click', '.mil-toolbar', function (e) {
+        let element = this;
+        let type = $(element).attr('data-type');
+        if (type == "paragraph") {
+            let node = $(`
+                <div class="card" name="inputnode" data-type=${type}>
+                    <button type="button" class="close position-absolute" style="right:0px;" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="card-body">
+                        <div class="form-group row" data-input="paragraph">
+                            <div class="col-12">
+                                <textarea class="summernote" data-uid="${getUID()}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+            $('.mil-editor').append($(node).get(0));
+            $('.mil-editor').find('.summernote:last').summernote({
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'video']],
+                ]
+            });
+        } else if (type == 'text') {
+            $('#basicModal').find('.modal-body').find('input:submit').click();
+        } else if (type == "textarea") {
+            $('#basicModal').find('.modal-body').find('input:submit').click();
+        } else if (type == "radio") {
+            $('#basicModal').find('.modal-body').find('input:submit').click();
+        } else if (type == "checkbox") {
+            $('#basicModal').find('.modal-body').find('input:submit').click();
+        } else if (type == "filecomponent") {
+            $('#basicModal').find('.modal-body').find('input:submit').click();
+        }
+    })
+    $(document).on('show.bs.modal', '#basicModal', function (e) {
+        let element = e.relatedTarget;
+        let type = $(element).attr('data-type');
+        let uid = getUID();
+        if (type == 'text' || type == "textarea" || type == "radio" || type == "checkbox" || type == "filecomponent") {
+            let node_outer = $(`
+                <form class="was-validated">
+                    <div class="form-group row">
+                        <label class="col-lg-auto col-form-label">標題</label>
+                        <div class="col-lg">
+                            <input class="form-control mil-toolbar-title" type="text" required/>
+                        </div>
+                    </div>
+                    <input type="submit" hidden>
+                    <hr/>
+                </form>
+            `);
+            if (type == "text") {
+                $(this).find('.modal-header').html(`回覆`);
+            } else if (type == "textarea") {
+                $(this).find('.modal-header').html(`回饋`);
+            } else if (type == "radio") {
+                $(this).find('.modal-header').html(`單選`);
+            } else if (type == "checkbox") {
+                $(this).find('.modal-header').html(`多選`);
+            } else if (type == "filecomponent") {
+                $(this).find('.modal-header').html(`檔案`);
+            }
+            if (type == "radio" || type == "checkbox") {
+                $(node_outer).append(`
+                    <button class="btn btn-primary" onclick="add('${type}')">＋</button>
+                `);
+            }
+            $(this).find('.modal-footer').html(`
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                <button type="button" class="btn btn-primary mil-toolbar" data-type="${type}">新增</button>
+            `);
+            $(this).find('.modal-body').html($(node_outer).get(0));
+
+            $('#basicModal').find('form').on('submit', function (e) {
+                e.preventDefault();
+                let node = $(`
+                    <div class="card" name="inputnode" data-type=${type}>
+                        <button type="button" class="close position-absolute" style="right:0px;" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="card-body">
+                            <div class="form-group row" data-input="${type}">
+                                <label class="col-lg-auto col-form-label">${$('.mil-toolbar-title').val() || ''}</label>
+                            </div>
+                        </div>
+                    </div>
+                `);
+                let node_inner = $(`<div class="col-lg"></div>`);
+                if (type == "radio" || type == "checkbox") {
+                    node_inner = $(`
+                        <div class="form-inline col-lg row row-cols-1 row-cols-lg-2 row-cols-xl-3 mil-${type}">
+                        </div>
+                    `);
+                    $('#basicModal').find(`input[data-input="${type}"]`).each(function () {
+                        $(node_inner).append(`<div class="form-check col">
+                            <input class="form-check-input" type="${type}" data-uid="${uid}" value="${$(this).val()}"/>
+                            <label class="form-check-label">${$(this).val()}</label>
+                        </div>`);
+                    })
+                } else if (type == "textarea") {
+                    $(node_inner).append(`
+                        <textarea class="form-control"  data-uid="${getUID()}"/>
+                    `);
+                } else if (type == "text") {
+                    $(node_inner).append(`
+                        <input type="text" class="form-control" data-uid="${getUID()}"/>
+                    `);
+                } else if (type == "filecomponent") {
+                    $(node_inner).append(`
+                        <input type="file" class="form-control" data-uid="${getUID()}"/>
+                    `);
+                }
+                $(node).find('[data-input]').append(node_inner);
+                $('.mil-editor').append($(node).get(0));
+                $('#basicModal').modal('hide');
+            });
+        }
+    })
+</script>
+<script type="text/javascript">
+    var table = null;
+    var setting = {
+        "lengthChange": true,
+        "destroy": true,
+        "info": true,
+        "searching": TextTrackCue,
+        "order": [],
+        "language": {
+            "processing": "處理中...",
+            "loadingRecords": "載入中...",
+            "lengthMenu": "顯示 _MENU_ 項結果",
+            "zeroRecords": "沒有符合的結果",
+            "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+            "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+            "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+            "infoPostFix": "",
+            "search": "搜尋:",
+            "paginate": {
+                "first": "第一頁",
+                "previous": "上一頁",
+                "next": "下一頁",
+                "last": "最後一頁"
+            },
+            "aria": {
+                "sortAscending": ": 升冪排列",
+                "sortDescending": ": 降冪排列"
+            }
+        }
+    }
+    $(function () {
+        appendSortable($('#sortableReceiver'), 1);
+        initSortable();
+        getuser_id();
+
+    });
+
+    function updatereceiver() {
+        let tmpstr = '';
+        $('#chkedList').find('td').each(function (index_inside) {
+            tmpstr += $(this).html();
+            tmpstr += '、';
+        });
+        $('[name="inputQuestion"][data-type="receiver"]').val(tmpstr.slice(0, -1))
+    }
+
+    function add(type) {
+        let node = $(`
+            <div class="form-group row">
+                <div class="col-lg">
+                    <input type="text" class="form-control" data-input="${type}" required/>
+                </div>
+                <div class="col">                
+                    <button class="btn btn-danger" onclick="del(this)">-</button>
+                </div>
+            </div>
+            `);
+        $('#basicModal').find('.modal-body form').append(node);
+    }
+
+    function del(element) {
+        $(element).closest('.form-group').remove();
+    }
+
+    $(document).on("click", '.close', function () {
+        $(this).parent('div.card').remove();
+    });
+
+    function initSortable() {
+        $("#sortableReceiver ul.droptrue:last").sortable({
+            connectWith: "ul"
+        });
+        $("#sortableReceiver ul.droptrue:last").disableSelection();
+
+        $(".mil-editor").sortable({
+            connectWith: "ul",
+        });
+        $(".mil-editor").on('mousedown', '.note-editable', function (e) {
+            var mdown = document.createEvent("MouseEvents");
+            mdown.initMouseEvent("mousedown", true, true, window, 0, e.screenX, e.screenY, e.clientX, e.clientY, true, false, false, true, 0, null);
+            $(this).closest('li')[0].dispatchEvent(mdown);
+        }).on('click', function (e) {
+            var $sortable = $(".mil-editor");
+            if ($sortable.data("preventBehaviour")) {
+                e.preventDefault();
+                $sortable.data("preventBehaviour", false)
+            }
+        });
+    }
+    $(document).on("sortreceive", "#sortableReceiver ul.droptrue:last", function () {
+        console.log(123);
+        appendSortable($('#sortableReceiver'), $("#sortableReceiver ul.droptrue").length + 1)
+        initSortable();
+    });
+    function appendSortable(element, index) {
+        $(element).append(`
+            <div class="card" style="min-height: 70px; min-width: 150px; margin-right: 5px;">
+                <div class="card-header text-center">
+                    第 ${index} 關
+                </div>
+                <div class="card-body">
+                    <ul class="droptrue list-unstyled" style="min-height: 70px;">
+                    </ul>
+                </div>
+            </div>
+        `);
+    }
+    $(document).on("sortstop", "#sortableReceiver ul.droptrue:eq(-2)", function () {
+        if ($(this).find('li').length == 0 && $("#sortableReceiver ul.droptrue:eq(-1)").find('li').length == 0) {
+            $("#sortableReceiver ul.droptrue:last").closest('.card').remove();
+        }
+    });
+
+    $(document).on('shown.bs.collapse', '#collapseExample', function (e) {
+        if (table != null)
+            table.draw(false);
+        else if (table == null) {
+            let setting_esign = JSON.parse(JSON.stringify(setting));
+            let setting_chkedList = JSON.parse(JSON.stringify(setting));
+            $("#chkedList").DataTable().destroy();
+            setting_esign["processing"] = true;
+            setting_esign["serverSide"] = true;
+            setting_esign["serverSide"] = true;
+            setting_esign["ajax"] = {
+                url: "/eSign/staffs",
+                type: 'get'
+            };
+            setting_esign["columns"] = [
+                {
+                    "data": "name",
+                },
+                { "data": "name" },
+            ];
+            setting_esign['columnDefs'] = [
+                {
+                    'targets': 0,
+                    'checkboxes': {
+                        'selectRow': true,
+                        'selectCallback': function (nodes, selected) {
+
+
+                            for (let index_outer = 0; index_outer < nodes.length; index_outer++) {
+                                $(table.cells().nodes()).each(function (index) {
+                                    if (this === nodes[index_outer]) {
+                                        for (let index_inner = 0; index_inner < table.cells().length; index_inner++) {
+                                            if (selected) {
+                                                chked.rows(0).remove().draw(`${table.cells().data()[index]}`);
+                                                if ($("#sortableReceiver ul.droptrue").length == 1) {
+                                                    appendSortable($('#sortableReceiver'), $("#sortableReceiver ul.droptrue").length + 1)
+                                                    initSortable();
+                                                }
+
+                                            }
+                                        }
+                                        return false;
+                                    }
+                                });
+                            }
+                            let checked_selected = table.column(0).checkboxes.selected();
+                            chked.rows().remove().draw();
+                            for (let index = 0; index < checked_selected.length; index++) {
+                                chked.row.add([checked_selected[index], checked_selected[index]]).draw();
+                            }
+                            chked.column(0).checkboxes.deselectAll();
+                            updatereceiver();
+                        }
+                    }
+                }
+            ];
+            setting_esign['select'] = {
+                'style': 'multi'
+            };
+
+            setting_chkedList['columnDefs'] = [
+                {
+                    'targets': 0,
+                }
+            ];
+            table = $('#chkList').DataTable(setting_esign);
+            chked = $('#chkedList').DataTable(setting_chkedList);
+        }
+    });
+
+    $(document).on("show.bs.tab", "#profile-tab", function () {
+        $("#sortableReceiver ul.droptrue:first").empty();
+        let checked_selected = table.column(0).checkboxes.selected();
+
+        for (let index = 0; index < checked_selected.length; index++) {
+            let name;
+            name = `<li data-id="${checked_selected[index]}">${checked_selected[index]}</li>`;
+            $("#sortableReceiver ul.droptrue:first").append(name);
+        }
+    })
+
+
+
+</script>

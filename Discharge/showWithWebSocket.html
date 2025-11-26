@@ -1,0 +1,168 @@
+<?php include(__DIR__.'/../basic/header.html'); ?>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <div class="card my-3">
+        <h5 class="card-header">即時資訊</h5>
+        <div class="card-body my-3 row">
+            <div class="table-responsive col-6 mb-4" style="max-height:20em; overflow-y:scroll">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                  			<th scope="col">#</th>
+			                <th scope="col">Reader</th>
+			                <th scope="col">IP</th>
+			                <th scope="col">TagID</th>
+			                <th scope="col">AntennaID</th>
+			                <th scope="col">TagEvent</th>
+			                <th scope="col">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_Rfid">
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive col-6 mb-4" style="max-height:20em; overflow-y:scroll">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+			                <th scope="col">#</th>
+                            <th scope="col">Z Value</th>
+                            <th scope="col">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_Z">
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive col-6 mb-4" style="max-height:20em; overflow-y:scroll">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+			                <th scope="col">#</th>
+			                <th scope="col">CenterX</th>
+			                <th scope="col">CenterY</th>
+			                <th scope="col">Radius</th>
+			                <th scope="col">Bright</th>
+			                <th scope="col">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_Spark">
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive col-6 mb-4" style="max-height:20em; overflow-y:scroll">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+			                <th scope="col">#</th>
+                            <th scope="col">Value</th>
+                            <th scope="col">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_Vibration">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php include(__DIR__.'/../basic/footer.html'); ?>
+
+</body>
+<script src="/js/json.js"></script>
+<script src="/js/string.js"></script>
+<script src="/js/dateTime.js"></script>
+<script src="/js/renderControls.js"></script>
+<script src="/js/jquery.signalR-2.4.2.min.js"></script>
+<script src="/js/webSocketHubProxy.js"></script>
+
+<script>
+    var jRfid = $("#tbody_Rfid");
+    var jZ = $("#tbody_Z");
+    var jSpark = $("#tbody_Spark");
+    var jVibration = $("#tbody_Vibration");
+    
+    $(function () {
+    })
+    var bDebug = false;
+
+    function appendRfidTags(cIndexList) {
+        //if (bDebug) return;
+        //bDebug = true;
+        json("get", "/RFID/dataLoad", { cIndexList: cIndexList }, function (data) {
+            if (data.length == 0) { return; }
+            
+            $.each(data, function (key, value) {
+                let tr = `
+                    <tr>
+                        <td>${value.iAutoIndex}</td>
+                        <td>${value.cReaderName}</td>
+                        <td>${value.cIP}</td>
+                        <td>${value.cTagID}</td>
+                        <td>${value.iAntennaID}</td>
+                        <td>${value.cTagEvent}</td>
+                        <td>${value.dTime}</td>
+                    </tr>`;
+                jRfid.prepend(tr);
+            });
+            //bDebug = false;
+        });
+	}
+    function appendZValues(cIndexList) {
+        //if (bDebug) return;
+        //bDebug = true;
+        json("get", "/Discharge/Z/dataLoad", { cIndexList: cIndexList }, function (data) {
+            if (data.length == 0) { return; }
+            
+            $.each(data, function (key, value) {
+                let tr = `
+                    <tr>
+                        <td>${value.iAutoIndex}</td><td>${value.fValue}</td><td>${value.dTime}</td>
+                    </tr>`;
+                jZ.prepend(tr);
+            });
+            //bDebug = false;
+        });
+	}
+    function appendDischargeValues(cIndexList) {
+        //if (bDebug) return;
+        //bDebug = true;
+        json("get", "/Discharge/spark/dataLoad", { cIndexList: cIndexList }, function (data) {
+            if (data.length == 0) { return; }
+            
+            $.each(data, function (key, value) {
+                let tr = `
+                    <tr>
+                        <td>${value.iAutoIndex}</td>
+                        <td>${value.iCenterX}</td>
+                        <td>${value.iCenterY}</td>
+                        <td>${value.iRadius}</td>
+                        <td>${value.iBright}</td>
+                        <td>${value.dTime}</td>
+                    </tr>`;
+                jSpark.prepend(tr);
+            });
+            //bDebug = false;
+        });
+	}
+    function appendVibrationValues(cIndexList) {
+        //if (bDebug) return;
+        //bDebug = true;
+        json("get", "/Discharge/vibration/dataLoad", { cIndexList: cIndexList }, function (data) {
+            if (data.length == 0) { return; }
+            
+            $.each(data, function (key, value) {
+                let tr = `
+                    <tr>
+                        <td>${value.iAutoIndex}</td><td>${value.cValue}</td><td>${value.dTime}</td>
+                    </tr>`;
+                jVibration.prepend(tr);
+            });
+            //bDebug = false;
+        });
+	}
+</script>
+</html>

@@ -1,0 +1,157 @@
+<?php include(__DIR__.'/../basic/header.html'); ?>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <div class="row row-cols-1 row-cols-md-3">
+        <div class="col-lg-12 mb-4">
+            <div class="card">
+                <h5 class="card-header text-primary">當前時間</h5>
+                <div class="card-body row row-cols-1 row-cols-md-3">
+                    <div class="col-lg-12 mb-4 row row-cols-1 row-cols-md-3">
+                        <div class="form-group form-inline">
+                            <label>選擇日期:</label>
+                            <input id="date" type="date" class="mx-2 form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-12 mb-4">
+                        <form oninput="formattedDate.value=formatSecond(time.value)">
+                            <div class="form-group">
+                                <input type="range" class="form-control-range" id="time" name="points" value="0" min="0"
+                                    max="86400">
+                                <output style="font-size: 18px;">當前時間:</output>
+                                <output name="formattedDate" for="time" style="font-size: 18px;"></output>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card my-3">
+                <h5 class="card-header">Z軸資訊</h5>
+                <div class="card-body">
+                    <div class="row justify-content-end">
+                        <button type="button" class="btn btn-success mx-2"><a class="text-white"
+                                href="http://172.25.25.34/timeSlider.aspx" target="_blank">動態數據</a>
+                        </button>
+                        <button type="button" class="btn btn-warning mx-2"><a class="text-white"
+                            href="/Discharge/Z" target="_blank">Z軸數據</a></button>
+                    </div>
+                    <div class="col-lg-12 mb-4 text-center">
+                        <img id="ZImg" src="" class="img-fluid img-thumbnail rounded" alt="...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card my-3">
+                <h5 class="card-header">火花</h5>
+                <div class="card-body">
+                    <div class="row justify-content-end">
+                        <button type="button" class="btn btn-success mx-2"> <a class="text-white"
+                                href="http://172.25.25.34/timeSlider.aspx" target="_blank">動態數據</a>
+                        </button>
+                        <button type="button" class="btn btn-warning mx-2"><a class="text-white"
+                            href="/Discharge/spark" target="_blank">火花數據</a></button>
+                        <button type="button" class="btn btn-danger mx-2"><a class="text-white"
+                            href="/Discharge/EDM" target="_blank">金屬中心數據</a></button>
+                    </div>
+                    <div class="col-lg-12 mb-4 text-center">
+                        <img id="sparkImg" src="" class="img-fluid img-thumbnail rounded" alt="...">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php include(__DIR__.'/../basic/footer.html'); ?>
+
+</body>
+<script>
+    $(function () {
+
+        var date = new Date();
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+
+        if (month < 10) month = "0" + month;
+        if (day < 10) day = "0" + day;
+
+        var today = year + "-" + month + "-" + day;
+        $("#date").attr("value", today);
+
+        h = date.getHours();
+        m = date.getMinutes();
+        s = date.getSeconds();
+        sec = h * 3600 + m * 60 + s
+
+        $("#time").attr("value", sec);
+        formattedDate = formatSecond(sec)
+        $("[name='formattedDate']").text(formattedDate);
+
+        getZImg(formattedDate);
+        getSparkImg(formattedDate);
+    })
+
+    function getZImg(formattedDate) {
+        $.ajax({
+            url: `/Discharge/Z/record`,
+            dataType: 'json',
+            method: 'GET',
+            data: {
+                time: formattedDate
+            },
+            success: function (response) {
+                $("#ZImg").attr('src', response['src'])
+            }
+        });
+    }
+
+    function getSparkImg(formattedDate) {
+        $.ajax({
+            url: `/Discharge/spark/record`,
+            dataType: 'json',
+            method: 'GET',
+            data: {
+                time: formattedDate
+            },
+            success: function (response) {
+                $("#sparkImg").attr('src', response['src'])
+            }
+        });
+    }
+
+    function formatSecond(secs) {
+        var hr = Math.floor(secs / 3600);
+        var min = Math.floor((secs - (hr * 3600)) / 60);
+        var sec = parseInt(secs - (hr * 3600) - (min * 60));
+
+        var currentDatetime = $("#date").val() + " " + hr + ':' + min + ':' + sec;
+        var dateTime = new Date(currentDatetime);
+
+        month = `${(dateTime.getMonth() + 1)}`.padStart(2, "0")
+        date = `${dateTime.getDate()}`.padStart(2, "0")
+        hr = `${dateTime.getHours()}`.padStart(2, "0")
+        min = `${dateTime.getMinutes()}`.padStart(2, "0")
+        sec = `${dateTime.getSeconds()}`.padStart(2, "0")
+
+        formattedDate = dateTime.getFullYear() + "-" + month + "-" + date + " " + hr + ':' + min + ':' + sec;
+
+        return formattedDate;
+    }
+
+    $(document).on('mouseup', '#time', function () {
+
+        formattedDate = $("[name='formattedDate']").val()
+        $("#sparkImg").attr('src', '')
+        $("#ZImg").attr('src', '')
+        getZImg(formattedDate);
+        getSparkImg(formattedDate);
+    })
+
+</script>
+
+</html>

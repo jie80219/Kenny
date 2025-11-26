@@ -1,0 +1,139 @@
+<?php include(__DIR__.'/../basic/header.html'); ?>
+
+<style type="text/css">
+</style>
+<div class="card">
+	<div class="card-header">
+		<h3>Status</h3>
+	</div>
+	<div class="card-body">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Reader</th>
+					<th>IP</th>
+					<th>Update</th>
+					<th>Connected</th>
+				</tr>
+			</thead>
+			<tbody id="uList">
+			</tbody>
+		</table>
+	</div>
+</div>
+<?php include(__DIR__.'/../basic/footer.html'); ?>
+</body>
+<script src="/js/json.js"></script>
+<script src="/js/string.js"></script>
+<script src="/js/renderControls.js"></script>
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/css/bootstrap-switch-button.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js"></script>
+<script>
+	$(function () {
+		renderControl(renderControlCallBack);
+	});
+	function renderControlCallBack() {
+		json("get", "/Discharge/setting/dataLoad", {}, function (oSetting) {
+			let jList = $("#uList");
+			for (cReaderName in oSetting.aRfidReader) {
+				let oReader = oSetting.aRfidReader[cReaderName];
+				addRow(jList, "rfid", cReaderName, "RFID " + cReaderName, oReader.cIP);
+			}
+			addRow(jList, "z", "z", "Z IP CAM", oSetting.oZ.cIP);
+			addRow(jList, "discharge", "discharge", "Discharge IP CAM", oSetting.oDischarge.cIP);
+			addRow(jList, "vibration", "vibration", "Vibration", oSetting.oVibration.oComPort.cComPort);
+			refreshStatus();
+		});
+	}
+
+	function addRow(jList, cApiName, cKey, cTitle, cIP) {
+		let tr = $("<tr></tr>").appendTo(jList);
+
+		let td = $("<td></td>").appendTo(tr);
+		$("<label></label>").html(cTitle).appendTo(td);
+
+		td = $("<td></td>").appendTo(tr);
+		$("<input type=\"text\" />")
+			.attr("id", cKey + "_IP")
+			.attr("class", "form-control")
+			.val(cIP)
+			.appendTo(td);
+
+		td = $("<td></td>").appendTo(tr);
+		$("<button type=\"button\"><i class=\"fas fa-save\"></i> Save</button>")
+			.attr("id", cKey + "_Save")
+			.attr("class", "btn btn-primary")
+			.attr("data-apiname", cApiName).attr("data-key", cKey)
+			.on("click", function () { uSave_OnClick(this); })
+			.appendTo(td);
+
+		td = $("<td class=\"align-middle text-lg\"></td>").appendTo(tr);
+		$("<i style=\"cursor:pointer\"></i>")
+			.attr("id", cKey + "_Status")
+			.attr("class", "fas fa-toggle-off fa-lg text-danger")
+			.attr("data-apiname", cApiName).attr("data-key", cKey)
+			.on("click", function () { uStatus_OnClick(this); })
+			.appendTo(td);
+	}
+
+	function refreshStatus() {
+		json("get", "/Discharge/status/dataLoad", {}, function (oStatus) {
+			for (cReaderName in oStatus.aIsConnected_RfidReader) {
+				setStatus(cReaderName, oStatus.aIsConnected_RfidReader[cReaderName]);
+			}
+			setStatus("z", oStatus.bIsConnected_Z);
+			setStatus("discharge", oStatus.bIsConnected_Discharge);
+			setStatus("vibration", oStatus.bIsConnected_Vibration);
+		});
+		
+		setTimeout(refreshStatus, 1500);
+	}
+	function setStatus(cKey, bIsConnected) {
+		let jIP = $("#" + cKey + "_IP");
+		let jSave = $("#" + cKey + "_Save");
+		let jStatus = $("#" + cKey + "_Status");
+		if (bIsConnected) {
+			jIP.attr("disabled", "disabled");
+			jSave.attr("disabled", "disabled");
+			jStatus.attr("class", "fas fa-toggle-on fa-lg text-success");
+		} else {
+			jIP.removeAttr("disabled");
+			jSave.removeAttr("disabled");
+			jStatus.attr("class", "fas fa-toggle-off fa-lg text-danger");
+		}
+	}
+
+	function uSave_OnClick(eSave) {
+		json("get", "/Discharge/setting/dataLoad", {}, function (oSetting) {
+			let jSave = $(eSave);
+			let apiName = jSave.attr("data-apiname");
+			let oData = { apiName: apiName, action: "save" };
+			let key = jSave.attr("data-key");
+			let cInput = $("#" + key + "_IP").val();
+			switch (apiName) {
+				case "rfid": oSetting.aRfidReader[key].cIP = cInput; oData = $.extend(oData, { readerName: key }); break;
+				case "z": oSetting.oZ.cIP = cInput; break;
+				case "discharge": oSetting.oDischarge.cIP = cInput; break;
+				case "vibration": oSetting.oVibration.oComPort.cComPort = cInput; break;
+				default: SetEr("no match"); return;
+			}
+
+			json("post", "/Discharge/setting/dataSave", oSetting, function () {
+				alert("OK!");
+			});
+		});
+	}
+
+	function uStatus_OnClick(eStatus) {
+		let jStatus = $(eStatus);
+		let action = jStatus.hasClass("fa-toggle-off") ? "connect" : "disconnect";
+		let apiName = jStatus.attr("data-apiname");
+		let oData = { apiName: apiName, action: action };
+		if (apiName == "rfid") { oData = $.extend(oData, { readerName: jStatus.attr("data-key") }); }
+		json("post", "/Discharge/callFireDetectionApi", oData, function () {
+			alert("OK!");
+		});
+	}
+</script>
+
+</html>

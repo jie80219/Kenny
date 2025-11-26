@@ -1,0 +1,257 @@
+<?php include(__DIR__.'/../basic/header.html'); ?>
+
+<style type="text/css">
+	#divControls {
+		font-size: 18pt;
+	}
+		#divControls i {
+			cursor: pointer;
+		}
+
+	#divImage img {
+		object-fit: contain;
+		width: 100%;
+		height: 100%;
+	}
+
+	#divZ_Image {
+		width: 175px;
+		height: 65px;
+	}
+
+	#divDischarge_Image {
+		width: 800px;
+		height: 260px;
+	}
+
+	.data-point-label {
+		background: #FFFFFF;
+		color: #0D33FF;
+		border: 1px solid #C0C0C0;
+		padding: 5px;
+		position: fixed;
+		height: 300px;
+		top: 200px;
+		width: 180px;
+		_position: absolute; /* position fixed for IE6 */
+		_top: expression(documentElement.scrollTop+100);
+		overflow: auto;
+	}
+</style>
+<div class="container-fluid">
+	<fieldset>
+		<legend><asp:Literal ID="uCameraType" EnableViewState="false" runat="server" /></legend>
+		<div id="divImage" class="d-flex">
+			<div id="divZ_Image"><img id="uZ_Image" /></div>
+			<div id="divDischarge_Image"><img id="uDischarge_Image" /></div>
+		</div>
+	</fieldset>
+
+</div>
+<div class="container-fluid">
+	<fieldset>
+		<legend>時間查詢</legend>
+		<div id="fixed-panel">
+			<div class="form-inline my-2">
+				日期：<div data-rendertype="Date" data-property-id="uDate"></div>
+				<div id="uTime" class="mx-2" />
+			</div>
+			<div id="divControls">
+				<i id="pause" title="暫停" class="far fa-pause-circle mx-2" onclick="pauseTime();"></i>
+				<i id="play" title="開始" class="far fa-play-circle mx-2" onclick="playTime();"></i>
+				<i id="nowTime" title="目前時間" class="far fa-clock mx-2" onclick="toNow();"></i>
+			</div>
+			<select id="uRange" class="form-control">
+				<option value="60">01分鐘</option>
+				<option value="300" selected="selected">05分鐘</option>
+				<option value="600">10分鐘</option>
+			</select>
+			<div id="flot-placeholder" style="width:100%;height:270px;margin: 20px 35px 0 10px;"></div>
+			<div id="legendContainer"></div>
+			<div id="sliderTime" style="width:100%;margin: 5px;" />
+		</div>
+	</fieldset>
+</div>
+<?php include(__DIR__.'/../basic/footer.html'); ?>
+</body>
+<script src="/js/json.js"></script>
+<script src="/js/string.js"></script>
+<script src="/js/dateTime.js"></script>
+<script src="/js/renderControls.js"></script>
+<script src="/js/flot-master/source/jquery.flot.min.js"></script>
+<script src="/js/flot-master/source/jquery.flot.stack.js"></script>
+<script src="/js/flot-master/source/jquery.flot.axislabels.js"></script>
+<script>
+	var iTodaySeconds;
+	var iTimeoutID;
+	var jDate, jTime, jRange;
+	var iDaySeconds = 24 * 60 * 60;
+	var U8 = 8 * 60 * 60 * 1000;
+	var dataset;
+	var oOptions = {
+		series: {
+			lines: { show: true },
+			points: { radius: 1, show: true }
+		},
+		xaxis: { mode: "time" },
+		yaxes: [{}, { position: 'right' }],
+		grid: {
+			hoverable: true,
+			borderWidth: 2,
+			borderColor: "#633200",
+			backgroundColor: { colors: ["#ffffff", "#EDF5FF"] }
+		},
+		colors: ["#FF0000", "#0022FF"]
+	};
+
+	$(document).ready(function () {
+		renderControl(renderControlCallBack);
+	});
+	function renderControlCallBack() {
+		jDate = $('#uDate');
+		jTime = $('#uTime');
+		jRange = $('#uRange');
+		$('#uTextbox').val("PJ");
+		
+		toNow();
+		iTimeoutID = 0;
+		startTime();
+	}
+	function startTime() {
+		$('#sliderTime').slider({
+			min: 0,
+			max: iDaySeconds - 1,
+			value: iTodaySeconds,
+			slide: function (event, ui) {
+				iTodaySeconds = ui.value;
+				let oTime = todaySeconds(iTodaySeconds);
+				jTime.html(oTime.cTime);
+			},
+			change: function (event, ui) {
+				iTodaySeconds = ui.value;
+				if (iDaySeconds > iTodaySeconds) {
+					iTodaySeconds += 1;
+				} else {
+					toNow();
+				}
+				let cDate = jDate.val();
+				let oTime_Start = todaySeconds(iTodaySeconds - parseInt(jRange.val()));
+				let cStart = cDate + " " + oTime_Start.cTime;
+				let oTime_End = todaySeconds(iTodaySeconds);
+				let cEnd = cDate + " " + oTime_End.cTime;
+				jTime.html(oTime_End.cTime);
+				$.when(
+					json("get", "/Discharge/Z/dataLoad", { dTime_Start: cStart, dTime_End: cEnd }),
+					json("get", "/Discharge/spark/dataLoad", { dTime_Start: cStart, dTime_End: cEnd })
+				).done(function (oDataZ, oDataDischarge) {
+					let aRowsZ = oDataZ[0].status === "success" && oDataZ[1] === "success" ? oDataZ[0].data : [];
+					let aRowsDischarge = oDataDischarge[0].status === "success" && oDataDischarge[1] === "success" ? oDataDischarge[0].data : [];
+					logCallBack(aRowsZ, aRowsDischarge);
+				});
+			}
+		});
+		if (iTimeoutID == 0) {
+			iTimeoutID = setTimeout(startTime, 1000);
+		} else {
+			clearTimeout(iTimeoutID);
+		}
+	}
+
+	var previousPoint = null, previousLabel = null;
+	$.fn.UseTooltip = function () {
+		$(this).bind("plothover", function (event, pos, item) {
+			if (item) {
+				if ((previousLabel != item.series.label) || (previousPoint != item.dataIndex)) {
+					previousPoint = item.dataIndex;
+					previousLabel = item.series.label;
+
+					let cToday = jDate.val();
+					let dToday = (new Date(cToday + "T08:00:00")).getTime();
+					let oTime = todayMilliseconds(item.datapoint[0] - dToday);
+					var cValue = item.datapoint[1];
+					var color = item.series.color;
+					showTooltip(item.pageX, item.pageY, color, oTime.cTimeWithMillisecond + "<br>" + previousLabel + ":" + cValue);
+					let cDateTime = cToday + "T" + oTime.cTimeWithMillisecond;
+					if (item.series.label === "Z") {
+						json("get", "/Discharge/Z/pictureLoad", { dTime: cDateTime }, function (data) {
+							$("#uZ_Image").attr('src', data)
+						});
+					} else {
+						json("get", "/Discharge/spark/pictureLoad", { dTime: cDateTime }, function (data) {
+							$("#uDischarge_Image").attr('src', data)
+						});
+					}
+				}
+			} else {
+				previousPoint = null; previousLabel = null;
+			}
+		});
+	};
+
+	function showTooltip(x, y, color, contents) {
+		$("#tooltip").remove();
+		$('<div id="tooltip">' + contents + '</div>').css({
+			position: 'absolute',
+			top: y + 20,
+			left: x - 50,
+			border: '2px solid ' + color,
+			padding: '3px',
+			'font-size': '9px',
+			'border-radius': '5px',
+			'background-color': '#fff',
+			'font-family': 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+			'z-index': '10',
+			opacity: 0.9
+		}).appendTo("body").fadeIn(200);
+	}
+
+	function toNow() {
+		let oDateTime = dateTime();
+		//let oDateTime = dateTime('2022-1-2 18:45:00');
+		iTodaySeconds = oDateTime.iTodaySeconds;
+		jDate.val(oDateTime.cDate);
+		jTime.html(oDateTime.cTime);
+	}
+
+	function pauseTime() {
+		clearTimeout(iTimeoutID);
+	}
+
+	function playTime() {
+		clearTimeout(iTimeoutID);
+		iTimeoutID = setTimeout(startTime, 1000);
+	}
+
+	function logCallBack(aRowsZ, aRowsDischarge) {
+		let aZ = new Array();
+		for (i = 0; i < aRowsZ.length; i++) {
+			let drZ = aRowsZ[i];
+			let oData = new Array();
+			oData[0] = Date.parse(drZ.dTime) + U8; oData[1] = drZ.fValue;
+			aZ[aZ.length] = oData;
+		}
+
+		let aDischarge = new Array();
+		for (i = 0; i < aRowsDischarge.length; i++) {
+			let drDischarge = aRowsDischarge[i];
+			let oData = new Array();
+			oData[0] = Date.parse(drDischarge.dTime) + U8; oData[1] = drDischarge.iRadius;
+			aDischarge[aDischarge.length] = oData;
+		}
+		let p = $.plot($("#flot-placeholder"), [{ label: "Z", data: aZ }, { label: "Discharge", data: aDischarge, yaxis: 5 }], oOptions);
+		$("#flot-placeholder").UseTooltip();
+		/*
+		在點上面寫數值
+		$.each(p.getData()[0].data, function (i, el) {
+			var o = p.pointOffset({ x: el[0], y: el[1] });
+			$('<div class="data-point-label">' + el[1] + '</div>').css({
+				position: 'absolute',
+				left: o.left - 5,
+				top: o.top - 15,
+			}).appendTo(p.getPlaceholder()).fadeIn('slow');
+		});
+		*/
+	}
+</script>
+
+</html>

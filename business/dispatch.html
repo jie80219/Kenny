@@ -1,0 +1,980 @@
+<?php include(__DIR__ . '/../basic/header.html'); ?>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<div class="row">
+  <!-- search -->
+  <div class="col-12">
+    <div class="card shadow mb-4">
+      <div class="card-body d-flex overflow-auto">
+        <div class="d-flex align-self-center" id="list-tab-business">
+          <ul class="list-group list-group-horizontal w-100">
+            <li class="list-group-item flex-fill w-100">上傳圖檔</li>
+            <li class="list-group-item flex-fill w-100">查詢歷史訂單</li>
+            <li class="list-group-item flex-fill w-100">全圖比對</li>
+            <li class="list-group-item flex-fill w-100">零件分類</li>
+            <li class="list-group-item flex-fill w-100">零件比對</li>
+            <li class="list-group-item flex-fill w-100">刻度圈選</li>
+            <li class="list-group-item flex-fill w-100">刻度修改</li>
+          </ul>
+        </div>
+        <div class="form-group" id="list-tab-other">
+        </div>
+        <div class="d-flex align-self-center" id="list-tab-end">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <!-- search -->
+  <div class="col-12">
+    <div class="card shadow mb-4">
+      <div class="card-header">
+        報價單摘要
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-borderless">
+            <thead>
+              <tr>
+                <th>客戶圖縮圖</th>
+                <th>訂單資訊</th>
+                <th>註記</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <!-- <td width=10%>
+                  <img class="img-thumbnail" id="imgThumbnail"></td>
+                <td>尚未找到相似的廠內圖</td>
+                <td>
+                  <div class="row">
+                    <p class="col-inline">品號：</p><span  id="spanitemNo">1</span>
+                  </div>
+                  <div class="row">
+                    <p class="col-inline">客戶圖號：</p><span  id="spanFileId">1</span>
+                  </div>
+                  <div class="row">
+                    <p>開單時間：</p><span id="spanUploadTime">2021/05/27</span>
+                  </div>
+                </td>
+                <td id="allcomment">尚未有任何註記</td> -->
+                
+                <td width=10%>
+                  <img class="img-thumbnail" id="imgThumbnail">
+                </td>
+                <td>
+                  <div class="form-group row">
+                    <label for="inputitemNo" class="col-xl-auto col-form-label">品號：</label>
+                    <input type="text" class="form-control col-xl-6" data-type="itemNo" name="inputitemNo" disabled>
+                    <button type="button" class="col-xl-auto btn btn-primary" data-toggle="modal" data-target="#exampleModal2" data-type="selectItemNO">修改</button>
+                  </div>
+                  <div class="row">
+                    <p>客戶圖號：<span id="spanFileId">1</span></p>
+                  </div>
+                  <div class="row">
+                    <p>開單時間：<span id="spanUploadTime">2021/05/27</span></p>
+                  </div>
+                </td>
+                <td id="allcomment">尚未有任何註記</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <!-- search -->
+  <div class="col-12">
+    <div class="row" id="discriptOther">
+      <!-- search -->
+      <!-- <div class="col-12">
+        <div class="card shadow mb-4">
+          <div class="card-header">
+            各部門結果摘要
+          </div>
+          <div class="card-body">
+            <button class="btn btn-primary">設定通知</button>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 card-deck" id="divStation">
+              <div class="card shadow mb-4 form-group">
+                <div class="card-header">
+                  製圖站
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <label class="col-form-label col-1">相似度結果</label>
+                    <div class="col table-responsive">
+                      <table class="table table-borderlress">
+                        <tbody>
+                          <tr>
+                            <td width=50%><img src="/fileCrop/6174" class="figure-img img-fluid img-thumbnail rounded" alt="..."></td>
+                            <td width=50%>前沖棒</td>
+                            <td class="text-nowrap">這是製圖站來的註記</td>
+                          </tr>
+                          <tr>
+                            <td width=50%><img src="/fileCrop/6174" class="figure-img img-fluid img-thumbnail rounded" alt="..."></td>
+                            <td width=50%>後沖棒</td>
+                            <td class="text-nowrap">這是製圖站來的註記</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card shadow mb-4 form-group">
+                <div class="card-header">
+                  技術站
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <label class="col-form-label col-1">相似度結果</label>
+                    <div class="col table-responsive">
+                      <table class="table table-borderlress">
+                        <tbody>
+                          <tr>
+                            <td width=50%><img src="/fileCrop/6174" class="figure-img img-fluid img-thumbnail rounded" alt="..."></td>
+                            <td width=50%>前沖棒</td>
+                            <td class="text-nowrap">這是技術站來的註記</td>
+                          </tr>
+                          <tr>
+                            <td width=50%><img src="/fileCrop/6174" class="figure-img img-fluid img-thumbnail rounded" alt="..."></td>
+                            <td width=50%>後沖棒</td>
+                            <td class="text-nowrap">這是技術站來的註記</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label class="col-form-label col-auto">追加製程成本：</label>
+                    <label class="col-form-label col-auto">5000</label>
+                  </div>
+                </div>
+              </div>
+              <div class="card shadow mb-4 form-group">
+                <div class="card-header">
+                  生管站
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <label class="col-form-label col-1">相似度結果</label>
+                    <div class="col table-responsive">
+                      <table class="table table-borderlress">
+                        <tbody>
+                          <tr>
+                            <td width=50%><img src="/fileCrop/1510" class="figure-img img-fluid img-thumbnail rounded" alt="..."></td>
+                            <td width=50%>前沖棒</td>
+                            <td class="text-nowrap">這是生管站來的註記</td>
+                          </tr>
+                          <tr>
+                            <td width=50%><img src="/fileCrop/1510" class="figure-img img-fluid img-thumbnail rounded" alt="..."></td>
+                            <td width=50%>後沖棒</td>
+                            <td class="text-nowrap">這是生管站來的註記</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-auto row">
+                      <label class="col-form-label col-auto">追加外包成本：</label>
+                      <label class="col-form-label col-auto">10000</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 col-sm-3 mb-4">
+    <div class="card shadow mb-4 h-100">
+      <div class="card-header">協助報價部門
+        <i class="fas fa-exclamation-circle" data-toggle="tooltip" data-placement="top" title="請選擇需要協助的部門（可複選）"></i>
+      </div>
+      <div class="card-body">
+        <div class="form-group row" id="divprogress">
+          <!-- <div class="form-group form-check form-inline col-auto">
+            <input class="form-check-input" name="checkModule" type="checkbox" value="2" checked="checked"/>
+            <label>研發</label>
+          </div>
+          <div class="form-group form-check form-inline col-auto">
+            <input class="form-check-input" name="checkModule" type="checkbox" value="4" checked="checked"/>
+            <label>技術</label>
+          </div>
+          <div class="form-group form-check form-inline col-auto">
+            <input class="form-check-input" name="checkModule" type="checkbox" value="3" checked="checked"/>
+            <label>製圖</label>
+          </div>
+          <div class="form-group form-check form-inline col-auto">
+            <input class="form-check-input" name="checkModule" type="checkbox" value="5" checked="checked"/>
+            <label>生管</label>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-sm mb-4">
+    <div class="row row-cols-1 h-100">
+      <div class="card shadow mb-4 h-100">
+        <div class="card-header">通知內容
+          <i class="fas fa-exclamation-circle" data-toggle="tooltip" data-placement="top" title="請編輯您想要轉達的內容於訊息內"></i>
+        </div>
+        <div class="card-body">
+          <ul class="row">
+            <li class="col-12">系統將會自動為您帶入以下資訊：
+              <ul class="list-unstyled row">
+                <li class="col-4" id="liDeadline">{回饋期限}</li>
+                <li class="col-4" id="liDepartmentUrl">{部門連結}</li>
+                <li class="col-4" id="liDepartmentName">{部門名稱}</li>
+              </ul>
+            </li>
+          </ul>
+          <div class="row">
+            <form id="formDeadline">
+              <div class="col-auto-inLine form-group row">
+                <label class="col-form-label col-auto">回饋期限</label>
+                <div class="col-auto">
+                  <input type="datetime-local" required class="form-control" id="inputDeadline" />
+                </div>
+                <button type="submit" class="btn btn-primary">送出</button>
+              </div>
+            </form>
+          </div>
+          <div id="summernote">Hello Summernote</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<?php include(__DIR__ . '/../basic/footer.html'); ?>
+
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+<script>
+
+  var setting = {
+    "lengthChange": true,
+    "destroy": true,
+    "info": true,
+    "searching": false,
+    "order": [],
+    "ordering":false,
+    "language": {
+      "processing": "處理中...",
+      "loadingRecords": "載入中...",
+      "lengthMenu": "顯示 _MENU_ 項結果",
+      "zeroRecords": "沒有符合的結果",
+      "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+      "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+      "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+      "infoPostFix": "",
+      "search": "搜尋:",
+      "paginate": {
+        "first": "第一頁",
+        "previous": "上一頁",
+        "next": "下一頁",
+        "last": "最後一頁"
+      },
+      "aria": {
+        "sortAscending": ": 升冪排列",
+        "sortDescending": ": 降冪排列"
+      }
+    }
+  }
+
+  var url = new URL(window.location.href);
+  var id = url.searchParams.get("id");
+  var file_id_dest = url.searchParams.get("file_id_dest");
+  var tmpLocation = window.location.href ;
+  var nextUrl;
+  var module_name = '業務';
+  var module_id;
+  var deadline;
+
+  $(function(){
+    setDeadlineDefault();
+    $('[data-toggle="tooltip"]').tooltip()
+    getModule();
+    getListState(id);
+    getAllcomment()
+
+    $('#summernote').summernote({
+      height: 300
+    });
+    $('#summernote').summernote('code',`
+      請{部門名稱}部門於{回饋期限}前，完成此報價的回饋資訊
+      <p>連結如下： {部門連結}</p>
+    `);
+
+    $('#formDeadline').on('submit',function(e){
+      e.preventDefault();
+      // updateDeadLine();
+      $('#exampleModal').modal('show');
+      generateQuotationModal();
+
+    });
+   
+
+    // $("#inputDeadline").datepicker({
+    //   onSelect: function() { 
+    //     deadline = $(this).datepicker('getDate'); 
+    //   }
+    // });
+    
+  })
+  function setDeadlineDefault(){
+    let date = new Date()
+    $('#inputDeadline').val(`${date.getFullYear()}-${((date.getMonth()+1)+"").padStart(2,'0')}-${((date.getDate())+"").padStart(2,'0')}T15:00:00`)
+  }
+  function getFalseProgress(){
+    $.ajax({
+      url: `/progress/false`,
+      type: 'get',
+      data: { id: id,},
+      dataType: 'json',
+      success: function(response) {
+        $(response).each(function(){
+          console.log( $(this).later)
+          $(`[name="checkProgress"][value="${this.progress_id}"]`).prop('checked', this.later);
+        })
+        $(`[name="checkProgress"]`).each(function(){
+          $(this).change()
+        });
+      }
+    });
+  }
+  function getModule() {
+    $.ajax({
+      url: `/setting/module`,
+      type: 'get',
+      data: {},
+      dataType: 'json',
+      success: function(response) {
+        $('#divprogress').html(``);
+        $.each(response, function() {
+          if (this.name == module_name) {
+            module_id = this.id;
+          }
+          if(this.id != 1 && this.id <=5){
+            $('#divprogress').append(`
+              <div class="row form-group form-check form-inline col-12" name="divprogressmodule" data-module_id="${this.id}">
+                <label  class="col-form-label col-auto">${this.name}</label>
+              </div>
+            `)
+          }
+
+        })
+        getAllProgress()
+      }
+    });
+  }
+  function getAllProgress(){
+    $.ajax({
+        url: `/setting/url`,
+        type: 'get',
+        data: {
+        },
+        dataType: 'json',
+        success: function(response) {
+          
+          $.each(response,function(){
+            if(this.module_id != 1){
+              $(`[name="divprogressmodule"][data-module_id="${this.module_id}"]`).append(`
+                
+                  <input class="form-check-input" name="checkProgress" type="checkbox" data-module="${this.module_id}" value="${this.id}" ${this.module_id==3||this.id==9?'':'checked'}/>
+                  <label>${this.name}</label>
+               
+              `)
+            }
+            
+          });
+          getFalseProgress()
+        }
+    });
+  }
+
+  function getAllcomment(){
+    let allcomment='';
+    let countallcomment=0;
+    $.ajax({
+        url: `/file/information`,
+        type: 'get',
+        data: {
+          file_id: id,
+        },
+        dataType: 'json',
+        success: function(response) {
+          let itemno = '';
+          $.each(response,function(){
+            itemno = this.itemno
+          })
+          $('#spanitemNo').html(itemno)
+          $('#spanitemNo').append(`<button type="button" class="btn btn-primary" onclick="modifyitemNo('${itemno}')">修改</button>`)
+
+        
+        }
+      });
+      function modifyitemNo(itemno){
+      $('#spanitemNo').html(`
+        <form id="formitemno">
+            <div class="row">
+              <input type="text" class="form-control col-8" value="${itemno}" id="inputitemno" placeholder="" required>
+              <button type="submit" class="btn btn-primary col-auto">送出</button>
+            </div>
+        </form>
+      `)
+
+      $('#formitemno').on('submit',function(e){
+        e.preventDefault();
+        $.ajax({
+          url: `/file/itemno`,
+          type: 'patch',
+          data: {
+            file_id: id,
+            itemno : $('#inputitemno').val()
+          },
+          dataType: 'json',
+          success: function(response) {
+            
+          }
+        });
+          
+
+      })
+    }
+    $.ajax({
+      url: `/processes/crop/${id}`,
+      type: 'get',
+      success: function(response) {
+        processArr = response.process
+        $.each(processArr, function(key, value) {
+          process_id = processArr[key];
+          setTimeout(getcomment(process_id), 3000)
+         
+        })
+        
+        function getcomment(process_id){
+          console.log('getcomment'+process_id)
+          $.ajax({
+            url: `/components/Match/${process_id}`,
+            type: 'get',
+            data: {
+              threshold: 0,
+              amount: 10,
+              module_name: '業務'
+            },
+            success: function(response) {
+              $(response.result).each(function(index) {
+                if(this.comment != null && this.comment != ''){
+                  allcomment+= `${this.comment}、`
+                  countallcomment +=1;
+                }
+              });
+              if(countallcomment>0){
+                allcomment = allcomment.slice(0, -1) 
+              }
+              countallcomment=0;
+              $('#allcomment').html(allcomment == ''?'尚未有任何註記':allcomment)
+
+            }
+          });
+        }
+      }
+    });
+  }
+  
+  function getDiscriptOther(){
+    window.sharedVariable = {
+      file_id:id,
+      module_name:'業務'
+    };
+    $("#discriptOther").load( `/discript/other`);  
+  }
+
+  function generateQuotationModal(type) {
+    $('#exampleModal .modal-footer').html(`<button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>`);
+    $("#exampleModal .modal-dialog ").attr("class", "modal-dialog modal-xl");
+    $('#exampleModal .modal-title').html(`報價單`);
+    $('#exampleModal .modal-body').html(`
+    <table class="table table-borderless" id="generatedataTable" width=100%>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>流水單號</th>
+          <th>開單日期</th>
+          <th>客戶圖號</th>
+          <th>處理狀態</th>
+          <th>客戶名稱</th>
+        </tr>
+      </thead>
+    </table>
+    `);
+    let setting_business = JSON.parse(JSON.stringify(setting));
+    $('#generatedataTable').DataTable(setting_business).destroy();
+
+    setting_business['ajax'] = {
+      url: `/files`,
+      type: 'get',
+      
+      "data": function(d) {
+              d.module_id = module_id,
+              d.finish = false,
+              d.starttime = '',
+              d.endtime = '',
+              d.order_name = ''
+          }
+    };
+    setting_business['processing'] = true;
+    setting_business['serverSide'] = true;
+    setting_business['createdRow'] = function(row, data, dataIndex) {
+      // $(row).attr('onclick', `inLoad(${data['id']})`);
+      $(row).attr('style', `cursor:pointer`);
+    };
+
+    setting_business['columns'] = [{
+      "data": null,
+        render: function(data, type, row, meta) {
+          return `<input type="checkbox" value=${data['id']} name="checkboxmakepdf" aria-label="Checkbox for following text input"> `;
+        }
+      },{
+        "data": "tmpid"
+      },
+      {
+        "data": "upload_time"
+      }, {
+        "data": "order_name",
+      }, {
+        "data": "progress",
+        
+      }, {
+        "data": "customer_code",
+      },
+    ];
+    $('#generatedataTable').DataTable(setting_business);
+    $('#exampleModal .modal-footer').append(`<button type="button" class="btn btn-primary" onclick=" updateDeadLine()">送出</button>`);
+    // generateQuotation()
+
+  }
+  let other=[];
+  function updateDeadLine(){
+    other=[];
+    other.push(id)
+    $('[name="checkboxmakepdf"]:checked').each(function(){
+      if ($(this).val() != id){
+        other.push($(this).val())
+      }
+      
+      // param+=`id[]=${$(this).val()}&`;
+    });
+    $('#exampleModal').modal('hide');
+   
+
+    $.ajax({
+      url: `/file/deadline`,
+      type: 'patch',
+      dataType: 'json',
+      data:{
+        id:id,
+        other:other,
+        deadline:$('#inputDeadline').val(),
+        
+      },
+      success: function(response) {
+        if(response.status == 'success'){
+          // getcheckModule();
+          // $('#liDeadline').html($('#inputDeadline').val().replace('T',' ') )
+           $('#summernote').summernote('code',`
+            請{部門名稱}部門於${$('#inputDeadline').val().replace('T',' ') }前，完成此報價的回饋資訊
+            <p>連結如下： {部門連結}</p>
+          `);
+          getNextUrl();
+          
+        }
+      }
+    });
+  }
+  function getcheckModule(){
+    var checkProgressArr = [];
+    $('[name="checkProgress"]:checked').each(function(){
+      checkProgressArr.push($(this).val());
+    })
+    var departmentUrl = '';
+    var departmentName = '';
+    $.ajax({
+      url: `/url/module`,
+      type: 'get',
+      dataType: 'json',
+      data:{
+        progress :checkProgressArr
+      },
+      success: function(response) {
+          $.each(response,function(key,value){
+            departmentUrl += `${value.url},`;
+            departmentName += `${value.name},`;
+          })
+          departmentUrl.slice(0,-1)
+          departmentName.slice(0,-1)
+          console.log(departmentUrl.slice(0,-1))
+          console.log(departmentName)
+          
+          
+          $('#liDeadline').html($('#inputDeadline').val().replace('T',' ') )
+          $('#liDepartmentUrl').html(departmentUrl.slice(0,-1).replaceAll(',',',</p>'))
+          $('#liDepartmentName').html(departmentName.slice(0,-1).replaceAll(',',',</p>'))
+
+          // $('#summernote').summernote('code',`
+          //   請${departmentName.slice(0,-1)}部門於${$('#inputDeadline').val().replace('T',' ')}前，完成此報價的回饋資訊
+          //   <p>連結如下： ${departmentUrl.slice(0,-1).replaceAll(',',',</p>')}</p>
+          // `);  
+          $('#summernote').summernote('code',`
+            請${departmentName.slice(0,-1)}部門於${$('#inputDeadline').val().replace('T',' ')}前，完成此報價的回饋資訊
+            <p>連結如下： ${departmentUrl.slice(0,-1).replaceAll(',',',</p>')}</p>
+          `);
+
+      }
+    });
+    // console.log(checkModuleArr)
+    
+  }
+
+  function getNextUrl(){
+   
+    $.ajax({
+      url: `/url/next`,
+      type: 'get',
+      dataType: 'json',
+      data:{
+        url:tmpLocation,
+        
+      },
+      success: function(response) {
+        if(response.status == 'success'){
+          nextUrl = response.url
+
+          sendEmail();
+        }
+      }
+    });
+  }
+
+  function removeFalse(progress_id){
+    $.ajax({
+      url: `/progress/false`,
+      type: 'delete',
+      dataType: 'json',
+      data:{
+        id:id,
+        progress_id :progress_id
+
+      },
+      success: function(response) {
+      }
+    });
+  }
+
+  function addFalse(progress_id){
+    $.ajax({
+      url: `/progress/false`,
+      type: 'post',
+      dataType: 'json',
+      data:{
+        id:id,
+        progress_id :progress_id
+      },
+      success: function(response) {
+      }
+    });
+  }
+  function modifyorder_name(tmporder_name){
+      $('#spanFileId').html(`
+      <form id="formorder_name">
+          <div class="row">
+            <input type="text" class="form-control col-8" value="${tmporder_name}" id="inputorder_name" placeholder="" required>
+            <button type="submit" class="btn btn-primary col-auto">送出</button>
+          </div>
+      </form>
+      `)
+
+      $('#formorder_name').on('submit',function(e){
+        e.preventDefault();
+        console.log('test')
+        $.ajax({
+          url: `/file/order_name`,
+          type: 'patch',
+          data:{
+            file_id:file_id,
+            order_name:$('#inputorder_name').val()
+          },
+          dataType: 'json',
+          success: function(response) {
+          }
+        });
+
+      })
+    }
+  function getListState(file_id) {
+    $.ajax({
+      url: `/file/state/${file_id}`,
+      type: 'get',
+      dataType: 'json',
+      data:{
+        module_name:'研發'
+      },
+      success: function(response) {
+        $(response.file_information).each(function() {
+          $('#spanUploadTime').text(this.upload_time)
+          $('#spanFileId').text(this.order_name)
+          $('#imgThumbnail').attr('src',`/file/${this.id}`)
+          $('#tdThumbnailDest').html(`
+              <img src="/file/${file_id_dest}" class="img-thumbnail" />
+          `)
+          $('#spanFileId').append(`<button type="button" class="btn btn-primary" onclick="modifyorder_name('${this.order_name}')">修改</button>`)
+
+        })
+
+        $('#list-tab-business').html(``);
+        let list_tab = $(`<ul class="list-group list-group-horizontal w-100"></ul>`);
+        let list_color = null;
+        $(response.state).each(function(index) {
+          if(index==0 || list_color != this.module_color){
+            list_color = this.module_color;
+            if(index!=0)
+              if(this.module_name=='研發')
+                $('#list-tab-business').append($(list_tab)[0].outerHTML);
+              else
+                $('#list-tab-other').append($(list_tab)[0].outerHTML);
+            list_tab = $(`
+              <div class="alert alert${this.module_color} form-group d-inline-flex col-12" role="alert">
+                <span class="col-auto">${this.module_name}</span>
+                <div class="list-group list-group-horizontal col" role="tablist">
+                  <ul class="list-group list-group-horizontal">
+                  </ul>
+                </div>
+              </div>
+            `);
+          }
+          if(this.progress.indexOf('完成報價')!=-1){
+            console.log(100)
+            $('#list-tab-end').append(`
+              <div class="alert alert${this.module_color} form-group d-inline-flex col-12" role="alert"">
+                <span class="col-auto">${this.module_name}</span>
+                <div class="list-group list-group-horizontal col" role="tablist">
+                  <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item list-group-item${this['update_time']!=null?this.module_color:''} flex-fill text-nowrap ${location.href.indexOf(this.url+'?')!=-1?'active':''}"  ${this.redirect?``:`onclick="javascript:location.href='${this['url']}?id=${file_id}&file_id_dest=${file_id_dest}'"`}>${this['progress']}</li>
+                  </ul>
+                </div>
+              </div>
+            `);
+          }else{
+            $(list_tab).find('ul').append(`
+              <li class="list-group-item list-group-item${this['update_time']!=null?this.module_color:''} flex-fill text-nowrap ${location.href.indexOf(this.url+'?')!=-1?'active':''}"  ${this.redirect?``:`onclick="javascript:location.href='${this['url']}?id=${file_id}&file_id_dest=${file_id_dest}'"`}>${this['progress']}</li>
+            `);
+          }
+          // if(index==response.state.length-1){
+          //   $('#list-tab-other').append($(list_tab)[0].outerHTML);
+          // }
+        })
+      }
+    })
+  }  
+  
+  function sendEmail(){
+    let content = $('#summernote').summernote('code').replace('{回饋期限}',$('#inputDeadline').val());
+    let progressArr=[],modules = [];
+
+
+    $('[name="checkProgress"]:checked').each(function(){
+      progressArr.push($(this).val());
+      
+      // console.log(jQuery.inArray($(this).data('module'), modules) )
+      
+      if(jQuery.inArray($(this).data('module'), modules) <0){
+        modules.push($(this).data('module'))
+      }
+    });
+    // console.log('response.status' )
+
+    $.ajax({
+      url:`/business/dispatch/email`,
+      type:'post',
+      data:{
+        id:id,
+        content:content,
+        message:$(`<div>${content}</div>`).text(),
+        progress:progressArr,
+        module:modules,
+        deadline:$('#inputDeadline').val().replace('T',' '),
+        finish: modules,
+        notify: 1,
+        file_id: id,
+        other:other
+      },
+      success:function(response){
+        // alert('寄信完成！');
+        $('#basicModal .modal-title').html('')
+        $('#basicModal .modal-body').html('寄信完成！')
+        $('#basicModal .modal-footer').html(`
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+            <button type="button" class="btn btn-primary" onclick="location.href='${ tmpLocation.replace("/business/dispatch", nextUrl)}';">確認</button>`)
+        $('#basicModal').modal('show')
+      }
+    })
+    console.log('response.status' )
+
+  }
+
+  $('#exampleModal2').on('show.bs.modal', function (event) {
+    // console.log($(event.relatedTarget).attr("data-type"));
+    var type = $(event.relatedTarget).attr("data-type");
+    $('#exampleModal2 .modal-footer').html('<button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>');
+    if (type == 'selectItemNO') {
+      $("#exampleModal2 .modal-dialog ").attr("class", "modal-dialog modal-xl");
+      selectItemNO();
+    }else{
+      $("#exampleModal2 .modal-dialog ").attr("class", "modal-dialog");
+    }
+  });
+
+  function selectItemNO(){
+    $('#exampleModal2 .modal-title').html('選擇品號')
+    $('#exampleModal2 .modal-footer').append(`<button type="button" class="btn btn-primary" onclick="updateItemNO()">下一步</button>`)
+    $('#exampleModal2 .modal-body').html(`
+      <div class="form-group row">
+            <label for="filteritemno" class="col-sm-auto col-form-label">客戶圖號</label>
+            <input type="text" class="form-control col-sm-6" data-type="picture_num" name="filteritemno"  >
+      </div>
+      <div class="form-group row">
+            <label for="filteritemno" class="col-sm-auto col-form-label">客戶代號</label>
+            <input type="text" class="form-control col-sm-6" data-type="customer_id" name="filteritemno" >
+      </div>
+      <table class="table table-borderless" id="generatedataTable" width=100%>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>品號</th>
+            <th>硬度</th>
+            <th>客戶圖號</th>
+            <th>版次</th>
+            <th>材質</th>
+            <th>鍍鈦</th>
+          </tr>
+        </thead>
+      </table>
+    `);
+    setitemnoTable()
+  }
+
+  function setitemnoTable(){
+    let picture_num = $('[name="filteritemno"][data-type="picture_num"]').val()
+    let customer_id = $('[name="filteritemno"][data-type="customer_id"]').val()
+
+    let setting_business = JSON.parse(JSON.stringify(setting));
+    $('#generatedataTable').DataTable(setting_business).destroy();
+
+    setting_business['ajax'] = {
+      url: `/business/itemNO`,
+      type: 'get',
+      "data": function(d) {
+        d.picture_num = picture_num,
+        d.customer_id = customer_id
+      }
+    };
+    setting_business['processing'] = true;
+    setting_business['serverSide'] = true;
+    setting_business['createdRow'] = function(row, data, dataIndex) {
+      // $(row).attr('onclick', `inLoad(${data['id']})`);
+      $(row).attr('style', `cursor:pointer`);
+    };
+
+    setting_business['columns'] = [{
+      "data": null,
+        render: function(data, type, row, meta) {
+          return `<input type="radio" value=${data['品號']} name="radioItemNO" aria-label="Checkbox for following text input"> `;
+        }
+      },{
+        "data": "品號"
+      },
+      {
+        "data": "硬度"
+      }, {
+        "data": "客戶圖號",
+      },{
+        "data": "版次",
+      },{
+        "data": "材質",
+      },{
+        "data": "鍍鈦",
+      },
+    ];
+    $('#generatedataTable').DataTable(setting_business);
+  }
+  let timeout_generatedataTable = null;
+  $(document).on('input', '[name="filteritemno"]', function () {
+    clearTimeout(timeout_generatedataTable);
+    timeout_generatedataTable = setTimeout(function () {
+      setitemnoTable();
+    }, 1000)
+  })
+  $(document).on('change', '[name="checkProgress"]', function () {
+    if($(this).prop('checked') == true){
+        console.log($(this).val(),'true')
+        removeFalse($(this).val());
+      }else{
+        console.log($(this).val(),'false')
+        addFalse($(this).val());
+
+      }
+  })
+ 
+
+function getitemno(){
+    $.ajax({
+      url: `/file/information`,
+      type: 'get',
+      data: {
+        file_id: id,
+      },
+      dataType: 'json',
+      success: function(response) {
+        let itemno = '';
+        $.each(response,function(){
+          itemno = this.itemno
+        })
+        $('[name=inputitemNo]').val(itemno)
+      }
+    });
+  }
+
+  function updateItemNO(){
+    $('[name="radioItemNO"]:checked').each(function(){
+      itemno = $(this).val()
+    })
+    $('#exampleModal2').modal('hide');
+    $('[name=inputitemNo]').val(itemno)
+    $.ajax({
+      url: `/file/itemno`,
+      type: 'patch',
+      data: {
+        file_id: id,
+        itemno : itemno
+      },
+      dataType: 'json',
+      success: function(response) {
+        
+      }
+    });
+
+  }
+  
+  $(function () {
+    getitemno();
+
+  })
+</script>

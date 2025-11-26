@@ -1,0 +1,127 @@
+<?php include(__DIR__.'/../basic/header.html'); ?>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <div class="row row-cols-1 row-cols-md-3">
+        <div class="col-lg-12 mb-4">
+            <div class="card">
+                <h5 class="card-header text-primary">當前時間</h5>
+                <div class="card-body row row-cols-1 row-cols-md-3">
+                    <div class="col-lg-12 mb-4 row row-cols-1 row-cols-md-3">
+                        <div class="form-group form-inline">
+                            <label>選擇日期:</label>
+                            <input id="date" type="date" class="mx-2 form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-12 mb-4">
+                        <form oninput="uDateTime.value=formatSecond(time.value)">
+                            <div class="form-group">
+                                <input type="range" class="form-control-range" id="time" name="points" value="0" min="0"
+                                    max="86400">
+                                <output style="font-size: 18px;">當前時間:</output>
+                                <output name="uDateTime" for="time" style="font-size: 18px;"></output>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card my-3">
+                <h5 class="card-header">Z軸資訊</h5>
+                <div class="card-body">
+                    <div class="row justify-content-end">
+                        <button type="button" class="btn btn-success mx-2"><a class="text-white"
+                                href="/timeSlider.aspx" target="_blank">動態數據</a>
+                        </button>
+                        <button type="button" class="btn btn-warning mx-2"><a class="text-white"
+                            href="/Discharge/Z" target="_blank">Z軸數據</a></button>
+                    </div>
+                    <div class="col-lg-12 mb-4 text-center">
+                        <img id="ZImg" src="" class="img-fluid img-thumbnail rounded" alt="...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card my-3">
+                <h5 class="card-header">火花</h5>
+                <div class="card-body">
+                    <div class="row justify-content-end">
+                        <button type="button" class="btn btn-success mx-2"> <a class="text-white"
+                                href="http://172.25.25.34/timeSlider.aspx" target="_blank">動態數據</a>
+                        </button>
+                        <button type="button" class="btn btn-warning mx-2"><a class="text-white"
+                            href="/Discharge/spark" target="_blank">火花數據</a></button>
+                        <button type="button" class="btn btn-danger mx-2"><a class="text-white"
+                            href="/Discharge/EDM" target="_blank">金屬中心數據</a></button>
+                    </div>
+                    <div class="col-lg-12 mb-4 text-center">
+                        <img id="sparkImg" src="" class="img-fluid img-thumbnail rounded" alt="...">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php include(__DIR__.'/../basic/footer.html'); ?>
+
+</body>
+<script src="/js/json.js"></script>
+<script src="/js/string.js"></script>
+<script src="/js/dateTime.js"></script>
+<script>
+    $(function () {
+        let oDateTime = dateTime();
+        //let oDateTime = dateTime('2022-01-02 18:43:20');
+        //let oDateTime = dateTime('2022-01-08 13:00:00');
+        $("#date").attr("value", oDateTime.cDate);
+        $("#time").attr("value", oDateTime.iTodaySeconds);
+        $("[name='uDateTime']").text(oDateTime.cDateTime);
+
+        getZRecord(oDateTime.cDateTime);
+        getSparkRecord(oDateTime.cDateTime);
+    });
+
+    function formatSecond(iTodaySeconds) {
+        let oTime = todaySeconds(iTodaySeconds);
+        let cDatetime = $("#date").val() + " " + oTime.cTime;
+        let oDateTime = dateTime(cDatetime);
+        return oDateTime.cDateTime;
+    }
+
+    function getZRecord(cDateTime) {
+        json("get", "/Discharge/Z/dataLoad", { dTime: cDateTime }, function (data) {
+            if (data.length == 0) { return; }
+            getZImg(data[0].dTime);
+        });
+    }
+    function getZImg(cDateTime) {
+        json("get", "/Discharge/Z/pictureLoad", { dTime: cDateTime }, function (data) {
+            $("#ZImg").attr('src', data)
+        });
+    }
+    function getSparkRecord(cDateTime) {
+        json("get", "/Discharge/spark/dataLoad", { dTime: cDateTime }, function (data) {
+            if (data.length == 0) { return; }
+            getSparkImg(data[0].dTime);
+        });
+    }
+    function getSparkImg(cDateTime) {
+		json("get", "/Discharge/spark/pictureLoad", { dTime: cDateTime }, function (data) {
+			$("#sparkImg").attr('src', data)
+		});
+    }
+
+    $(document).on('mouseup', '#time', function () {
+        cDateTime = $("[name='uDateTime']").val();
+        $("#sparkImg").attr('src', '');
+        $("#ZImg").attr('src', '');
+        getZImg(cDateTime);
+        getSparkImg(cDateTime);
+    })
+</script>
+
+</html>

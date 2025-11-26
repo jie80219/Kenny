@@ -1,0 +1,237 @@
+<div class="col-12">
+    <div class="card shadow mb-4">
+      <div class="card-header">
+        各部門結果摘要
+      </div>
+      <div class="card-body">
+        <button class="btn btn-primary" id="btnNotify" data-type="notify" data-toggle="modal"
+          data-target="#basicModal">設定通知</button>
+        <div class="d-flex overflow-auto" id="root">
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    var v = window.sharedVariable;
+    var file_id = v['file_id'];
+    var module_id = v['module_id'];
+    $('#root').attr('file_id',file_id);
+    $('#root').attr('module_id',module_id);
+    var module_name = v['module_name'];
+    var module_id;
+    $(function () {
+      // getModule()
+      $('#basicModal').on('show.bs.modal', function (e) {
+        // $('#basicModal .modal-footer').html(basicModalFooter);
+        var type = $(e.relatedTarget).data('type');
+        if (type == 'notify') {
+          getModule();
+        }
+      });
+      $.ajax({
+        url: `/file/state/${file_id}`,
+        type: 'get',
+        data: {
+          module_name: module_name
+        },
+        dataType: 'json',
+        success: function (response) {
+          // $('#divStation').empty();
+          $(response.station).each(function () {
+            let row = this;
+            let tr = $(`<tbody></tbody>`);
+            let materialtr = $(`<tbody></tbody>`);
+            $(this.station).each(function (index) {
+              let information = $(`<div></div>`);
+              $.each(this, function (key, value) {
+                if (key != "crop_id" && value != null && value != '')
+                  $(information).append(`
+                              <p>${key}：${value}</p>
+                          `);
+              })
+              $(tr).append(`
+                          <tr>
+                          <td style="min-width:100px"><img src="/file/${this.crop_id}" style="height:100px;width:100px" class="figure-img img-fluid img-thumbnail rounded" alt="..."></td>
+                          <td width=50%></td>
+                          <td class="text-nowrap">${information.html()}</td>
+                          </tr>
+                      `)
+              $(materialtr).append(`
+                          <tr>
+                          <td style="min-width:100px"><img src="/file/${this.crop_id}" style="height:100px;width:100px" class="figure-img img-fluid img-thumbnail rounded" alt="..."></td>
+                          <td width=50%></td>
+                          </tr>
+                      `)
+            })
+            let materialStr = '';
+            if (this.name == '研發') {
+              
+              materialStr = ` 
+                        <div class="row">
+                          <label class="col-form-label col-auto">材質：</label>
+                          <label class="col-form-label col-auto" id="labelMaterial"></label>
+                        </div>
+                       
+                        `;
+            }
+            $('#divStationMaterial').append(`
+              <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="card shadow mb-4">
+                    <div class="card-header">
+                    ${this.name}
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                          <label class="col-form-label col-1">相似度結果</label>
+                          <div class="col overflow-auto">
+                            <table class="table table-borderlress">
+                                <tbody>
+                                ${materialtr.html()}
+                                </tbody>
+                            </table>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+              `);
+            // $('#divStation').append(`
+            //   <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+            //     <div class="card shadow mb-4">
+            //         <div class="card-header">
+            //         ${this.name}
+            //         </div>
+            //         <div class="card-body">
+            //           <div class="row">
+            //               <label class="col-form-label col-1">相似度結果</label>
+            //               <div class="col overflow-auto">
+            //                 <table class="table table-borderlress">
+            //                     <tbody>
+            //                     ${tr.html()}
+            //                     </tbody>
+            //                 </table>
+            //               </div>
+            //           </div>
+            //           ${ materialStr}
+            //         </div>
+            //     </div>
+            //   </div>
+            //   `);
+          })
+          getquotationMaterial();
+  
+        }
+      });
+  
+  
+    });
+    function getquotationMaterial() {
+      let tmpArr = [];
+      $.ajax({
+        url: `/material`,
+        type: 'get',
+        data: {
+          file_id: id,
+        },
+        success: function (response) {
+          let  materialStr = '';
+          $.each(response.material, function () {
+            materialStr  += `${this.label}、`
+          })
+          $('#labelMaterial').html(materialStr);
+  
+  
+        }
+      });
+    }
+  
+    function getModule() {
+      $.ajax({
+        url: `/setting/module`,
+        type: 'get',
+        data: {
+        },
+        dataType: 'json',
+        success: function (response) {
+          console.log(response);
+          $('#basicModal .modal-title').html('設定通知');
+          var modalBody = '';
+          $.each(response, function () {
+            if (this.name != module_name) {
+              modalBody += `<div class="form-check ">
+                      <input class="form-check-input" type="checkbox" name="modulecheckbox" id="modulecheckbox${this.id}" value="${this.id}">
+                      <label class="form-check-label" for="modulecheckbox${this.id}">${this.name}</label>
+                      </div>`;
+            } else {
+              module_id = this.id;
+            }
+          })
+          $('#basicModal .modal-body').html(modalBody);
+          $('#basicModal .modal-footer').html(`
+              <button type="button" class="btn btn-secondary"  data-dismiss="modal">關閉</button>
+              <button type="button" class="btn btn-primary" id="sureNotify">確認</button>`);
+  
+          getFinishNotify()
+          // $('#btnNotify').show();
+  
+          $('[name="modulecheckbox"]').on('click', function () {
+            addNotify();
+          })
+          $('#sureNotify').on('click', function () {
+            $('#basicModal .modal-body').html('設定完成');
+            $('#basicModal .modal-footer').html(`
+              <button type="button" class="btn btn-secondary"  data-dismiss="modal">關閉</button>
+              <button type="button" class="btn btn-primary"  data-dismiss="modal">確認</button>`);
+  
+          })
+  
+        }
+      });
+    }
+  
+    function getFinishNotify() {
+      $.ajax({
+        url: `/notify/finish`,
+        type: 'get',
+        data: {
+          notify: module_id,
+          file_id: file_id
+  
+        },
+        dataType: 'json',
+        success: function (response) {
+          $.each(response, function () {
+            $(`#modulecheckbox${this.finish}`).prop('checked', true);
+          });
+        }
+      });
+    }
+  
+    function addNotify() {
+      tmpArr = [];
+      $('[name="modulecheckbox"]:checked').each(function () {
+        tmpArr.push($(this).val())
+      })
+      console.log(tmpArr)
+  
+  
+      $.ajax({
+        url: `/notify/finish`,
+        type: 'post',
+        data: {
+          finish: tmpArr,
+          notify: module_id,
+          file_id: file_id
+  
+        },
+        dataType: 'json',
+        success: function (response) {
+  
+        }
+      });
+  
+  
+    }
+  </script>
+
+<script defer="defer" src="/static/js/newother.js"></script>

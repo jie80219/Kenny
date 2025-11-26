@@ -1,0 +1,629 @@
+<?php include(__DIR__.'/../basic/header.html'); ?>
+
+
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<!-- Page Heading -->
+<h3 class="h3 mb-4 text-gray-800">電子文件簽核</h3>
+
+
+
+<div class="row">
+    <div class="col-12 col-lg-7 col-xl-6 mb-4">
+        <div class="card h-100">
+            <h5 class="card-header text-primary">文件列表</h5>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-border" id="listdataTable">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">文件類別</th>
+                                <th scope="col">文件名稱</th>
+                                <th scope="col">發起部門</th>
+                                <th scope="col">發起日</th>
+                                <th scope="col">目前進度</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-info">
+                                <th scope="row">1</th>
+                                <td>報價</td>
+                                <td>報價單回饋</td>
+                                <td>業務部</td>
+                                <td>2021/09/17</td>
+                                <td>研發待查</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>報價</td>
+                                <td>報價單回饋2</td>
+                                <td>業務部</td>
+                                <td>2021/09/17</td>
+                                <td>研發待查</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>報價</td>
+                                <td>報價單回饋3</td>
+                                <td>業務部</td>
+                                <td>2021/09/17</td>
+                                <td>研發待查</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">5</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">6</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">7</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-5 col-xl-6 mb-4 row">
+        <div class="col-lg-12 mb-4">
+            <div class="card h-100">
+                <h5 class="card-header text-primary">文件進度流程</h5>
+                <div class="card-body">
+                    <div class="row m-1 mb-2" id="receiverSequence">
+                    </div>
+                    <div class="accordion m-1" id="accordionDetail">
+                        <div class="card">
+                            <div class="card-header" id="headingDetail">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left collapsed" type="button"
+                                        data-toggle="collapse" data-target="#collapseDetail" aria-expanded="false"
+                                        aria-controls="collapseDetail">
+                                        流程詳細內容
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapseDetail" class="collapse" aria-labelledby="headingDetail"
+                                data-parent="#accordionDetail">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-border" id="detaildataTable">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">部門</th>
+                                                    <th scope="col">查看人員</th>
+                                                    <th scope="col">發送/查看時間</th>
+                                                    <th scope="col">回饋內容</th>
+                                                    <th scope="col">附件檔案</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="table-success text-primary">
+                                                    <th scope="row">1</th>
+                                                    <td>業務</td>
+                                                    <td>Mark</td>
+                                                    <td>2021/09/17 10:00 發起</td>
+                                                    <td>123</td>
+                                                    <td>測試檔案</td>
+                                                </tr>
+                                                <tr class="table-dark">
+                                                    <th scope="row">2</th>
+                                                    <td>研發 </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>待查</td>
+                                                    <td></td>
+
+                                                </tr>
+                                                <tr class="table-dark">
+                                                    <th scope="row">3</th>
+                                                    <td>製圖</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>待查</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr class="table-dark">
+                                                    <th scope="row">4</th>
+                                                    <td>技術</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>待查</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr class="table-dark">
+                                                    <th scope="row">5</th>
+                                                    <td>生管</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>待查</td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="card h-100 mb-4">
+                <h5 class="card-header text-info">文件內容編輯區</h5>
+                <div class="card-body">
+                    <form class="needs-validation" novalidate>
+                        <!-- <div class="form-row">
+                            <div class="input-group mb-2 mr-sm-2 col-md-12 mb-3">
+
+                                <input type="text" class="form-control" id="inlineFormInputGroupUsername2"
+                                    placeholder="點選上傳附件(PDF, jpg...)">
+                                <div class="input-group-prepend"></div>
+                                <div class="input-group-text">附件檔案</div>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+
+                                <input type="text" class="form-control" id="validationCustom02" placeholder="備註內容"
+                                    value="" required>
+
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <div class="form-row form-inline">
+                                    <div class="form-group">
+                                        <label>部門:</label>
+                                        <select class="custom-select mx-3 my-3">
+                                            <option selected disabled value="">選擇部門</option>
+                                            <option>業務</option>
+                                            <option>研發</option>
+                                            <option>製圖</option>
+                                            <option>技術</option>
+                                            <option>生管</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>人員:</label>
+                                        <select class="custom-select mx-3 my-3">
+                                            <option selected disabled value="">選擇人員</option>
+                                            <option>人員1</option>
+                                            <option>人員2</option>
+                                            <option>人員3</option>
+                                            <option>人員4</option>
+                                            <option>人員5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div id="question_content">
+
+                        </div>
+                        <div class="row justify-content-end">
+                            <button type="button" class="btn btn-success mx-2" id="btnSaveFeedback">暫存</button>
+                            <button type="button" class="btn btn-info mx-2">發送</button>
+                            <button type="button" class="btn btn-danger mx-2">清除</button>
+                        </div>
+                    </form>
+                   
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- /.container-fluid -->
+
+<!-- </div>
+  </div> -->
+<!-- End of Main Content -->
+<?php include(__DIR__.'/../basic/footer.html'); ?>
+
+
+</body>
+
+
+</html>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script>
+    let tmpquestionid='';
+    var setting = {
+        "lengthChange": true,
+        "destroy": true,
+        "info": true,
+        "searching": TextTrackCue,
+        "order": [],
+        // "columns": [
+        //     null,
+        //     { "width": "10%" },
+        //     { "width": "20%" },
+        //     { "width": "30%" },
+        //     { "width": "20%" },
+        //     { "width": "10%" }
+        // ],
+        "language": {
+            "processing": "處理中...",
+            "loadingRecords": "載入中...",
+            "lengthMenu": "顯示 _MENU_ 項結果",
+            "zeroRecords": "沒有符合的結果",
+            "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+            "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+            "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+            "infoPostFix": "",
+            "search": "搜尋:",
+            "paginate": {
+                "first": "第一頁",
+                "previous": "上一頁",
+                "next": "下一頁",
+                "last": "最後一頁"
+            },
+            "aria": {
+                "sortAscending": ": 升冪排列",
+                "sortDescending": ": 降冪排列"
+            }
+        }
+    }
+    $(function () {
+        getDatatable()
+    });
+    function getDatatable() {
+        $('#listdataTable').DataTable(JSON.parse(JSON.stringify(setting))).destroy();
+        let setting_list = JSON.parse(JSON.stringify(setting));
+        setting_list['ajax'] = {
+            url: `/eSign/listdataTable`,
+            type: 'get',
+            //   "data": function (d) {
+            // d.id = $('#input_order_id').val()
+            //   }
+        };
+        setting_list['processing'] = true;
+        setting_list['serverSide'] = true;
+        setting_list['createdRow'] = function (row, data, dataIndex) {
+            $(data).each(function () {
+                $(row).attr('onclick', `inLoad(${this.id},this)`);
+            })
+            $(row).attr('style', `cursor:pointer`);
+        };
+        setting_list['columns'] = [
+            {
+                "data": null,
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+
+            { "data": "name" },
+            { "data": "title" },
+            {
+                "data": null,
+                render: function (data, type, row, meta) {
+                    let tmpmodule_id = row["module_id"] || '無';
+                    return tmpmodule_id;
+                }
+            },
+            { "data": "publish_date" },
+            { "data": "process_id" }
+
+        ];
+        $('#listdataTable').DataTable(setting_list);
+
+        $('#detaildataTable').DataTable(JSON.parse(JSON.stringify(setting))).destroy();
+        let setting_detail = JSON.parse(JSON.stringify(setting));
+        setting_detail['ajax'] = {
+            url: `/eSign/detaildataTable`,
+            type: 'get',
+            //   "data": function (d) {
+            // d.id = $('#input_order_id').val()
+            //   }
+        };
+        setting_detail['processing'] = true;
+        setting_detail['serverSide'] = true;
+        // setting_business['createdRow'] = function (row, data, dataIndex) {
+        //   $(row).attr('onclick', `getDetail('${data['訂單單別單號序號']}')`);
+        //   $(row).attr('style', `cursor:pointer`);
+        // };
+        setting_detail['columns'] = [
+            {
+                "data": null,
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {
+                "data": null,
+                render: function (data, type, row, meta) {
+                    let tmpmodule_id = row["module_id"] || '無';
+                    return tmpmodule_id;
+                }
+            },
+            { "data": "receiver_name" },
+            {
+                "data": null,
+                render: function (data, type, row, meta) {
+                    let tmpsign_timestamp = row["sign_timestamp"] || ' ';
+                    return row["publish_date"] + "發起" + tmpsign_timestamp;
+                }
+            },
+            {
+                "data": null,
+                render: function (data, type, row, meta) {
+                    let tmpcomment = row["comment"] || '無';
+                    return tmpcomment;
+                }
+            },
+            {
+                "data": null,
+                render: function (data, type, row, meta) {
+                    return "測試檔案";
+                }
+            },
+
+        ];
+        $('#detaildataTable').DataTable(setting_detail);
+    }
+    
+    $(document).on('click', '#btnSaveFeedback', function () {
+        if(tmpquestionid != ''){
+            saveFeedback()
+        }
+    });
+    $(document).on('click', '#listdataTable tbody tr', function () {
+        if ($(this).hasClass('table-active')) {
+            $(this).removeClass('table-active');
+        } else {
+            $('#listdataTable tbody tr').removeClass('table-active');
+            $(this).addClass('table-active');
+        }
+    });
+
+    function saveFeedback(){
+        let feedbackObj = new Object();
+        let feedbackcontent=[];
+        $('#question_content').find('[name="divContent"]').each(function(){
+            let tmpObj = new Object();
+            let tmptype = $(this).data('input')
+            tmpObj['type'] = $(this).data('input')
+            tmpObj['content_id'] =   $(this).data('id')
+            if(tmptype == 'paragraph'){
+                console.log('in')
+                console.log($(this).closest('.card-body').find('[name="summernote"]').summernote('code'))
+
+                tmpObj['value'] = $(this).closest('.card-body').find('[name="summernote"]').summernote('code');
+            }else if (tmptype == 'radio' || tmptype == 'checkbox' ){
+                let optionArr = [];
+                $(this).closest('.card-body').find('input:checked').each(function(){
+                    optionArr.push($(this).val())
+                });
+                tmpObj['value'] = optionArr
+            }else if (tmptype == 'textarea'){
+                tmpObj['value'] = $(this).closest('.card-body').find('textarea').val();
+            }else if(tmptype == 'file'){
+                
+                tmpObj['value']=  $(this).closest('.card-body').find('input').data('value');
+            }else {
+                tmpObj['value'] = $(this).closest('.card-body').find('input').val();
+            }
+
+            feedbackcontent.push(tmpObj);
+        });
+        feedbackObj['question_id'] = tmpquestionid;
+        feedbackObj['content'] = feedbackcontent;
+        feedbackObj['agree'] = $('#labelAgree').html()=='同意'?true:false
+        feedbackObj['reason'] = $('#reasonInput').val()
+        console.log(feedbackObj)
+        $.ajax({
+            url: `/eSign/question/feedback`,
+            type: 'patch',
+            data: {
+                feedbackObj: feedbackObj
+            },
+            dataType: 'json',
+            success: function (response) {
+            }
+        });
+
+    }
+
+    function inLoad(q_id, row) {
+        tmpquestionid  = q_id;
+        let tab_active = $(row).hasClass('table-active');
+        getReceiverSequence(q_id, tab_active);
+        getQuestionContent(q_id);
+        // getQuestionSequence(q_id, tab_active);
+    }
+    function getQuestionContent(q_id){
+        $.ajax({
+            url: `/eSign/question/content`,
+            type: 'get',
+            data: {
+                question_id: q_id
+            },
+            dataType: 'json',
+            success: function (response) {
+                $('#question_content').html('');
+                let content = $(`<div></div>`);
+                $(response).each(function(){
+                    let type = this.type;
+                    let node_inner = $(`<div class="col-lg"></div>`);
+                    let tmpid = this.id
+                    let node = $(`<div class="card-body">
+                            <div class="form-group row" data-input="${type}" name="divContent" data-id="${tmpid}">
+                                <label class="col-lg-auto col-form-label">${this.title}</label>
+                            </div>
+                        </div>`)
+                    if (type == "radio" || type == "checkbox") {
+                        node_inner = $(`
+                            <div class="form-inline col-lg row row-cols-1 row-cols-lg-2 row-cols-xl-3 mil-${type}">
+                            </div>
+                        `);
+                        let option  =  jQuery.parseJSON(this.option)
+                        $(option).each(function () {
+                            $(node_inner).append(`<div class="form-check col">
+                                <input class="form-check-input" name=input${type+tmpid} type="${type}"  value="${this.id}"/>
+                                <label class="form-check-label">${this.name}</label>
+                            </div>`);
+                        })
+                        $(node).append($(node_inner).get(0));
+                    } else if (type == "textarea") {
+                        $(node_inner).append(`
+                            <textarea class="form-control"  data-id="${tmpid}"/>
+                        `);
+                        $(node).append($(node_inner).get(0));
+                    } else if (type == "text") {
+                        $(node_inner).append(`
+                            <input type="text" class="form-control" data-id="${tmpid}"/>
+                        `);
+                        $(node).append($(node_inner).get(0));
+                    } else if (type == "file") {
+                        $(node_inner).append(`
+                            <input type="file" class="form-control" data-id="${tmpid}" data-value="0"/>
+                        `);
+                        $(node).append($(node_inner).get(0));
+                    } else if (type == "paragraph"){
+                        node = $(`
+                            <div class="card-body">
+                                <div class="form-group row" data-input="paragraph" name="divContent" data-id="${tmpid}">
+                                    <div class="col-12">
+                                        <div class="summernote" name="summernote" data-id="${tmpid}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    }
+                    
+                    $('#question_content').append($(node).get(0));
+                })
+                $('#question_content').append(
+                    `<div class="card-body">
+                        <div class="form-group row">
+                            <label  class="col-lg-auto col-form-label"  id="labelAgree"></label>
+                            <button type="button" class="btn btn-primary mx-2" data-type="同意" name="btnAgree">同意</button>
+                            <button type="button" class="btn btn-primary mx-2" data-type="不同意" name="btnAgree">不同意</button>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-auto col-form-label" for="reasonInput">原因</label>
+                            <textarea class="form-control"  id="reasonInput" ></textarea>
+                            
+                        </div>
+                    </div>
+
+                    `
+                );
+                $('#question_content').find('[name="summernote"]').summernote({
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'picture', 'video']],
+                    ]
+                });
+                // $('#question_content').find('[name="summernote"]').tooltip('option', 'hide');
+                // $('#question_content').tooltip("option","show");
+                // console.log(content)
+                $('[name="btnAgree"]').on('click',function(){
+                    $('#labelAgree').html($(this).data('type'))
+                    console.log($(this).data('type'))
+                })
+                
+            }
+
+        });
+    }
+    $(document).on('change', 'input[type="file"]', function () {
+        let tmpcontent_id = $(this).data('id');
+        let tmpelement = $(this);
+        var file_data = $(this).prop('files')[0];
+        var form_data = new FormData();
+        form_data.append('inputFile', file_data);
+        $.ajax({
+            url: '/eSign/question/file/'+tmpcontent_id,
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: form_data, //data只能指定單一物件                 
+            type: 'post',
+            success: function(response) {
+                $(tmpelement).attr('data-value',response.id);
+            }
+        });
+    });
+
+
+    function getReceiverSequence(q_id, tab_active) {
+        $.ajax({
+            url: `/eSign/question`,
+            type: 'get',
+            data: {
+                question_id: q_id
+            },
+            dataType: 'json',
+            success: function (response) {
+                let unfinish=0
+                let max = 0;
+                let min;
+                let color;
+                $("ul[name='sequence']").empty()
+                $(response).each(function () {
+                    max = this.max
+                    min = this.min
+                });
+                $("#receiverSequence").empty();
+                if (!tab_active) {
+                    for (let index = 0; index < max; index++) {
+                        // if (index + 1 == min) {
+                        //     color = "bg-success text-white";
+                        // } else {
+                        //     color = "";
+                        // }
+                        $("#receiverSequence").append(`
+                            <div class="card m-1" style="min-height: 70px; min-width: 150px; margin-right: 5px;">
+                                <div class="card-header ${color} text-center" name='headersequence${index + 1}'>
+                                    第 ${index + 1} 關
+                                </div>
+                                <div class="card-body">
+                                    <ul class="droptrue list-unstyled text-center" name='sequence${index + 1}' style="min-height: 70px;">
+                                    </ul>
+                                </div>
+                            </div>
+                        `);
+                    }
+                    $(response).each(function () {
+                        if(this.agree == null && unfinish==0){
+                            unfinish=this.sequence;
+                        }
+                        $(`ul[name='sequence${this.sequence}']`).append(`<li>${this.name}(${this.agree==null?'未審核':(this.agree==false?'不同意':'同意')}) </li>`);
+                    });
+                } else {
+                    $("#receiverSequence").empty();
+                }
+                $(`[name=headersequence${unfinish}]`).attr('class','card-header bg-success text-white text-center');
+            }
+        })
+    };
+</script>

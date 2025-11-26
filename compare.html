@@ -1,0 +1,1128 @@
+<?php include(__DIR__ . '/basic/header.html'); ?>
+<style>
+  .select-wrapper {
+    margin: auto;
+    max-width: 600px;
+    width: calc(100% - 40px);
+  }
+
+  .select-pure__select {
+    align-items: center;
+    background: #f9f9f8;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+    color: #363b3e;
+    cursor: pointer;
+    display: flex;
+    font-size: 16px;
+    font-weight: 500;
+    justify-content: left;
+    min-height: 44px;
+    padding: 5px 10px;
+    position: relative;
+    transition: 0.2s;
+    width: 100%;
+  }
+
+  .select-pure__options {
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+    color: #363b3e;
+    display: none;
+    left: 0;
+    max-height: 221px;
+    overflow-y: scroll;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    /* position:fixed; */
+    z-index: 99999;
+  }
+
+  .select-pure__select--opened .select-pure__options {
+    display: block;
+  }
+
+  .select-pure__option {
+    background: #fff;
+    border-bottom: 1px solid #e4e4e4;
+    box-sizing: border-box;
+    height: 44px;
+    line-height: 25px;
+    padding: 10px;
+
+  }
+
+  .select-pure__option--selected {
+    color: #e4e4e4;
+    cursor: initial;
+    pointer-events: none;
+  }
+
+  .select-pure__option--hidden {
+    display: none;
+  }
+
+  .select-pure__selected-label {
+    background: #5e6264;
+    border-radius: 4px;
+    color: #fff;
+    cursor: initial;
+    display: inline-block;
+    margin: 5px 10px 5px 0;
+    padding: 3px 7px;
+  }
+
+  .select-pure__selected-label:last-of-type {
+    margin-right: 0;
+  }
+
+  .select-pure__selected-label i {
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 7px;
+  }
+
+  .select-pure__selected-label i:hover {
+    color: #e4e4e4;
+  }
+
+  .select-pure__autocomplete {
+    background: #f9f9f8;
+    border-bottom: 1px solid #e4e4e4;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    box-sizing: border-box;
+    font-size: 16px;
+    outline: none;
+    padding: 10px;
+    width: 100%;
+  }
+</style>
+<link rel="stylesheet" href="/vendor/select-pure/dist/select-pure.css">
+<div id="fileState"></div>
+<div class="row row-cols-1">
+  <div class="col">
+    <div class="card shadow mb-4 h-100">
+      <div class="card-header">全圖比對
+        <i class="fas fa-exclamation-circle" data-toggle="tooltip" data-placement="top"
+          title="選擇要呈現的廠內圖數量。可設定要呈現出的數量"></i>
+      </div>
+      <div class="card-body">
+        <button type="button" class="btn btn-primary float-right" id="buttonPass" data-id="0">下一步</button>
+        <div class=" row">
+
+        </div>
+
+        <div class="form-group row">
+          <div class="col-sm-auto form-group row">
+            <label class="col-form-label col-auto">相似度門檻：</label>
+            <div class="col-auto">
+              <select class="form-control" id="selectThreshold">
+                <option value="0">0%</option>
+                <option value="40">40%</option>
+                <option value="50">50%</option>
+                <option value="60">60%</option>
+                <option value="70">70%</option>
+                <option value="80">80%</option>
+                <option value="90">90%</option>
+                <option value="100">100%</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-auto form-group row">
+            <label class="col-form-label col-auto">參考數量：</label>
+            <div class="col-auto">
+              <select class="form-control" id="selectAmount">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+            <label class="col-form-label col-auto">張</label>
+            <label class="col-form-label col-auto">，篩選結果：7 / 7 張</label>
+          </div>
+        </div>
+        <div class="accordion" id="accordionFilter">
+          <div class="card">
+            <div class="card-header" id="accordionHeadingFilter">
+              <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse"
+                  data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                  篩選設定
+                </button>
+              </h2>
+            </div>
+            <div id="collapseFilter" class="collapse" aria-labelledby="accordionHeadingFilter"
+              data-parent="#accordionFilter">
+              <div class="card-body" style="height: 400px;">
+                <div class="form-group row">
+                  <div class="form-group row col-12">
+                    <label class="col-form-label col-sm-auto">年份：</label>
+                    <div class="col row" id="divYear"></div>
+                  </div>
+                  <div class="form-group row col-12">
+                    <label class="col-form-label col-sm-auto">材質：</label>
+                    <div class="col row" id="divMaterial"></div>
+                  </div>
+                  <div class="form-group row col-12">
+                    <label class="col-form-label col-sm-auto">鍍鈦：</label>
+                    <div class="col row" id="divTitanizing"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul>
+          <li>註記的部分會在研發階段時，看到所留下的註記</li>
+          <li>按下一步後可送至研發</li>
+        </ul>
+        <div class="form-group row" id="divImage">
+        </div>
+        <!-- <div class="table-responsive">
+          <table class="table table-borderless" width=100%>
+            <thead>
+              <tr>
+                <th>相似客戶圖</th>
+                <th>訂單資訊</th>
+                <th width=30%>註記</th>
+                <th>相似度</th>
+                <th>勾選</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="divImage">
+            </tbody>
+          </table>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+<?php include(__DIR__ . '/basic/footer.html'); ?>
+<script src="/vendor/select-pure/dist/select-pure.bundle.min.js"></script>
+<script>
+
+  var setting = {
+    "lengthChange": true,
+    "destroy": true,
+    "info": true,
+    "searching": false,
+    "order": [],
+    "language": {
+      "processing": "處理中...",
+      "loadingRecords": "載入中...",
+      "lengthMenu": "顯示 _MENU_ 項結果",
+      "zeroRecords": "沒有符合的結果",
+      "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+      "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+      "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+      "infoPostFix": "",
+      "search": "搜尋:",
+      "paginate": {
+        "first": "第一頁",
+        "previous": "上一頁",
+        "next": "下一頁",
+        "last": "最後一頁"
+      },
+      "aria": {
+        "sortAscending": ": 升冪排列",
+        "sortDescending": ": 降冪排列"
+      }
+    }
+  }
+
+
+  let material = null;
+  let titanizing = null;
+  let year = null;
+  let instanceMaterial, instanceTitanizing, instanceYear;
+
+  // let process = null;
+  var url = new URL(window.location.href);
+  var id = url.searchParams.get("id");
+  var file_id_dest = url.searchParams.get("file_id_dest");
+  if (file_id_dest == null)
+    file_id_dest = id;
+  var module_id;
+  var module_name = '業務';
+  var allState = [];
+  let process = [];
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    $("#buttonPass").attr('data-id', id);
+    getModule();
+    getFilter();
+    getListState(id);
+    // getFileInformation(id);
+    getResultComponents();
+  })
+  function getModule() {
+    $.ajax({
+      url: `/setting/module`,
+      type: 'get',
+      data: {
+      },
+      dataType: 'json',
+      success: function (response) {
+        $.each(response, function () {
+          if (this.name == module_name) {
+            module_id = this.id;
+          }
+
+        })
+        console.log(module_id)
+      }
+    });
+  }
+
+  function nextpage() {
+    console.log('in')
+    $.ajax({
+      url: '/file/progress',
+      type: 'post',
+      data: {
+        url: window.location.href,
+        id: id
+      },
+      dataType: 'json',
+      success: function (response) {
+        $(response).each(function () {
+          window.location.href = `${this.url}?id=${id}`
+        })
+      }
+    })
+  }
+  function sendemail(modules) {
+    // return false
+    let content = `報價編號${id} ${module_name}部門已完成填寫`;
+    $.ajax({
+      url: `/business/dispatch/email`,
+      type: 'post',
+      data: {
+        id: id,
+        content: content,
+        message: content,
+        module: modules,
+        // deadline:$('#inputDeadline').val().replace('T',' ')
+
+      },
+      dataType: 'json',
+      success: function (response) {
+        nextpage()
+      }
+    })
+
+
+  }
+
+  function buttonPass() {
+    let file_id = id;
+    $('#basicModal').find('.modal-header').text(``);
+    $('#basicModal').find('.modal-body').text(`請稍等...`);
+    $('#basicModal').find('.modal-footer').text(``);
+    $('#basicModal').modal('show');
+    $.ajax({
+      url: `/notify/finish/module`,
+      type: 'get',
+      data: {
+        finish: module_id,
+        file_id: file_id,
+
+
+      },
+      dataType: 'json',
+      success: function (response) {
+
+        var moduleArr = []
+        $.each(response, function () {
+          moduleArr.push(this.notify)
+        })
+
+        if (allState.includes('已上傳圖檔') && allState.includes('已查詢歷史訂單') && allState.includes('已完成報價') && moduleArr.length > 0) {
+          sendemail(moduleArr)
+          nextpage()
+        } else {
+          nextpage()
+        }
+      }
+    })
+  }
+
+  $(document).on('click', '#buttonPass', function () {
+    buttonPass()
+
+  });
+
+  let crops_arr = new Object();
+  var focusID, focusItemID;
+  function inputFocus(resID, resItemID) {
+    console.log('22')
+    focusID = resID;
+    focusItemID = resItemID;
+  }
+  function getResultComponents() {
+    var processArr = [];
+    $.ajax({
+      url: `/processes/crop/${file_id_dest}`,
+      type: 'get',
+      success: function (response) {
+
+        processArr = response.process
+        var compareObj = new Object();
+        let crops = $(`<div></div>`);
+        $(response.crop).each(function () {
+          $(crops).append(`
+            <img src="/fileCrop/${this}" style="width:100px;height:100px" class="col figure-img img-thumbnail rounded" alt="..." />
+          `);
+        })
+
+        $('#divImage').html(``)
+        $.each(response.process, function (key, value) {
+          console.log(123);
+          process.push(value)
+          $('#divImage').append(`
+            <div class="card col-12">
+              <div class="card-body">
+                <div class="form-group row">
+                  <label class="col-form-label col-auto">零件${key + 1}</label>
+                  <div class="col-auto">
+                  ${crops.html()}
+                  </div>
+                  <div class="overflow-auto">
+                    <table class="table table-borderless" width=100%>
+                      <thead>
+                        <tr>
+                          
+                          <th class="text-nowrap">客戶原圖</th>
+                          <th class="text-nowrap" style="width:50vw">視角圖（請左右滑動）</th>
+                          <th class="text-nowrap" width=30%>註記</th>
+                          <th class="text-nowrap">平均相似度</th>
+                          <th class="text-nowrap">勾選</th>
+                        </tr>
+                      </thead>
+                      <tbody id="divImage_${value}">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            `);
+          compareObj[value] = [];
+        });
+
+        instanceYear = new SelectPure('#divYear', {
+          options: year,
+          multiple: true,
+          autocomplete: true,
+          icon: "fa fa-times",
+          inlineIcon: false,
+          classNames: {
+            select: "select-pure__select",
+            dropdownShown: "select-pure__select--opened",
+            multiselect: "select-pure__select--multiple",
+            label: "select-pure__label",
+            placeholder: "select-pure__placeholder",
+            dropdown: "select-pure__options",
+            option: "select-pure__option",
+            autocompleteInput: "select-pure__autocomplete",
+            selectedLabel: "select-pure__selected-label",
+            selectedOption: "select-pure__option--selected",
+            placeholderHidden: "select-pure__placeholder--hidden",
+            optionHidden: "select-pure__option--hidden",
+          },
+          onChange: value => {
+            process_resultMatch(process_id)
+          },
+        });
+        // console.log(year)
+        // console.log(material)
+
+        instanceMaterial = new SelectPure('#divMaterial', {
+          options: material,
+          multiple: true,
+          autocomplete: true,
+          icon: "fa fa-times",
+          inlineIcon: false,
+          classNames: {
+            select: "select-pure__select",
+            dropdownShown: "select-pure__select--opened",
+            multiselect: "select-pure__select--multiple",
+            label: "select-pure__label",
+            placeholder: "select-pure__placeholder",
+            dropdown: "select-pure__options",
+            option: "select-pure__option",
+            autocompleteInput: "select-pure__autocomplete",
+            selectedLabel: "select-pure__selected-label",
+            selectedOption: "select-pure__option--selected",
+            placeholderHidden: "select-pure__placeholder--hidden",
+            optionHidden: "select-pure__option--hidden",
+          },
+          onChange: value => {
+            process_resultMatch(process_id)
+          },
+        });
+
+        console.log('in1')
+
+
+
+
+        instanceTitanizing = new SelectPure('#divTitanizing', {
+          options: titanizing,
+          multiple: true,
+          autocomplete: true,
+          icon: "fa fa-times",
+          inlineIcon: false,
+          classNames: {
+            select: "select-pure__select",
+            dropdownShown: "select-pure__select--opened",
+            multiselect: "select-pure__select--multiple",
+            label: "select-pure__label",
+            placeholder: "select-pure__placeholder",
+            dropdown: "select-pure__options",
+            option: "select-pure__option",
+            autocompleteInput: "select-pure__autocomplete",
+            selectedLabel: "select-pure__selected-label",
+            selectedOption: "select-pure__option--selected",
+            placeholderHidden: "select-pure__placeholder--hidden",
+            optionHidden: "select-pure__option--hidden",
+          },
+          onChange: value => {
+            process_resultMatch(process_id)
+          },
+        });
+
+        processinterval = [];
+        $.each(processArr, function (key, value) {
+          process_id = processArr[key];
+          processinterval[process_id] = setTimeout(process_resultMatch(process_id), 3000)
+        })
+        function process_resultMatch(process_id) {
+          console.log(instanceYear.value())
+          $.ajax({
+            url: `/components/Match/${process_id}`,
+            type: 'get',
+            data: {
+              threshold: $('#selectThreshold').val(),
+              amount: $('#selectAmount').val(),
+              module_name: '業務',
+              year: instanceYear.value(),
+              material: instanceMaterial.value(),
+              titanizing: instanceTitanizing.value(),
+            },
+            success: function (response) {
+              // console.log($(`#divImage_${focusID}  #divImageResultMatch_${focusItemID} td [name="inputComment"]`))
+              if ($(`#divImage_${focusID}  #divImageResultMatch_${focusItemID} td [name="inputComment"]`).length == 1) {
+                $(`#divImage_${focusID}  #divImageResultMatch_${focusItemID} td [name="inputComment"]`).focus();
+              }
+              let selector_not = ``;
+              $(response.result).each(function () {
+                selector_not += `:not(#divImageResultMatch_${this.id})`;
+              });
+
+              $(`#divImage_${response.id} [id*=divImageResultMatch_]${selector_not}`).each(function () {
+                $(this).remove();
+              })
+              $(response.result).each(function (index) {
+                responseItem = this;
+                // console.log(response.id)
+
+                // console.log(compareArr.indexOf(responseItem.id))
+                let comment = null;
+                let comment_other = '';
+                if (isJson(this.comment)) {
+                  $(JSON.parse(this.comment)).each(function () {
+                    if (this.module_name == '技術') {
+                      comment = this.comment
+                    } else if (this.module_name != null && this.comment != null) {
+                      comment_other += `<p>${this.module_name}：${this.comment}</p>`;
+                    }
+                  })
+                }
+                let title = "";
+                $(response.process.result[index].processes).each(function () {
+                  title = this.零件名稱
+                })
+
+                let crops = $(`
+                    <tr> 
+                    </tr> 
+                `);
+                if (isJson(this.crop_ids)) {
+                  $(JSON.parse(this.crop_ids)).each(function () {
+                    if (!crops_arr.hasOwnProperty(this.crop_id)) {
+                      crops_arr[this.crop_id] = new Object();
+                    }
+                    if (this.source != null)
+                      crops_arr[this.crop_id][this.source] = this.confidence;
+                  })
+                  $(JSON.parse(this.crop_ids)).each(function () {
+                    if ($(crops).find(`[src="/fileCrop/${this.crop_id}"]`).length == 0)
+                      $(crops).append(`<td><img src="/fileCrop/${this.crop_id}" style="height:100px;width:auto" onclick="getConfidence(${this.crop_id},${this.source})" class="figure-img img-fluid img-thumbnail rounded w-auto" alt="..." /></td>`);
+                  })
+                }
+                console.log(crops)
+                let file_id = id
+                let process_obj = $("<div></div>");
+                if ($(`#divImage_${response.id}  #divImageResultMatch_${responseItem.id}`).length == 0) {
+                  var $boolAppend = false;
+                  var $tmpAppend = `
+                    <tr name="divImageResultMatch${response.id}" id="divImageResultMatch_${responseItem.id}" data-avg="${Number.parseFloat(responseItem.avg).toFixed(2)}" >
+                     
+                      <td width=20%>
+                        <img src="/file/${responseItem.fileID}" data-type="two" data-img2="${file_id}"   class="figure-img img-fluid img-thumbnail rounded" alt="..." />
+                      </td>
+                      <td>
+                        <table style="width:50vw;">
+                        ${crops[0].outerHTML}
+                        </table>
+                      </td>
+                      <td>
+                        <div class="form-inline">
+                          <input value="${responseItem.comment || ''}" onfocus="inputFocus(${response.id},${responseItem.id})" type="text" value="${comment != null ? comment : ''}" class="form-control" name="inputComment" data-process_id="${response.id}" data-crop_id="${responseItem.id}" data-confidence="${Number.parseFloat(responseItem.avg).toFixed(2)}"/>
+                        </div>
+                      </td>
+                      <td>相似度：${Number.parseFloat(responseItem.avg).toFixed(2)}%</td>
+                      <td><input type="checkbox" class="form-control" ${responseItem.comment != null ? 'checked' : ''} name="inputCheck"  data-process_id="${response.id}" data-crop_id="${responseItem.id}" data-confidence="${Number.parseFloat(responseItem.avg).toFixed(2)}"/></td>
+                    </tr>
+                  `;
+                  // if($(`[name="divImageResultMatch${response.id}"]`).length == 0){
+                  //   $(`#divImage_${response.id}`).append($tmpAppend);
+                  //   $boolAppend = true;
+                  // }else{
+                  $(`[name="divImageResultMatch${response.id}"]`).each(function () {
+                    if ($(this).data('avg') <= Number.parseFloat(responseItem.avg).toFixed(2)) {
+                      $($tmpAppend).insertBefore((this))
+                      $boolAppend = true;
+                      return false;
+                    }
+                  });
+                  // }
+                  if (!$boolAppend) {
+                    $(`#divImage_${response.id}`).append($tmpAppend);
+                  }
+
+
+
+                }
+                // if(index==0){
+                // let tmpIndex = 0;
+                $(`#divImage_${response.id} #divImageResultMatch_${responseItem.id} [name="tdDetail"]`).html(``);
+
+
+                let process = "";
+                $(response.process.result[index].processes).each(function () {
+                  console.log('inin')
+                  $(`#divImage_${response.id} #divImageResultMatch_${responseItem.id} [name="collapseBtn"]`).show();
+                  let row = this;
+
+                  var liDetail = '';
+                  $.each(row, function (key, value) {
+                    if (key == "零件名稱")
+                      return
+                    liDetail += `
+                          <div class=" form-group row text-nowrap">
+                                <label class="col-form-label col-auto col-md-5" for="">${key}</label>
+                                <input class="form-control col-md-6" id="" value="${value}">
+                          </div>`;
+                    // if(tmpIndex > 2){
+
+                    // }else{
+                    //   $(`#divImage_${response.id} #divImageResultMatch_${responseItem.id} [name="tdDetail"]`).append(`
+                    //     <p class="text-nowrap">${key}：${value}</p>
+                    //   `);
+                    // }
+                    // tmpIndex++;
+                  })
+                  $(`#collapseDetail_${response.id}_${responseItem.id}`).append(`
+                      <li class="ui-state-default list-inline-item col-auto">
+                        <button type="button" class="close col-12 text-left" aria-label="Close" onclick="inDeleteLi(this)">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                        ${liDetail}
+                        <div class=" form-group row text-nowrap">
+                              <label class="col-form-label col-auto col-md-5" for="">註記</label>
+                              <input class="form-control col-md-6" id="" value="">
+                        </div>
+                        <div class=" form-group row text-nowrap">
+                              <label class="col-form-label col-auto col-md-5" for="">製程成本</label>
+                              <input class="form-control col-md-6" name="inputCost" value="">
+                        </div>
+                        <p>歷史追加成本：</p>
+                        <p>2017-05-22：1100</p>
+                        <p>2018-04-23：1400</p>
+                        <p>2019-03-24：1600</p>
+                        <p>2020-05-24：2000</p>
+                      </li>
+                    `);
+                });
+                // }
+                $(`#divImage_${response.id}`).append($(`#divImage_${response.id}  #divImageResultMatch_${responseItem.id}`));
+                $(`#divImage_${response.id}`).append($(`#tr_${response.id}_multiCollapseExample${responseItem.id}`));
+
+              })
+              $(response.status).each(function () {
+                if (this.status == "stop") {
+                  clearTimeout(processinterval[response.id]);
+                } else {
+                  processinterval[response.id] = setTimeout(process_resultMatch(response.id), 3000)
+                }
+              })
+              $(`[id*=collapseDetail_${response.id}]`).sortable({
+                revert: true,
+                stop: function (event, ui) {
+                  $('.ui-state-default.list-inline-item.col-auto').each(function (index) {
+                    $(this).find('input').eq(0).val('00' + (index + 1) + '0');
+                  })
+                }
+              });
+              // $('[name="btnAddProcess"]').on('click',function(){
+              //   inAddProcess($(this).data('component_id'),$(this).data('process_id'));
+              // });
+              // $( "#draggable" ).draggable({
+              //   connectToSortable: "#sortable",
+              //   helper: "clone",
+              //   revert: "invalid"
+              // });
+              // $( "ul, li" ).disableSelection();
+            }
+          })
+        }
+      }
+    })
+
+  }
+  function getConfidence(crop_id, source) {
+    setTimeout(function () {
+      $('#imgModal').find('.modal-body').html(``);
+      let crops = $('<div class="card-group"></div>')
+      $.each(crops_arr[crop_id], function (key, value) {
+        crops.append(`
+        <div class="card">
+          <img src="/fileCrop/${key}" class="card-img-top" alt="...">
+          <div class="card-body text-nowrap">
+            ${value.toFixed(2)}%
+          </div>
+        </div>
+        `);
+      })
+      $('#imgModal').find('.modal-body').append(crops[0].outerHTML);
+    }, 2000)
+  }
+  function getFilter() {
+    $.ajax({
+      url: `/business/filter/year`,
+      type: 'get',
+      async: false,
+      success: function (response) {
+        year = response;
+      }
+    })
+    // instanceYear = new SelectPure('#divYear', {
+    //   options: year,
+    //   multiple: true,
+    //   autocomplete: true, 
+    //   icon: "fa fa-times",
+    //   inlineIcon: false,
+    //   classNames: {
+    //     select: "select-pure__select",
+    //     dropdownShown: "select-pure__select--opened",
+    //     multiselect: "select-pure__select--multiple",
+    //     label: "select-pure__label",
+    //     placeholder: "select-pure__placeholder",
+    //     dropdown: "select-pure__options",
+    //     option: "select-pure__option",
+    //     autocompleteInput: "select-pure__autocomplete",
+    //     selectedLabel: "select-pure__selected-label",
+    //     selectedOption: "select-pure__option--selected",
+    //     placeholderHidden: "select-pure__placeholder--hidden",
+    //     optionHidden: "select-pure__option--hidden",
+    //   },
+    //   onChange: value => {
+    //     $('#selectAmount').change();
+    //   },
+
+    // });
+
+    $.ajax({
+      url: `/business/filter/material`,
+      type: 'get',
+      async: false,
+      success: function (response) {
+        material = response;
+      }
+    })
+    // instanceMaterial = new SelectPure('#divMaterial', {
+    //   options: material,
+    //   multiple: true,
+    //   autocomplete: true,
+    //   icon: "fa fa-times",
+    //   inlineIcon: false,
+    //   classNames: {
+    //     select: "select-pure__select",
+    //     dropdownShown: "select-pure__select--opened",
+    //     multiselect: "select-pure__select--multiple",
+    //     label: "select-pure__label",
+    //     placeholder: "select-pure__placeholder",
+    //     dropdown: "select-pure__options",
+    //     option: "select-pure__option",
+    //     autocompleteInput: "select-pure__autocomplete",
+    //     selectedLabel: "select-pure__selected-label",
+    //     selectedOption: "select-pure__option--selected",
+    //     placeholderHidden: "select-pure__placeholder--hidden",
+    //     optionHidden: "select-pure__option--hidden",
+    //   },
+    //   onChange: value => {
+    //     $('#selectAmount').change();
+    //   },
+    // });
+    $.ajax({
+      url: `/business/filter/titanizing`,
+      type: 'get',
+      async: false,
+      success: function (response) {
+        titanizing = response;
+      }
+    })
+    // instanceTitanizing = new SelectPure('#divTitanizing', {
+    //   options: titanizing,
+    //   multiple: true,
+    //   autocomplete: true,
+    //   icon: "fa fa-times",
+    //   inlineIcon: false,
+    //   classNames: {
+    //     select: "select-pure__select",
+    //     dropdownShown: "select-pure__select--opened",
+    //     multiselect: "select-pure__select--multiple",
+    //     label: "select-pure__label",
+    //     placeholder: "select-pure__placeholder",
+    //     dropdown: "select-pure__options",
+    //     option: "select-pure__option",
+    //     autocompleteInput: "select-pure__autocomplete",
+    //     selectedLabel: "select-pure__selected-label",
+    //     selectedOption: "select-pure__option--selected",
+    //     placeholderHidden: "select-pure__placeholder--hidden",
+    //     optionHidden: "select-pure__option--hidden",
+    //   },
+    //   onChange: value => {
+    //     $('#selectAmount').change();
+    //   },
+    // });
+    // $(year).each(function(){
+    //   $('#divYear').append(`
+    //     <div class="form-group form-check col-auto form-inline">
+    //       <input type="checkbox" class="form-check-input">
+    //       <label class="form-check-label">${this.label}</label>
+    //     </div>
+    //   `);
+    // })
+    // $(material).each(function(){
+    //   $('#divMaterial').append(`
+    //     <div class="form-group form-check col-auto form-inline">
+    //       <input type="checkbox" class="form-check-input">
+    //       <label class="form-check-label">${this.label}</label>
+    //     </div>
+    //   `);
+    // })
+    // $(titanizing).each(function(){
+    //   $('#divTitanizing').append(`
+    //     <div class="form-group form-check col-auto form-inline">
+    //       <input type="checkbox" class="form-check-input">
+    //       <label class="form-check-label">${this.label}</label>
+    //     </div>
+    //   `);
+    // })
+  }
+
+
+  function getListState(file_id) {
+    window.sharedVariable = {
+      file_id: file_id,
+      module_name: '業務'
+    };
+    $("#fileState").load(`/file/state`);
+    $.ajax({
+      url: `/file/state/${file_id}`,
+      type: 'get',
+      data: {
+        module_name: module_name
+      },
+      dataType: 'json',
+      success: function (response) {
+        $(response.state).each(function (index) {
+          if (this.module_name == module_name) {
+            allState.push(this.progress)
+          }
+        });
+      }
+    });
+
+  }
+  $(document).on('change', '#selectAmount,#selectThreshold', function () {
+    // getFileInformation(id)
+    getResultComponents()
+  });
+  function getFileInformation(file_id) {
+    $.ajax({
+      url: `/file/information/${file_id}`,
+      type: 'get',
+      dataType: 'json',
+      success: function (response) {
+        $(response).each(function () {
+          let process_id = this.process_id
+          process = setTimeout(process_resultMatch(process_id), 2000)
+          function process_resultMatch(process_id) {
+            $.ajax({
+              url: `/resultMatch/${process_id}`,
+              data: {
+                threshold: $('#selectThreshold').val(),
+                amount: $('#selectAmount').val(),
+                year: instanceYear.value(),
+                material: instanceMaterial.value(),
+                titanizing: instanceTitanizing.value(),
+              },
+              type: 'get',
+              success: function (response) {
+                let selector_not = ``;
+                $(response.result).each(function () {
+                  selector_not += `:not(#divImageResultMatch_${this.id})`;
+                });
+
+                $(`[id*=divImageResultMatch_]${selector_not}`).each(function () {
+                  $(this).remove();
+                })
+                $(response.result).each(function (index) {
+                  let match = this;
+                  let comment = null;
+                  if (isJson(this.comment)) {
+                    $(JSON.parse(this.comment)).each(function () {
+                      if (this.module_name == '業務') {
+                        comment = this.comment
+                      }
+                    })
+                  }
+                  if ($(`#divImageResultMatch_${this.id}`).length == 0) {
+                    $('#divImage').append(`
+                    <tr id="divImageResultMatch_${this.id}">
+                      <td width=20%>
+                        <img src="/file/${this.id}" class="figure-img img-fluid img-thumbnail rounded" alt="..." />
+                      </td>
+                      <td >
+                        <div  name="tdDetail">
+                          <p class="text-nowrap">查無製程</p>
+                        </div>
+                        <p>
+                          <a class="btn btn-light" name="collapseBtn"  style="display:none;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 100%;min-width: 1px;" data-toggle="collapse" href="#multiCollapseExample${this.id}" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">查看更多資訊</a>
+                        </p>
+                        <div class="col">
+                          <div class="collapse multi-collapse" id="multiCollapseExample${this.id}">
+                            <div class="" name="collapseDetail"  ></div>
+                          </div>
+                        </div>
+                       
+                        </td>
+                      <td><input type="text" value="${comment != null ? comment : ''}" class="form-control" name="inputComment" data-file_id="${file_id}" data-file_id_dest="${this.id}" data-confidence="${Number.parseFloat(this.confidence).toFixed(2)}"/></td>
+                      <td>相似度：${Number.parseFloat(this.confidence).toFixed(2)}%</td>
+                      <td><button type="button" class="btn btn-primary" onclick="buttonPass(${file_id},${this.id})" data-file_id="${file_id}" data-file_id_dest="${this.id}">下一步</button></td>
+                    </tr>
+                  `);
+
+                    if (match.order_name != null || index == 0) {
+                      $.ajax({
+                        url: `/business/detail`,
+                        type: 'get',
+                        data: {
+                          id: match.order_name
+                        },
+                        success: function (response) {
+                          $(response).each(function () {
+                            $(`#divImageResultMatch_${match.id} [name="tdDetail"]`).html(``);
+                            $(`#divImageResultMatch_${match.id} [name="collapseBtn"]`).show();
+                            let row = this;
+                            let tmpIndex = 0;
+                            // $(`#divImageResultMatch_${match.id} [name="collapseBtn"]`).html(`查看更多資訊`)
+                            $.each(row, function (key, value) {
+                              if (tmpIndex > 2) {
+                                $(`#divImageResultMatch_${match.id} [name="collapseDetail"]`).append(`
+                                <p class="text-nowrap">${key}：${value}</p>
+                              `);
+                              } else {
+                                $(`#divImageResultMatch_${match.id} [name="tdDetail"]`).append(`
+                                <p class="text-nowrap">${key}：${value}</p>
+                              `);
+                              }
+                              tmpIndex++;
+
+                            })
+
+                            return false;
+                          })
+                        }
+                      })
+                    }
+                  }
+                  // <button type="button" class="btn btn-link" onclick="getDetail(${index==0?'\'211-961205001\'':this.order_name},${this.id})">訂單明細</button>
+                  $('#divImage').append($(`#divImageResultMatch_${this.id}`));
+                })
+                $(response.status).each(function () {
+                  if (this.status == "stop") {
+                    clearTimeout(process);
+                  } else {
+                    process = setTimeout(function () { process_resultMatch(response.process_id) }, 2000)
+                  }
+                })
+              }
+            })
+          }
+        })
+      }
+    })
+  }
+  $(document).on('input', '[name=inputComment]', function () {
+    let element = this;
+    if ($(element).closest('tr').find('[name=inputCheck]').prop('checked')) {
+      $.ajax({
+        url: `/components/comment`,
+        type: 'post',
+        data: {
+          process_id: $(element).attr('data-process_id'),
+          crop_id: $(element).attr('data-crop_id'),
+          confidence: $(element).attr('data-confidence'),
+          comment: $(element).closest('tr').find('[name=inputComment]').val(),
+          material: '',
+          stuff: '',
+          process: '',
+          module_name: '業務'
+        },
+      })
+    }
+  })
+  // $(document).on('input', '[name=inputComment]', function () {
+  //   let element = this;
+  //   $.ajax({
+  //     url: `/file/comment`,
+  //     type: 'post',
+  //     data: {
+  //       file_id: $(element).attr('data-file_id'),
+  //       file_id_dest: $(element).attr('data-file_id_dest'),
+  //       confidence: $(element).attr('data-confidence'),
+  //       comment: $(element).closest('tr').find('[name=inputComment]').val(),
+  //       module_name: '業務'
+  //     },
+  //   })
+  // })
+  // function nextpage(file_id,file_id_dest){
+  //   $.ajax({
+  //     url: '/file/progress',
+  //     type: 'post',
+  //     data: {
+  //       url: window.location.href,
+  //       id: id
+  //     },
+  //     dataType: 'json',
+  //     success: function (response) {
+  //       $(response).each(function () {
+  //         window.location.href = `${this.url}?id=${file_id}&file_id_dest=${file_id}`
+  //       })
+  //     }
+  //   })
+  // }
+  // function sendemail(modules,file_id,file_id_dest){
+  //   let content = `報價編號${id} ${module_name}部門已完成填寫`;
+  //   $.ajax({
+  //     url:`/business/dispatch/email`,
+  //     type:'post',
+  //     data:{
+  //       id:id,
+  //       content:content,
+  //       message:content,
+  //       module:modules,
+  //       // deadline:$('#inputDeadline').val().replace('T',' ')
+
+  //     },
+  //     dataType:'json',
+  //     success:function(response){
+  //       nextpage(file_id,file_id_dest)
+  //     }
+  //   })
+
+  // }
+
+
+  // function buttonPass(file_id,file_id_dest) {
+  //   // let file_id = id;
+  //   $('#basicModal').find('.modal-header').text(``);
+  //   $('#basicModal').find('.modal-body').text(`請稍等...`);
+  //   $('#basicModal').find('.modal-footer').text(``);
+  //   $('#basicModal').modal('show');
+  //   $.ajax({
+  //     url:`/notify/finish/module`,
+  //     type:'get',
+  //     data:{
+  //       finish:module_id,
+  //       file_id:id,
+
+
+  //     },
+  //     dataType:'json',
+  //     success:function(response){
+
+  //       var moduleArr=[]
+  //       $.each(response,function(){
+  //         moduleArr.push(this.notify)
+  //       })
+  //       // console.log(moduleArr)
+
+  //       console.log(allState)
+  //       if(allState.includes('已上傳圖檔') && allState.includes('已查詢歷史訂單') && allState.includes('已完成報價') && moduleArr.length>0){
+  //        sendemail(moduleArr,file_id,file_id_dest)
+  //       }else{
+  //         nextpage(file_id,file_id_dest)
+  //       }
+  //     }
+  //   })
+  // }
+
+
+
+
+  $(document).on('click', '#buttonFinish', function () {
+    let element = this;
+    $('#basicModal').find('.modal-header').text(``);
+    $('#basicModal').find('.modal-body').text(`請稍等...`);
+    $('#basicModal').find('.modal-footer').text(``);
+    $('#basicModal').modal('show');
+    $.ajax({
+      url: '/file/progress/finish',
+      type: 'post',
+      data: {
+        id: id
+      },
+      dataType: 'json',
+      success: function (response) {
+        $(response).each(function () {
+          window.location.href = `${this.url}?id=${id}`
+        })
+      }
+    })
+  });
+
+  function inspin() {
+    $('#exampleModal .modal-title').html('讀取中')
+    $('#exampleModal .modal-footer').html('')
+    $('#exampleModal .modal-body').html(`<div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>`);
+    $('#exampleModal').modal('show');
+  }
+</script>

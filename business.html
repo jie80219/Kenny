@@ -1,0 +1,842 @@
+<?php include(__DIR__ . '/basic/header.html'); ?>
+<div id="fileState"></div>
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="card shadow mb-4 h-100">
+      <div class="card-header">
+        既有訂單搜尋
+        <i class="fas fa-exclamation-circle" data-toggle="tooltip" data-placement="top" title="請選擇您要參考的既有訂單，選擇後請在右上角進行下一步，若查無訂單，請按下一步進行全圖比對"></i>
+      </div>
+      <div class="card-body">
+        <div class="form-group row">
+          
+          <label class="col-form-label col-sm-auto">客戶圖號：</label>
+          <div class="col-sm">
+            <input class="form-control" id="input_order_id" />
+          </div>
+          <div class="row" id="divAction">
+
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-form-label col-sm-auto">已成單</label>
+        </div>
+        <div class="form-group row table-responsive">
+          <table class="table table-border" id="dataTable" width=100% >
+            <thead> 
+              <tr>
+                <th>＃</th>
+                <th>報價單單別單號序號</th>
+                <th>客戶圖號</th>
+                <th>圖面版次</th>
+                <th>客戶全名</th>
+                <th>幣別</th>
+                <th>單據日期</th>
+                <th>(報價)材質</th>
+                <th>報價數量</th>
+                <th>報價單價</th>
+                <th>訂單單別單號序號</th>
+                <th>圖面版次</th>
+                <th>規格</th>
+                <th>單據日期</th>
+                <th>(廠內)材質</th>
+                <th>訂單數量</th>
+                <th>訂單單價</th>
+                <th>訂單金額</th>
+                <th>鍍鈦種類</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <div class="form-group row">
+          <label class="col-form-label col-sm-auto">未成單</label>
+        </div>
+        <div class="form-group row table-responsive">
+          <table class="table table-border" id="dataTable_unordered" width=100%>
+            <thead>
+              <tr>
+                <th>＃</th>
+                <th>報價編號</th>
+                <th>客戶圖號</th>
+                <th>客戶全名</th>
+                <th>報價日期</th>
+                <th>報價數量</th>
+                <th>報價單價</th>
+                <th>幣別</th>
+                <th>鍍鈦</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <!-- <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="pills-ordered-tab" data-toggle="pill" href="#pills-ordered" role="tab"
+              aria-controls="pills-ordered" aria-selected="true">
+              已成單
+            </a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pills-unordered-tab" data-toggle="pill" href="#pills-unordered" role="tab"
+              aria-controls="pills-unordered" aria-selected="false">
+              未成單
+            </a>
+          </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-ordered" role="tabpanel" aria-labelledby="pills-ordered-tab">
+            <div class="form-group row table-responsive">
+              <table class="table table-border" id="dataTable" width=100%>
+                <thead>
+                  <tr>
+                    <th>訂單單別單號序號</th>
+                    <th>客戶全名</th>
+                    <th>單據日期</th>
+                    <th>材質</th>
+                    <th>數量</th>
+                    <th>金額</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>012312321312312</td>
+                    <td>車洗</td>
+                    <td>20</td>
+                    <td>37.2</td>
+                    <td>37.2</td>
+                    <td>37.2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="pills-unordered" role="tabpanel" aria-labelledby="pills-unordered-tab">
+            <div class="form-group row table-responsive">
+              <table class="table table-border" id="dataTable_unordered" width=100%>
+                <thead>
+                  <tr>
+                    <th>報價編號</th>
+                    <th>客戶全名</th>
+                    <th>報價日期</th>
+                    <th>數量</th>
+                    <th>報價金額</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>012312321312312</td>
+                    <td>車洗</td>
+                    <td>20</td>
+                    <td>37.2</td>
+                    <td>37.2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  <!-- <div class="col-12 col-sm-4 col-md-3 mb-4">
+    <div class="row row-cols-1">
+      <div class="col">
+        <div class="card shadow">
+          <div class="card-header">
+            請選擇
+            <i class="fas fa-exclamation-circle" data-toggle="tooltip" data-placement="top" title="下一步：繼續從全圖比對來取得相似訂單。完成報價：系統會依照所選之訂單進行建議報價"></i>
+          </div>
+          <div class="card-body">
+            <div class="row" id="divAction">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row row-cols-1">
+      <div class="col">
+        <div class="card shadow">
+          <div class="card-header">確認品號</div>
+          <div class="card-body">
+            <div class="form-group row">
+              <label for="inputitemNo" class="col-xl-auto col-form-label">品號：</label>
+              <input type="text" class="form-control col-xl-6" data-type="itemNo" name="inputitemNo" disabled>
+              <button type="button" class="col-xl-auto btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                data-type="selectItemNO">修改</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row row-cols-1" hidden>
+      <div class="col">
+        <div class="card shadow h-100">
+          <div class="card-header">訂單資訊</div>
+          <div class="card-body">
+            <dl class="row row-cols-1 row-cols-sm-2" id="dlDetail">
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+</div>
+<?php include(__DIR__ . '/basic/footer.html'); ?>
+
+<script>
+
+  var setting = {
+    "lengthChange": true,
+    "destroy": true,
+    "info": true,
+    "searching": false,
+    "order": [],
+    "ordering": false,
+    "scrollX": true,
+    "scrollY": '80vh',
+    "language": {
+      "processing": "處理中...",
+      "loadingRecords": "載入中...",
+      "lengthMenu": "顯示 _MENU_ 項結果",
+      "zeroRecords": "沒有符合的結果",
+      "info": "顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
+      "infoEmpty": "顯示第 0 至 0 項結果，共 0 項",
+      "infoFiltered": "(從 _MAX_ 項結果中過濾)",
+      "infoPostFix": "",
+      "search": "搜尋:",
+      "paginate": {
+        "first": "第一頁",
+        "previous": "上一頁",
+        "next": "下一頁",
+        "last": "最後一頁"
+      },
+      "aria": {
+        "sortAscending": ": 升冪排列",
+        "sortDescending": ": 降冪排列"
+      }
+    }
+  }
+
+  var url = new URL(window.location.href);
+  var id = url.searchParams.get("id");
+  var file_id_dest = url.searchParams.get("file_id_dest");
+  var module_id;
+  var module_name = '業務';
+  var allState = [];
+
+  var addType = '';
+  var addQuotationObj = new Object();
+
+  var delivery_date = "null"
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    getdelivery_date();
+    getModule();
+
+    getListState(id);
+
+    getFileInformation(id);
+    $('#divAction').html(`
+      <div class="form-group col-auto">
+        <button type="button" class="btn btn-primary" id="buttonPass" data-id="${id}">下一步</button>
+      </div>
+    `);
+
+  })
+  $('#exampleModal').on('show.bs.modal', function (event) {
+    // console.log($(event.relatedTarget).attr("data-type"));
+    var type = $(event.relatedTarget).attr("data-type");
+    $('#exampleModal .modal-footer').html('<button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>');
+    if (type == 'selectItemNO') {
+
+      $("#exampleModal .modal-dialog ").attr("class", "modal-dialog modal-xl");
+
+      selectItemNO();
+    } else {
+      $("#exampleModal .modal-dialog ").attr("class", "modal-dialog");
+
+    }
+
+  });
+  function selectItemNO() {
+
+    $('#exampleModal .modal-title').html('選擇品號')
+    $('#exampleModal .modal-footer').append(`<button type="button" class="btn btn-primary" onclick="updateItemNO()">下一步</button>`)
+    $('#exampleModal .modal-body').html(`
+  <div class="form-group row">
+        <label for="filteritemno" class="col-sm-auto col-form-label">客戶圖號</label>
+        <input type="text" class="form-control col-sm-6" data-type="picture_num" name="filteritemno"  >
+  </div>
+  <div class="form-group row">
+        <label for="filteritemno" class="col-sm-auto col-form-label">客戶代號</label>
+        <input type="text" class="form-control col-sm-6" data-type="customer_id" name="filteritemno" >
+  </div>
+  <table class="table table-borderless" id="generatedataTable" width=100%>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>品號</th>
+        <th>硬度</th>
+        <th>客戶圖號</th>
+        <th>版次</th>
+        <th>材質</th>
+        <th>鍍鈦</th>
+      </tr>
+    </thead>
+  </table>
+`);
+
+    setitemnoTable()
+
+
+  }
+  $(document).on('input', '[name="filteritemno"]', function () {
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      setitemnoTable();
+    }, 1000)
+  })
+
+  function setitemnoTable() {
+    let picture_num = $('[name="filteritemno"][data-type="picture_num"]').val()
+    let customer_id = $('[name="filteritemno"][data-type="customer_id"]').val()
+
+    let setting_business = JSON.parse(JSON.stringify(setting));
+    $('#generatedataTable').DataTable(setting_business).destroy();
+
+    setting_business['ajax'] = {
+      url: `/business/itemNO`,
+      type: 'get',
+      "data": function (d) {
+        d.picture_num = picture_num,
+          d.customer_id = customer_id
+      }
+    };
+    setting_business['processing'] = true;
+    setting_business['serverSide'] = true;
+    setting_business['createdRow'] = function (row, data, dataIndex) {
+      // $(row).attr('onclick', `inLoad(${data['id']})`);
+      $(row).attr('style', `cursor:pointer`);
+    };
+
+    setting_business['columns'] = [{
+      "data": null,
+      render: function (data, type, row, meta) {
+        return `<input type="radio" value=${data['品號']} name="radioItemNO" aria-label="Checkbox for following text input"> `;
+      }
+    }, {
+      "data": "品號"
+    },
+    {
+      "data": "硬度"
+    }, {
+      "data": "客戶圖號",
+    }, {
+      "data": "版次",
+    }, {
+      "data": "材質",
+    }, {
+      "data": "鍍鈦",
+    },
+    ];
+    $('#generatedataTable').DataTable(setting_business);
+  }
+  function updateItemNO() {
+    $('[name="radioItemNO"]:checked').each(function () {
+      itemno = $(this).val()
+    })
+    $('#exampleModal').modal('hide');
+    $('[name=inputitemNo]').val(itemno)
+    $('#inputitemNo').val(itemno)
+    $.ajax({
+      url: `/file/itemno`,
+      type: 'patch',
+      data: {
+        file_id: id,
+        itemno: itemno
+      },
+      dataType: 'json',
+      success: function (response) {
+
+      }
+    });
+
+
+
+  }
+
+  $('#basicModal').on('show.bs.modal', function (e) {
+
+    $('#basicModal').find('.modal-footer').html(``);
+
+    let element = $(e.relatedTarget);
+    let type = $(element).attr('data-type');
+    if (type == 'seepicture') {
+      seepicture($(element).attr('data-folder'), $(element).attr('data-name'));
+    }
+  });
+  function seepicture(folder, name) {
+    $('#basicModal').find('.modal-title').text('檢視原圖');
+    $('#basicModal .modal-footer').html(` <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">確定</button>`);
+    $('#basicModal .modal-body').html(`<img src="/file/picture/${folder}/${name}" class="img-fluid" alt="...">`);
+    $('#basicModal .modal-dialog').attr('class', `modal-dialog modal-dialog-scrollable modal-xl`);
+
+    // $.ajax({
+    //   url: `/file/picture`,
+    //   type: 'get',
+    //   data: {
+    //     folder:folder,
+    //     name:name
+    //   },
+    //   // dataType: 'json',
+    //   success: function (response) {
+    //     // console.log(response.picture)
+    //     if(response.status == "failed"){
+    //       $('#basicModal .modal-body').html(`找不到此資料夾`)
+    //     }else{
+    //       $('#basicModal .modal-body').html(`<img src="${response.picture}" class="img-fluid" alt="...">`);
+    //     }
+    //   }
+    // });
+    console.log(folder, name)
+    // <img src="..." class="img-thumbnail" alt="...">
+  }
+  function getdelivery_date() {
+    $.ajax({
+      url: `/file/delivery_date`,
+      type: 'get',
+      data: {
+        file_id: id
+      },
+      dataType: 'json',
+      success: function (response) {
+        $.each(response, function () {
+          delivery_date = this.delivery_date || 'null'
+        })
+      }
+    });
+  }
+  function getModule() {
+    $.ajax({
+      url: `/setting/module`,
+      type: 'get',
+      data: {
+      },
+      dataType: 'json',
+      success: function (response) {
+        $.each(response, function () {
+          if (this.name == module_name) {
+            module_id = this.id;
+          }
+
+        })
+        console.log(module_id)
+      }
+    });
+  }
+
+
+
+
+
+  function getListState(file_id) {
+    window.sharedVariable = {
+      file_id: file_id,
+      module_name: '業務'
+    };
+    $("#fileState").load(`/file/state`, function () {
+
+    });
+
+    $.ajax({
+      url: `/file/state/${file_id}`,
+      type: 'get',
+      data: {
+        module_name: module_name
+      },
+      dataType: 'json',
+      success: function (response) {
+        $(response.state).each(function (index) {
+          if (this.module_name == module_name) {
+            allState.push(this.progress)
+          }
+        });
+      }
+    });
+
+  }
+
+  function getFileInformation(file_id) {
+    $.ajax({
+      url: `/file/information/${file_id}`,
+      type: 'get',
+      dataType: 'json',
+      success: function (response) {
+        $(response).each(function () {
+          $('#input_order_id').val(this.order_name)
+          getBusinesses()
+        })
+      }
+    })
+  }
+  let timeout = null;
+  $(document).on('input', '#input_order_id', function () {
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      getBusinesses();
+    }, 1000)
+  })
+  $(document).on('click', '#dataTable tbody tr', function () {
+    if ($(this).hasClass('table-active')) {
+      $(this).removeClass('table-active');
+    } else {
+      $('#dataTable tbody tr').removeClass('table-active');
+      $(this).addClass('table-active');
+    }
+  });
+  $(document).on('click', '#dataTable_unordered tbody tr', function () {
+    if ($(this).hasClass('table-active')) {
+      $(this).removeClass('table-active');
+    } else {
+      $('#dataTable_unordered tbody tr').removeClass('table-active');
+      $(this).addClass('table-active');
+    }
+  });
+  function nextpage() {
+    $.ajax({
+      url: '/file/progress',
+      type: 'post',
+      data: {
+        url: window.location.href,
+        id: id
+      },
+      dataType: 'json',
+      success: function (response) {
+        $(response).each(function () {
+          window.location.href = `${this.url}?id=${id}`
+        })
+      }
+    })
+  }
+  function sendemail(modules) {
+    let content = `報價編號${id} ${module_name}部門已完成填寫`;
+    $.ajax({
+      url: `/business/dispatch/email`,
+      type: 'post',
+      data: {
+        id: id,
+        content: content,
+        message: content,
+        module: modules,
+        // deadline:$('#inputDeadline').val().replace('T',' ')
+
+      },
+      dataType: 'json',
+      success: function (response) {
+        nextpage()
+      }
+    })
+
+  }
+
+  function buttonPass() {
+    let file_id = id;
+    $('#basicModal').find('.modal-header').text(``);
+    $('#basicModal').find('.modal-body').text(`請稍等...`);
+    $('#basicModal').find('.modal-footer').text(``);
+    $('#basicModal').modal('show');
+    $.ajax({
+      url: `/notify/finish/module`,
+      type: 'get',
+      data: {
+        finish: module_id,
+        file_id: file_id,
+
+
+      },
+      dataType: 'json',
+      success: function (response) {
+
+        var moduleArr = []
+        $.each(response, function () {
+          moduleArr.push(this.notify)
+        })
+        // console.log(moduleArr)
+
+        console.log(allState)
+        if (allState.includes('已上傳圖檔') && allState.includes('已全圖比對') && allState.includes('已完成報價') && moduleArr.length > 0) {
+          sendemail(moduleArr)
+        } else {
+          nextpage()
+        }
+      }
+    })
+  }
+
+  $(document).on('click', '#buttonPass', function () {
+    buttonPass()
+
+  });
+
+
+  $(document).on('click', '#buttonFinish', function () {
+    $('#basicModal').find('.modal-header').text(``);
+    $('#basicModal').find('.modal-body').text(`請稍等...`);
+    $('#basicModal').find('.modal-footer').text(``);
+    $('#basicModal').modal('show');
+    let tmpArr = new Object();
+    tmpArr['cost'] = addQuotationObj['報價單價']
+    if (addType == 'ordered') {
+      tmpArr['num'] = addQuotationObj['總數量']
+    } else {
+      tmpArr['num'] = addQuotationObj['報價數量']
+    }
+    tmpArr['discount'] = ''
+    tmpArr['descript'] = ''
+    tmpArr['deadline'] = delivery_date
+    tmpArr['delivery_week'] = addQuotationObj['交貨週數']
+    tmpArr['currency'] = addQuotationObj['幣別']
+    tmpArr['file_id'] = id;
+
+    $.ajax({
+      url: `/quotation`,
+      type: 'post',
+      dataType: 'json',
+      data: {
+        tmpArr
+      },
+      success: function (response) {
+        goFinish()
+      }
+    });
+
+
+
+
+  });
+
+  function goFinish() {
+
+    $.ajax({
+      url: '/file/progress/finish',
+      type: 'post',
+      data: {
+        id: id
+      },
+      dataType: 'json',
+      success: function (response) {
+
+        $(response).each(function () {
+          window.location.href = `${this.url}?id=${id}`
+        })
+      }
+    })
+  }
+  function getBusinesses() {
+    $('#dataTable').DataTable(JSON.parse(JSON.stringify(setting))).destroy();
+    let setting_business = JSON.parse(JSON.stringify(setting));
+    setting_business['ajax'] = {
+      url: `/business/datatables`,
+      type: 'post',
+      "data": function (d) {
+        d.id = $('#input_order_id').val()
+      }
+    };
+    setting_business['processing'] = true;
+    setting_business['serverSide'] = true;
+    setting_business['createdRow'] = function (row, data, dataIndex) {
+      $(row).attr('onclick', `getDetail('${data['訂單單別單號序號']}')`);
+      $(row).attr('style', `cursor:pointer`);
+    };
+    setting_business['columns'] = [
+      {
+        "data": null,
+        render: function (data, type, row, meta) {
+          return meta.row + meta.settings._iDisplayStart + 1;
+        }
+      },
+      { "data": "報價單單別單號序號" },
+      { "data": "客戶圖號" },
+      { "data": "報價單圖面版次" },
+      { "data": "客戶全名" },
+      { "data": "幣別" },
+      { "data": "報價單單據日期" },
+      { "data": "材質" },
+      { "data": "報價數量" },
+      { "data": "報價單價" },
+      { "data": "訂單單別單號序號" },
+      { "data": "訂單圖面版次" },
+      { "data": "規格" },
+      { "data": "訂單單據日期" },
+      { "data": "廠內材質" },
+      { "data": "訂單數量" },
+      { "data": "訂單單價" },
+      { "data": "訂單金額" },
+      { "data": "鍍鈦" },
+      {
+        "data": null,
+        render: function (data, type, row, meta) {
+          return `<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicModal" data-folder="${row['客戶圖片']}" data-name="${row['客戶圖號']}"  data-type="seepicture">
+                  檢視原圖
+                </button>`
+        }
+      },
+    ];
+    $('#dataTable').DataTable(setting_business);
+
+
+    $('#dataTable_unordered').DataTable(JSON.parse(JSON.stringify(setting))).destroy();
+    let setting_business_unordered = JSON.parse(JSON.stringify(setting));
+    setting_business_unordered['ajax'] = {
+      url: `/business/datatables/unordered`,
+      type: 'post',
+      "data": function (d) {
+        d.id = $('#input_order_id').val()
+      }
+    };
+    setting_business_unordered['processing'] = true;
+    setting_business_unordered['serverSide'] = true;
+    setting_business_unordered['createdRow'] = function (row, data, dataIndex) {
+      $(row).attr('onclick', `getDetailUnordered('${data['報價編號']}')`);
+      $(row).attr('style', `cursor:pointer`);
+    };
+    setting_business_unordered['columns'] = [
+      {
+        "data": null,
+        render: function (data, type, row, meta) {
+          return meta.row + meta.settings._iDisplayStart + 1;
+        }
+      },
+      { "data": "報價編號" },
+      { "data": "客戶圖號" },
+      { "data": "客戶全名" },
+      { "data": "報價日期" },
+      { "data": "報價數量" },
+      { "data": "報價單價" },
+      { "data": "幣別" },
+      { "data": "鍍鈦" },
+      {
+        "data": null,
+        render: function (data, type, row, meta) {
+          return `<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#basicModal"  data-folder="${row['客戶圖片']}" data-name="${row['客戶圖號']}"   data-type="seepicture">
+                  檢視原圖
+                </button>`
+        }
+      }
+    ];
+    $('#dataTable_unordered').DataTable(setting_business_unordered);
+
+
+  }
+  function getDetail(order_id) {
+    addQuotationObj = new Object();
+    addType = 'ordered'
+
+    $('#divAction').html(`
+      <div class="form-group col-auto">
+        <button type="button" class="btn btn-primary" id="buttonPass" data-id="${id}">下一步</button>
+      </div>
+    `);
+    $('#dlDetail').html(``);
+    $.ajax({
+      url: `/business/detail`,
+      type: 'get',
+      data: {
+        id: $('#input_order_id').val(),
+        order_id: order_id
+      },
+      success: function (response) {
+        $('#divAction').html(`
+          <div class="form-group col-auto">
+            <button type="button" class="btn btn-primary" id="buttonPass" data-id="${id}">下一步</button>
+          </div>
+        `);
+        $('#dlDetail').html(``);
+        $(response).each(function () {
+          let row = this;
+          $.each(row, function (key, value) {
+            $('#dlDetail').append(`
+              <dt class="col">${key}：</dt>
+              <dd class="col">${value}</dd>
+            `);
+            addQuotationObj[key] = value || '';
+
+          })
+          return false;
+        })
+        if (response.length != 0) {
+          $('#divAction').append(`
+            <div class="form-group col-auto">
+              <button type="button" class="btn btn-secondary" id="buttonFinish" data-id="${id}">完成報價</button>
+            </div>
+          `);
+        }/* else{
+          $('#divAction').append(`
+            <div class="form-group col-auto">
+              <button type="button" class="btn btn-primary" id="buttonPass" data-id="${id}">後送製圖</button>
+            </div>
+          `);
+        } */
+      }
+    })
+  }
+  function getDetailUnordered(order_id) {
+    addType = 'unordered'
+
+    addQuotationObj = new Object();
+    $('#divAction').html(`
+      <div class="form-group col-auto">
+        <button type="button" class="btn btn-primary" id="buttonPass" data-id="${id}">下一步</button>
+      </div>
+    `);
+    $('#dlDetail').html(``);
+    $.ajax({
+      url: `/business/detail/unordered`,
+      type: 'get',
+      data: {
+        id: $('#input_order_id').val(),
+        order_id: order_id
+      },
+      success: function (response) {
+        $('#divAction').html(`
+          <div class="form-group col-auto">
+            <button type="button" class="btn btn-primary" id="buttonPass" data-id="${id}">下一步</button>
+          </div>
+        `);
+        $('#dlDetail').html(``);
+        $(response).each(function () {
+          let row = this;
+          $.each(row, function (key, value) {
+            $('#dlDetail').append(`
+              <dt class="col">${key}：</dt>
+              <dd class="col">${value || ''}</dd>
+            `);
+            addQuotationObj[key] = value || '';
+          })
+          return false;
+        })
+        if (response.length != 0) {
+          $('#divAction').append(`
+            <div class="form-group col-auto">
+              <button type="button" class="btn btn-secondary" id="buttonFinish" data-id="${id}">完成報價</button>
+            </div>
+          `);
+        }/* else{
+          $('#divAction').append(`
+            <div class="form-group col-auto">
+              <button type="button" class="btn btn-primary" id="buttonPass" data-id="${id}">後送製圖</button>
+            </div>
+          `);
+        } */
+      }
+    })
+  }
+</script>

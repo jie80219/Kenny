@@ -1,0 +1,143 @@
+<?php include(__DIR__.'/../basic/header.html'); ?>
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <div class="row row-cols-1 row-cols-md-3">
+        <div class="col-lg-12 mb-4">
+            <div class="card">
+                <h5 class="card-header text-primary">當前時間</h5>
+                <div class="card-body row row-cols-1 row-cols-md-3">
+                    <div class="col-lg-12 mb-4 row row-cols-1 row-cols-md-3">
+                        <div class="form-group form-inline">
+                            <label>選擇日期:</label>
+                            <input id="date" type="date" class="mx-2 form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-12 mb-4">
+                        <form oninput="uDateTime.value=formatSecond(time.value)">
+                            <div class="form-group">
+                                <input type="range" class="form-control-range" id="time" name="points" value="0" min="0" max="86400">
+                                <output style="font-size: 18px;">當前時間:</output>
+                                <output name="uDateTime" for="time" style="font-size: 18px;"></output>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 mb-4">
+            <div class="card my-3">
+                <h5 class="card-header">Z軸詳細資訊</h5>
+                <div class="card-body my-3 row row-cols-1 row-cols-md-3">
+                    <div class="col-lg-6 mb-4 text-center">
+                        <img id="ZImg" src="" class="img-fluid img-thumbnail rounded" alt="...">
+                    </div>
+                    <div class="table-responsive col-lg-6 mb-4" style="max-height: 500px;">
+                        <table id="ZTable" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>時間</th>
+                                    <th>Z軸數值</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ZInfo">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 mb-4">
+            <div class="card my-3">
+                <h5 class="card-header">圖表</h5>
+                <div class="card-body">
+                    <div class="col-lg-12 mb-4 text-center">
+                        <canvas id="ZChart" style="max-height: 600px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php include(__DIR__.'/../basic/footer.html'); ?>
+
+</body>
+<script src="/js/json.js"></script>
+<script src="/js/string.js"></script>
+<script src="/js/dateTime.js"></script>
+<script src="/js/renderControls.js"></script>
+<script>
+    var jZInfo = $("#ZInfo");
+    var zX_Values = [];
+    var zXY_Values = [];
+    
+    $(function () {
+        let oDateTime = dateTime();
+        $("#date").val(oDateTime.cDate);
+        $("#time").val(oDateTime.iTodaySeconds);
+        getZInfo(oDateTime.cDateTime);
+    })
+    $("#time").on('mouseup', function () {
+        getZInfo($("[name='uDateTime']").val());
+    })
+    
+    function getZInfo(cDateTime) {
+        $("[name='uDateTime']").text(cDateTime);
+        zX_Values = [];
+        zXY_Values = [];
+        jZInfo.empty();
+        json("get", "/Discharge/Z/dataLoad", { dTime: cDateTime }, function (data) {
+            if (data.length == 0) { return; }
+            
+            $.each(data, function (key, value) {
+                let tr = `
+                    <tr onclick="getZImg(this);" data-time="${value.dTime}">
+                        <td>${value.dTime}</td><td>${value.fValue}</td>
+                    </tr>`;
+                jZInfo.append(tr);
+                zX_Values.push(value.dTime);
+                zXY_Values.push(parseFloat(value.fValue));
+            });
+            getZImg(jZInfo.find("tr:first"));
+
+            $("#ZTable").append(jZInfo);
+            
+            new Chart("ZChart", {
+                type: "line",
+                data: {
+                    labels: zX_Values,
+                    datasets: [{
+                        label: 'Z軸數值',
+                        pointRadius: 4,
+                        pointBackgroundColor: "rgba(0,0,255,1)",
+                        data: zXY_Values
+                    }]
+                }
+            });
+            
+        });
+    }
+    function getZImg(eRow) {
+        jZInfo.find("tr").attr("class", "");
+        let jRow = $(eRow);
+        jRow.attr("class", "p-3 mb-2 bg-danger text-white");
+        let cDateTime = jRow.attr("data-time");
+        let jImage = $("#ZImg");
+        jImage.attr("src", "");
+        json("get", "/Discharge/Z/pictureLoad", { dTime: cDateTime }, function (data) {
+            jImage.attr("src", data);
+        });
+    }
+
+    function formatSecond(iTodaySeconds) {
+        let oTime = todaySeconds(iTodaySeconds);
+        let cDatetime = $("#date").val() + " " + oTime.cTime;
+        let oDateTime = dateTime(cDatetime);
+        return oDateTime.cDateTime;
+    }
+
+</script>
+
+</html>

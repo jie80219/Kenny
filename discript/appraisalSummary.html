@@ -1,0 +1,516 @@
+<div class="col">
+    <div class="card shadow mb-4">
+      <div class="card-header">
+        估價摘要
+      </div>
+      <div class="card-body h-100">
+        分為以下兩種計算方式
+        <ul>
+          <li>依研發建議之相似零件均價之價格</li>
+          <li>以智能辨識最相似之價格</li>
+        </ul>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="pills-develop-tab" data-toggle="pill" href="#pills-develop" role="tab" aria-controls="pills-develop" aria-selected="true">研發建議</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="pills-deeplearning-tab" data-toggle="pill" href="#pills-deeplearning" role="tab" aria-controls="pills-deeplearning" aria-selected="false">智能估價建議</a>
+          </li>
+        </ul>
+        <ul>
+          <li>請點選零件來檢視價格趨勢</li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="pills-develop" role="tabpanel" aria-labelledby="pills-develop-tab">
+            <div class="form-group row">
+              <div class="col-sm-auto form-group row">
+                <label class="col-form-label col-auto">零件相似度門檻：</label>
+                <div class="col-auto">
+                  <select class="form-control" id="selectThreeshold_develop" name="selectThreeshold">
+                    <option value="0">0%</option>
+                    <option value="10">10%</option>
+                    <option value="20">20%</option>
+                    <option value="30">30%</option>
+                    <option value="40">40%</option>
+                    <option value="50">50%</option>
+                    <option value="60">60%</option>
+                    <option value="70">70%</option>
+                    <option value="80">80%</option>
+                    <option value="90">90%</option>
+                    <option value="100">100%</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-auto form-group row">
+                <label class="col-form-label col-auto">研發建議數量：</label>
+                <div class="col-auto">
+                  <select class="form-control" id="selectLimit_develop"  name="selectLimit">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                  </select>
+                </div>
+                <label class="col-form-label col-auto">篩選結果：</label>
+                <label class="col-form-label col-auto" id="labelCount_develop">2</label>
+                <label class="col-form-label col-auto">/</label>
+                <label class="col-form-label col-auto" id="labelTotal_develop">30</label>
+                <label class="col-form-label col-auto">張</label>
+              </div>
+            </div>
+            <div class="overflow-auto">
+              <table class="table" width=100% id="dataTable_develop">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>智能建議金額</th>
+                    <th>研發用料成本</th>
+                    <th>技術製程成本</th>
+                    <th>生管外包成本</th>
+                    <!-- <th><button class="btn btn-primary" onclick="itemAdd(this,'rd')">新增項目</button></th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- <tr>
+                    <th>1</th>
+                    <td>零件A</td>
+                    <td>300</td>
+                  </tr>
+                  <tr>
+                    <th>2</th>
+                    <td>零件B</td>
+                    <td>300</td>
+                  </tr> -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="pills-deeplearning" role="tabpanel" aria-labelledby="pills-deeplearning-tab">
+            <div class="form-group row">
+              <div class="col-sm-auto form-group row">
+                <label class="col-form-label col-auto">零件相似度門檻：</label>
+                <div class="col-auto">
+                  <select class="form-control" id="selectThreeshold_deeplearning" name="selectThreeshold">
+                    <option value="0">0%</option>
+                    <option value="10">10%</option>
+                    <option value="20">20%</option>
+                    <option value="30">30%</option>
+                    <option value="40">40%</option>
+                    <option value="50">50%</option>
+                    <option value="60">60%</option>
+                    <option value="70">70%</option>
+                    <option value="80">80%</option>
+                    <option value="90">90%</option>
+                    <option value="100">100%</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-auto form-group row">
+                <label class="col-form-label col-auto">智能辨識建議數量：</label>
+                <div class="col-auto">
+                  <select class="form-control" id="selectLimit_deeplearning" name="selectLimit">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                  </select>
+                </div>
+                <label class="col-form-label col-auto">篩選結果：</label>
+                <label class="col-form-label col-auto" id="labelCount_deeplearning">2</label>
+                <label class="col-form-label col-auto">/</label>
+                <label class="col-form-label col-auto" id="labelTotal_deeplearning">30</label>
+                <label class="col-form-label col-auto">張</label>
+              </div>
+            </div>
+            <div class="overflow-auto">
+
+            <table class="table" width=100% id="dataTable_deeplearning">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>智能建議金額</th>
+                  <th>研發用料成本</th>
+                  <th>技術製程成本</th>
+                  <th>生管外包成本</th>
+                  <!-- <th><button class="btn btn-primary" onclick="itemAdd(this,'valuation')">新增項目</button></th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <!-- <tr>
+                  <th>1</th>
+                  <td>零件A</td>
+                  <td>300</td>
+                </tr>
+                <tr>
+                  <th>2</th>
+                  <td>零件B</td>
+                  <td>300</td>
+                </tr> -->
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+var v = window.sharedVariable;
+var id = v['file_id'];
+var file_id_dest = v['file_id_dest'];
+$(function(){
+    getFinishInformation()
+});
+
+$(document).on('change','[name="valSuggestion"]',function(){
+    saveSuggestionVal($(this).data('suggest_id'),$(this).closest('tr').data('process_mapping_id'),$(this).val())
+  })
+
+  $(document).on('change','[name="thSuggestion"]',function(){
+    saveSuggestion($(this).data('suggest_id'),$(this).val())
+  })
+
+  function saveSuggestionVal(suggest_id,process_mapping_id,tmpVal){
+    console.log(suggest_id,process_mapping_id,tmpVal)
+    $.ajax({
+        url: `/finish/suggestionVal`,
+        type: 'post',
+        data: {
+          suggest_id:suggest_id,
+          process_mapping_id:process_mapping_id,
+          val:tmpVal
+        },
+        success: function(response) {
+        }
+      });
+  }
+
+  function deleteSuggestion(suggest_id){
+    console.log(suggest_id)
+    $(`[name="thSuggestion"][data-suggest_id="${suggest_id}"]`).closest('th').remove();
+    $(`[name="valSuggestion"][data-suggest_id="${suggest_id}"]`).each(function(){
+      $(this).closest('td').remove()
+    });
+    $.ajax({
+        url: `/finish/suggestion`,
+        type: 'delete',
+        data: {
+          id:suggest_id
+        },
+        success: function(response) {
+
+        }
+      });
+
+
+  }
+  
+  function saveSuggestion(suggest_id,tmpVal){
+    
+    
+    $.ajax({
+      url: `/finish/suggestion`,
+      type: 'patch',
+      data: {
+        id:suggest_id,
+        title :tmpVal,
+      },
+      success:function(response){
+
+      }
+    });
+  }
+  function itemAdd(element,type){
+    $.ajax({
+        url: `/finish/suggestion`,
+        type: 'post',
+        data: {
+          file_id:id,
+          type:type
+        },
+        success: function(response) {
+          let table = $(element).closest('table');
+          $(table).find('thead tr').each(function(){
+            $(this).append(`
+              <th >
+              
+                <div class="input-group mb-3">
+                
+                  <input data-suggest_id="${response.suggest_id}" type="text" data-type="${type}" name="thSuggestion" placeholder="請輸入項目名稱" class="form-control" />
+                  <div class="input-group-append">
+                    <button data-suggest_id="${response.suggest_id}" type="button" class="close" aria-label="Close" onclick="deleteSuggestion('${response.suggest_id}')">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                </div>
+              </th>
+            `);
+            $(this).append($(element).closest('th'));
+          })
+          $(table).find('tbody tr').each(function(){
+            $(this).append(`
+              <td style="min-width:200px" ><input data-suggest_id="${response.suggest_id}" name="valSuggestion" type="text" placeholder="請輸入項目成本" class="form-control" /></td>
+            `);
+          })
+        }
+      });
+    
+  }
+ 
+  var fileInformation=[];
+  function getFinishInformation() {
+      console.log('getFinishInformation')
+      
+    $.ajax({
+      url: `/finish/information`,
+      type: 'get',
+      data: {
+        process_mapping: {
+          file_id: id,
+          file_id_dest: id,
+          threshold:$('#selectThreeshold_develop').val(),
+          limit:$('#selectLimit_develop').val(),
+        },
+        process_result: {
+          file_id: id,
+          file_id_dest: id,
+          threshold:$('#selectThreeshold_deeplearning').val(),
+          limit:$('#selectLimit_deeplearning').val(),
+        },
+        modify_process:{
+          file_id: id,
+        }
+      },
+      success:function(response){
+        fileInformation = response;
+
+        let sumtech = 0;
+        let summanage = 0;
+        $(fileInformation.modify_process).each(function(index) {
+          sumtech += parseInt(this.cost || '0')
+          summanage += parseInt(this.outsourcer_cost || '0')
+        })
+        console.log('sumtech',sumtech,summanage)
+
+        $('#dataTable_develop tbody').empty();
+        $('#dataTable_deeplearning tbody').empty();
+        $(fileInformation.process_mapping).each(function(index) {
+          let row = this;
+          let component_dest = $('<td></td>');
+          let total_all = new Object();
+          let process_mapping_id = this.process_mapping_id;
+          let tmpcurrency = null;
+          $(this.order_dest_name).each(function() {
+            $(this.詳細內容).each(function() {
+              let date = null;
+              $.each(this.日期, function() {
+                date = new Date(this);
+              })
+              $.each(this.幣別, function() {
+                tmpcurrency = this;
+              })
+              let 報價金額 = this.報價金額;
+              $.each(this.報價金額, function() {
+                報價金額 = this;
+              })
+              if (!total_all.hasOwnProperty(date))
+                total_all[date] = [];
+              total_all[date].push(parseFloat(報價金額));
+            })
+          })
+          total_all = Object.keys(total_all).sort().reduce(
+            (obj, key) => {
+              obj[key] = total_all[key];
+              return obj;
+            }, {}
+          );
+          let init = 0;
+          let randexp = 0;
+          $.each(total_all, function(i, row) {
+            let now = row.reduce((a, b) => a + b, 0) / row.length || 0;
+            if (init == -1) {
+              init = now;
+              return;
+            }
+            randexp += now - init;
+            init = now;
+          })
+          let price = (init + randomExponential(1 / randexp)).toFixed(2) || 0;
+          let material = ` + <span class="col-auto text-nowrap">追加成本 ${row.material}</span>`
+          if (row.material == null || row.material == '') material = '';
+          // let process = ` + <span class="col-auto text-nowrap">追加成本 ${row.process}</span>`
+          let process = ` + <span class="col-auto text-nowrap">追加成本 ${sumtech}</span>`
+          // if (row.process == null || row.process == '') process = '';
+          let outsourcer = `  <span class="col-auto text-nowrap">追加成本 ${summanage}</span>`
+          // let outsourcer = `  <span class="col-auto text-nowrap">追加成本 ${row.outsourcer}</span>`
+          // if (row.outsourcer == null || row.outsourcer == '') outsourcer = '';
+          // while(price < 0){
+          //   price = (init + randomExponential(1/randexp)).toFixed(2)
+          // }
+          let other = `  <span class="col-auto text-nowrap">加工成本 ${row.other}</span>`
+          if (row.other == null || row.other == '') other = '';
+          $('#dataTable_develop tbody').append(`
+            <tr data-process_mapping_id="${process_mapping_id}" onclick="getDetail('process_mapping',${index},this)">
+              <td>${index+1}</td>
+              <td>${price!='0.00'?(price+' '+tmpcurrency):''}</td>
+              <td><span class="col-auto text-nowrap"></span>${material+RD_cost!=0?'追加成本'+ RD_cost:''}</td>
+              <td><span class="col-auto text-nowrap"></span>${other+process}</td>
+              <td><span class="col-auto text-nowrap"></span>${outsourcer}</td>
+            </tr>
+          `);
+        })
+        $(fileInformation.process_result).each(function(index) {
+          let component_dest = $('<td></td>');
+          let total_all = new Object();
+          let tmpcurrency = null;
+          $(this.order_dest_name).each(function() {
+            $(this.詳細內容).each(function() {
+              $.each(this.幣別, function() {
+                tmpcurrency = this;
+              })
+              if (!total_all.hasOwnProperty(this.日期))
+                total_all[this.日期] = [];
+              total_all[this.日期].push(parseFloat(this.報價金額));
+            })
+          })
+          total_all = Object.keys(total_all).sort().reduce(
+            (obj, key) => {
+              obj[key] = total_all[key];
+              return obj;
+            }, {}
+          );
+          let init = -1;
+          let randexp = 0;
+          $.each(total_all, function(i, row) {
+            let now = row.reduce((a, b) => a + b, 0) / row.length || 0;
+            if (init == -1) {
+              init = now;
+              return;
+            }
+            randexp += now - init;
+            init = now;
+          })
+          let price = (init + randomExponential(1 / randexp)).toFixed(2) || 0;
+          // while(price < 0){
+          //   price = (init + randomExponential(1/randexp)).toFixed(2)
+          // }
+          $('#dataTable_deeplearning tbody').append(`
+            <tr onclick="getDetail('process_result',${index})">
+              <td>${index+1}</td>
+              <td>${price +' '+ tmpcurrency}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          `);
+        })
+        $('#labelCount_develop').text($('#selectLimit_develop').val());
+        $('#labelTotal_develop').text(fileInformation.total.process_mapping);
+        $('#labelCount_deeplearning').text($('#selectLimit_deeplearning').val());
+        $('#labelTotal_deeplearning').text(fileInformation.total.process_result);
+        getFinishSuggestion()
+      }
+    })
+  }
+
+
+function randomExponential(rate, randomUniform) {
+  // http://en.wikipedia.org/wiki/Exponential_distribution#Generating_exponential_variates
+  rate = rate || 1;
+
+  // Allow to pass a random uniform value or function
+  // Default to Math.random()
+  var U = randomUniform;
+  if (typeof randomUniform === 'function') U = randomUniform();
+  if (!U) U = Math.random();
+
+  return -Math.log(U)/rate;
+}
+function getFinishSuggestion(){
+    $.ajax({
+      url: `/finish/suggestion`,
+      type: 'get',
+      data: {
+       file_id:id,
+      },
+      success:function(response){
+        $.each(response.title,function(){
+          tmpTh = this
+          let table;
+          if(this.type == 'rd'){
+             table = $('#dataTable_develop');
+          }else if(this.type == 'valuation'){
+             table = $('#dataTable_deeplearning');
+
+          }
+          $(table).find('thead tr').each(function(){
+            $(this).append(`
+            <th>
+            <div class="input-group mb-3">
+                
+                <input data-suggest_id="${tmpTh.id}" value="${tmpTh.title==null?'':tmpTh.title}" type="text" data-type="${tmpTh.type}" name="thSuggestion" placeholder="請輸入項目名稱" class="form-control" />
+                <div class="input-group-append">
+                  <button data-suggest_id="${tmpTh.id}" type="button" class="close" aria-label="Close" onclick="deleteSuggestion('${tmpTh.id}')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              </div>
+              </th>
+            `);
+            // $(this).append($(element).closest('th'));
+          })
+          $(table).find('tbody tr').each(function(){
+            $(this).append(`
+              <td style="min-width:200px"><input data-suggest_id="${tmpTh.id}" name="valSuggestion" type="text" placeholder="請輸入項目成本" class="form-control" /></td>
+            `);
+          })
+        })
+
+        $.each(response.val,function(){
+          console.log(this)
+          $(`tr[data-process_mapping_id="${this.process_mapping_id}"]`).find(`[name="valSuggestion"][data-suggest_id="${this.suggest_id}"]`).val(this.val)
+        });
+
+        $('#dataTable_develop').find('thead tr').append(`<th><button class="btn btn-primary" onclick="itemAdd(this,'rd')">新增項目</button></th>`)
+        $('#dataTable_deeplearning').find('thead tr').append(`<th><button class="btn btn-primary" onclick="itemAdd(this,'valuation')">新增項目</button></th>`)
+      }
+    });
+
+  }
+
+
+</script>
